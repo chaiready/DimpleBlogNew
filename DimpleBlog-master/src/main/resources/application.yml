@@ -84,9 +84,15 @@ spring:
       # 热部署开关
       enabled: true
   redis:
-    host: 47.112.14.207
-    port: 8002
-    database: 11
+    host: 127.0.0.1
+    port: 6379
+    password:
+    #timeout: 0
+    pool:
+      max-idle: 8
+      min-idle: 0
+      max-active: 8
+      max-wait: -1
 # MyBatis
 mybatis:
   # 搜索指定包别名

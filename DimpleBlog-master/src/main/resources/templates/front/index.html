@@ -3,7 +3,7 @@
 <html lang="zh" xmlns:th="https://www.thymeleaf.org">
 
 <head>
-    <title>DimpleÁöÑ‰∏™‰∫∫ÂçöÂÆ¢</title>
+    <title>Dimpleµƒ∏ˆ»À≤©øÕ</title>
     <meta name="baidu_union_verify" content="7aef518d672b5859ca390cabb140abf3">
     <div th:include="include-front :: head('','')"></div>
     <style>
@@ -207,11 +207,11 @@
 
 <body class="nobg">
 <th:block th:replace="include-front :: header"/>
-<!--ÂÜÖÂÆπÂå∫ÂºÄÂßã-->
+<!--ƒ⁄»›«¯ø™ º-->
 <div class="container">
-    <!--ÊúÄÊñ∞ÊñáÁ´†-->
+    <!--◊Ó–¬Œƒ’¬-->
     <section class="mysection">
-        <!--        ËΩÆÊí≠ÂõæÂºÄÂßã-->
+        <!--        ¬÷≤•Õºø™ º-->
         <div id="ups-banner">
             <div class="swiper-container">
                 <div class="swiper-wrapper">
@@ -222,7 +222,7 @@
                             </div>
                             <a th:target="${(carouselMap.target=='1')?'_blank':''}"
                                th:href="${'/f/carouselMap/'+carouselMap.carouselId+'?url='+carouselMap.url}"
-                               class="link">ËØ¶ÊÉÖÁÇπÂáª</a></div>
+                               class="link">œÍ«Èµ„ª˜</a></div>
                         <div class="img-fix">
                             <div class="img-inner">
                                 <img th:src="${carouselMap.imgUrl}" class="imgs">
@@ -238,13 +238,13 @@
                 <div class="swiper-button-prev"></div>
             </div>
         </div>
-        <!--        ËΩÆÊí≠ÂõæÁªìÊùü-->
+        <!--        ¬÷≤•ÕºΩ· ¯-->
 
         <div class="arclist">
-            <h4 class="index-title homeh4"><a href="\"><i class="fa fa-certificate"></i>ÊúÄÊñ∞ÊñáÁ´†
+            <h4 class="index-title homeh4"><a href="\"><i class="fa fa-certificate"></i>◊Ó–¬Œƒ’¬
                 <small>New Article</small>
             </a></h4>
-            <!--ÂàóË°®ÂºÄÂßã-->
+            <!--¡–±Ìø™ º-->
             <ul>
                 <li th:each="blog:${blogs.list}" th:class="${blog.support=='1'?'tuijian':''}">
                     <div class="arcimg">
@@ -262,25 +262,25 @@
                         <p th:text="${blog.summary}"></p>
                         <ul>
                             <li>
-                                <a th:title="${'ËæπÂ∞è‰∏∞'+#dates.format(blog.createTime, 'yyyy-MM-dd')+'ÂèëË°®'}">
+                                <a th:title="${'±ﬂ–°∑·'+#dates.format(blog.createTime, 'yyyy-MM-dd')+'∑¢±Ì'}">
                                     <i class="fa fa-clock-o"></i>
                                     <span th:text="${#dates.format(blog.createTime, 'yyyy-MM-dd')}"></span>
                                 </a>
                             </li>
                             <li>
-                                <a href="/f/about.html" title="‰ΩúËÄÖÔºö ËæπÂ∞è‰∏∞"><i class="fa fa-user"></i>ËæπÂ∞è‰∏∞</a>
+                                <a href="/f/about.html" title="◊˜’ﬂ£∫ ±ﬂ–°∑·"><i class="fa fa-user"></i>±ﬂ–°∑·</a>
                             </li>
-                            <li><a th:title="${'Â∑≤Êúâ'+blog.commentCount+'Êù°ËØÑËÆ∫'}"
+                            <li><a th:title="${'“—”–'+blog.commentCount+'Ãı∆¿¬€'}"
                                    th:href="${'/f/article/'+blog.blogId+'.html#Comment'}"
                                    href="article/219.html#Comment">
                                 <i class="fa fa-comments-o"></i>
                                 <span th:text="${blog.commentCount}"></span>
                             </a>
                             </li>
-                            <li><a th:title="${'Â∑≤Êúâ'+blog.click+'Ê¨°ÊµèËßà'}"><i class="fa fa-eye"></i><span
+                            <li><a th:title="${'“—”–'+blog.click+'¥Œ‰Ø¿¿'}"><i class="fa fa-eye"></i><span
                                     th:text="${blog.click}"></span></a></li>
                             <li>
-                                <a th:href="${'/f/category/'+blog.categoryId+'.html'}" title="Êü•ÁúãÂàÜÁ±ª">
+                                <a th:href="${'/f/category/'+blog.categoryId+'.html'}" title="≤Èø¥∑÷¿‡">
                                     <i class="fa fa-list-ul"></i>
                                     <span th:text="${blog.categoryTitle}"></span>
                                 </a>
@@ -290,11 +290,11 @@
                 </li>
             </ul>
         </div>
-        <!--ÂàÜÈ°µÂºÄÂßã-->
+        <!--∑÷“≥ø™ º-->
         <div th:replace="navigation :: navigation-index(${blogs})"></div>
-        <!--ÂàÜÈ°µÁªìÊùü-->
+        <!--∑÷“≥Ω· ¯-->
     </section>
-    <!--Â∑¶‰æßÁªìÊùü-->
+    <!--◊Û≤‡Ω· ¯-->
 
     <th:block th:replace="include-front :: side"/>
 </div>
