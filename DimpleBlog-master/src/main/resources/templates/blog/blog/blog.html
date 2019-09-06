@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="https://www.thymeleaf.org">
 <head>
-    <th:block th:include="include :: header('åšå®¢åˆ—è¡¨')"/>
+    <th:block th:include="include :: header('²©¿ÍÁĞ±í')"/>
     <th:block th:include="include :: layout-latest-css"/>
 </head>
 <body class="gray-bg">
@@ -10,34 +10,34 @@
         <div class="box box-main">
             <div class="box-header">
                 <div class="box-title">
-                    <i class="fa icon-grid"></i> åšå®¢æ¦‚è§ˆ
+                    <i class="fa icon-grid"></i> ²©¿Í¸ÅÀÀ
                 </div>
                 <div class="box-tools pull-right">
-                    <button type="button" class="btn btn-box-tool" id="btnRefresh" title="åˆ·æ–°åˆ—è¡¨"><i
+                    <button type="button" class="btn btn-box-tool" id="btnRefresh" title="Ë¢ĞÂÁĞ±í"><i
                             class="fa fa-refresh"></i></button>
                 </div>
             </div>
             <div class="ui-layout-content">
                 <ul class="folder-list m-b-md linksDetails" style="padding: 0">
                     <li class="condition">
-                        <a> <i class="fa fa-inbox "></i> æ‰€æœ‰
+                        <a> <i class="fa fa-inbox "></i> ËùÓĞ
                             <span class="label label-success pull-right"
                                   th:text="${total}">123 </span>
                         </a>
                     </li>
                     <li class="condition" val="1">
-                        <a> <i class="fa fa-tags "></i> å·²å‘å¸ƒ
+                        <a> <i class="fa fa-tags "></i> ÒÑ·¢²¼
                             <span class="label  label-default  pull-right "
                                   th:text="${published}">123</span>
                         </a>
                     </li>
                     <li class="condition" val="2">
-                        <a> <i class="fa fa-chain-broken "></i> è‰ç¨¿ç®±
+                        <a> <i class="fa fa-chain-broken "></i> ²İ¸åÏä
                             <span class="label label-warning pull-right " th:text="${draft}">123</span>
                         </a>
                     </li>
                     <li class=" condition" val="3">
-                        <a> <i class="fa fa-indent "></i> åƒåœ¾ç®±
+                        <a> <i class="fa fa-indent "></i> À¬»øÏä
                             <span class="label label-danger  pull-right "
                                   th:text="${garbage}"> 123</span>
                         </a>
@@ -56,37 +56,37 @@
                 <div class="select-list">
                     <ul>
                         <li>
-                            åšå®¢æ ‡é¢˜ï¼š<input type="text" name="title"/>
+                            ²©¿Í±êÌâ£º<input type="text" name="title"/>
                         </li>
                         <li>
-                            åšå®¢çŠ¶æ€ï¼š<select id="blogStatus" name="status"
+                            ²©¿Í×´Ì¬£º<select id="blogStatus" name="status"
                                          th:with="type=${@dict.getType('blog_blog_status')}">
-                            <option value="">æ‰€æœ‰</option>
+                            <option value="">ËùÓĞ</option>
                             <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
                                     th:value="${dict.dictValue}"></option>
                         </select>
                         </li>
                         <li>
-                            æ¨èï¼š<select id="blogSupport" name="support"
+                            ÍÆ¼ö£º<select id="blogSupport" name="support"
                                        th:with="type=${@dict.getType('blog_blog_support')}">
-                            <option value="">æ‰€æœ‰</option>
+                            <option value="">ËùÓĞ</option>
                             <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
                                     th:value="${dict.dictValue}"></option>
                         </select>
                         </li>
                         <li class="select-time">
-                            <label>åˆ›å»ºæ—¶é—´ï¼š </label>
-                            <input type="text" class="time-input" id="startTime" placeholder="å¼€å§‹æ—¶é—´"
+                            <label>´´½¨Ê±¼ä£º </label>
+                            <input type="text" class="time-input" id="startTime" placeholder="¿ªÊ¼Ê±¼ä"
                                    name="params[beginTime]"/>
                             <span>-</span>
-                            <input type="text" class="time-input" id="endTime" placeholder="ç»“æŸæ—¶é—´"
+                            <input type="text" class="time-input" id="endTime" placeholder="½áÊøÊ±¼ä"
                                    name="params[endTime]"/>
                         </li>
                         <li>
                             <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
-                                    class="fa fa-search"></i> æœç´¢</a>
+                                    class="fa fa-search"></i> ËÑË÷</a>
                             <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
-                                    class="fa fa-refresh"></i> é‡ç½®</a>
+                                    class="fa fa-refresh"></i> ÖØÖÃ</a>
                         </li>
                     </ul>
                 </div>
@@ -94,29 +94,29 @@
         </div>
 
         <div class="btn-group-sm" id="toolbar" role="group">
-            <a class="btn btn-success" onclick="createMenuItem('/blog/blog/add','æ–°å¢åšæ–‡')">
-                <i class="fa fa-plus"></i> æ–°å¢
+            <a class="btn btn-success" onclick="createMenuItem('/blog/blog/add','ĞÂÔö²©ÎÄ')">
+                <i class="fa fa-plus"></i> ĞÂÔö
             </a>
             <a class="btn btn-primary btn-edit single disabled" onclick="$.operate.editTab()">
-                <i class="fa fa-edit"></i> ä¿®æ”¹
+                <i class="fa fa-edit"></i> ĞŞ¸Ä
             </a>
             <a class="btn btn-danger btn-del multiple disabled" onclick="$.operate.removeAll()">
-                <i class="fa fa-remove"></i> åˆ é™¤
+                <i class="fa fa-remove"></i> É¾³ı
             </a>
             <a class="btn btn-warning" onclick="$.table.exportExcel()">
-                <i class="fa fa-download"></i> å¯¼å‡º
+                <i class="fa fa-download"></i> µ¼³ö
             </a>
             <a class="btn btn-primary btn-del  multiple  disabled" onclick="changeStatus(1)">
-                <i class="fa fa-list-ol"></i> å‘å¸ƒ
+                <i class="fa fa-list-ol"></i> ·¢²¼
             </a>
             <a class="btn btn-warning btn-del multiple disabled" onclick="changeStatus(2)">
-                <i class="fa fa-strikethrough"></i> è‰ç¨¿ç®±
+                <i class="fa fa-strikethrough"></i> ²İ¸åÏä
             </a>
             <a class="btn btn-danger btn-del multiple disabled" onclick="changeStatus(3)">
-                <i class="fa fa-trash"></i> åƒåœ¾ç®±
+                <i class="fa fa-trash"></i> À¬»øÏä
             </a>
             <a class="btn btn-default btn-del multiple disabled" onclick="pushBaidu()">
-                <i class="fa fa-exchange"></i> æ¨é€åˆ°ç™¾åº¦
+                <i class="fa fa-exchange"></i> ÍÆËÍµ½°Ù¶È
             </a>
         </div>
         <div class="col-sm-12 select-table table-striped">
@@ -165,59 +165,59 @@
             sortName: "createTime",
             sortOrder: "desc",
             uniqueId: "blogId",
-            modalName: "åšå®¢",
+            modalName: "²©¿Í",
             columns: [{
                 field: 'state',
                 checkbox: true
             }, {
                 field: 'blogId',
-                title: 'åšå®¢ID'
+                title: '²©¿ÍID'
             }, {
                 field: 'title',
-                title: 'åšå®¢æ ‡é¢˜',
+                title: '²©¿Í±êÌâ',
                 formatter: function (value, row, index) {
                     return $.table.tooltip(value);
                 }
             }, {
                 field: 'createTime',
-                title: 'åˆ›å»ºæ—¶é—´',
+                title: '´´½¨Ê±¼ä',
                 sortable: true
             }, {
                 field: 'status',
-                title: 'çŠ¶æ€',
+                title: '×´Ì¬',
                 formatter: function (value, row, index) {
                     return $.table.selectDictLabel(datas, value);
                 }
             }, {
                 field: 'support',
-                title: 'æ¨è',
+                title: 'ÍÆ¼ö',
                 align: 'center',
                 formatter: function (value, row, index) {
                     return statusTools(value, row);
                 }
             }, {
                 field: 'allowComment',
-                title: 'è¯„è®º',
+                title: 'ÆÀÂÛ',
                 align: 'center',
                 formatter: function (value, row, index) {
                     return statusToolsAllowComment(value, row);
                 }
             }, {
                 field: 'weight',
-                title: 'æƒé‡',
+                title: 'È¨ÖØ',
                 align: 'center',
             }, {
                 field: 'click',
-                title: 'ç‚¹å‡»é‡',
+                title: 'µã»÷Á¿',
                 sortable: true
             }, {
-                title: 'æ“ä½œ',
+                title: '²Ù×÷',
                 align: 'center',
                 formatter: function (value, row, index) {
                     var actions = [];
-                    actions.push('<a class="btn btn-success btn-xs ' + '" href="javascript:void(0)" onclick="$.operate.editTab(\'' + row.blogId + '\')"><i class="fa fa-edit"></i> ç¼–è¾‘</a> ');
-                    actions.push('<a class="btn btn-danger btn-xs ' + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.blogId + '\')"><i class="fa fa-remove"></i> åˆ é™¤</a> ');
-                    actions.push('<a class="btn btn-info btn-xs ' + '" href="javascript:void(0)" onclick="detail(\'' + row.blogId + '\')"><i class="fa fa-search"></i> è¯¦ç»†</a> ');
+                    actions.push('<a class="btn btn-success btn-xs ' + '" href="javascript:void(0)" onclick="$.operate.editTab(\'' + row.blogId + '\')"><i class="fa fa-edit"></i> ±à¼­</a> ');
+                    actions.push('<a class="btn btn-danger btn-xs ' + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.blogId + '\')"><i class="fa fa-remove"></i> É¾³ı</a> ');
+                    actions.push('<a class="btn btn-info btn-xs ' + '" href="javascript:void(0)" onclick="detail(\'' + row.blogId + '\')"><i class="fa fa-search"></i> ÏêÏ¸</a> ');
                     return actions.join('');
                 }
             }]
@@ -241,40 +241,40 @@
         }
     }
 
-    /* åšå®¢ç¦æ­¢è¯„è®ºè¯„è®º */
+    /* ²©¿Í½ûÖ¹ÆÀÂÛÆÀÂÛ */
     function disableAllowComment(blogId) {
-        $.modal.confirm("ç¡®è®¤è¦ç¦æ­¢è¯„è®ºè¯¥åšæ–‡å—ï¼Ÿ", function () {
+        $.modal.confirm("È·ÈÏÒª½ûÖ¹ÆÀÂÛ¸Ã²©ÎÄÂğ£¿", function () {
             $.operate.put($.table._option.changeAllowCommentUrl + "/" + blogId + "/" + false);
         })
     }
 
-    /* åšå®¢å…è®¸è¯„è®º */
+    /* ²©¿ÍÔÊĞíÆÀÂÛ */
     function enableAllowComment(blogId) {
-        $.modal.confirm("ç¡®è®¤è¦å…è®¸è¯„è®ºè¯¥åšæ–‡å—ï¼Ÿ", function () {
+        $.modal.confirm("È·ÈÏÒªÔÊĞíÆÀÂÛ¸Ã²©ÎÄÂğ£¿", function () {
             $.operate.put($.table._option.changeAllowCommentUrl + "/" + blogId + "/" + true);
         })
     }
 
-    /* åšå®¢æ¨è-åœç”¨ */
+    /* ²©¿ÍÍÆ¼ö-Í£ÓÃ */
     function disable(blogId) {
-        $.modal.confirm("ç¡®è®¤è¦å–æ¶ˆæ¨èè¯¥åšæ–‡å—ï¼Ÿ", function () {
+        $.modal.confirm("È·ÈÏÒªÈ¡ÏûÍÆ¼ö¸Ã²©ÎÄÂğ£¿", function () {
             $.operate.put($.table._option.changeSupportUrl + "/0", {"blogId": blogId});
         })
     }
 
-    /* åšå®¢æ¨è-å¯ç”¨ */
+    /* ²©¿ÍÍÆ¼ö-ÆôÓÃ */
     function enable(blogId) {
-        $.modal.confirm("ç¡®è®¤è¦æ¨èè¯¥åšæ–‡å—ï¼Ÿ", function () {
+        $.modal.confirm("È·ÈÏÒªÍÆ¼ö¸Ã²©ÎÄÂğ£¿", function () {
             $.operate.put($.table._option.changeSupportUrl + "/1", {"blogId": blogId});
         })
     }
 
     function detail(id) {
-        var title = "è¯¦ç»†";
+        var title = "ÏêÏ¸";
         var url = "/f/article/" + id + '.html';
         var width = $(window).width() / 1.5;
         var height = $(window).height() / 1.2;
-        //å¦‚æœæ˜¯ç§»åŠ¨ç«¯ï¼Œå°±ä½¿ç”¨è‡ªé€‚åº”å¤§å°å¼¹çª—
+        //Èç¹ûÊÇÒÆ¶¯¶Ë£¬¾ÍÊ¹ÓÃ×ÔÊÊÓ¦´óĞ¡µ¯´°
         if (navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)) {
             width = 'auto';
             height = 'auto';
@@ -295,13 +295,13 @@
             type: 2,
             area: [width + 'px', height + 'px'],
             fix: false,
-            //ä¸å›ºå®š
+            //²»¹Ì¶¨
             maxmin: true,
             shade: 0.3,
-            title: "è¯¦ç»†",
+            title: "ÏêÏ¸",
             content: url,
-            btn: 'å…³é—­',
-            // å¼¹å±‚å¤–åŒºåŸŸå…³é—­
+            btn: '¹Ø±Õ',
+            // µ¯²ãÍâÇøÓò¹Ø±Õ
             shadeClose: true,
             success: function (layer) {
                 layer[0].childNodes[3].childNodes[0].attributes[0].value = 'layui-layer-btn1';

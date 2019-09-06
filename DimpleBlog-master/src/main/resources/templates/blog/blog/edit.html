@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="https://www.thymeleaf.org">
 <head>
-    <th:block th:include="include :: header('ç¼–è¾‘åšå®¢')"/>
+    <th:block th:include="include :: header('±à¼­²©¿Í')"/>
     <th:block th:include="include :: layout-latest-css"/>
     <th:block th:include="include :: summernote-css"/>
     <th:block th:include="include :: bootstrap-tagsinput-css"/>
@@ -14,10 +14,10 @@
         <div class="box box-main">
             <div class="box-header">
                 <div class="box-title">
-                    <i class="fa icon-grid"></i> åšå®¢æ¦‚è§ˆ
+                    <i class="fa icon-grid"></i> ²©¿Í¸ÅÀÀ
                 </div>
                 <div class="box-tools pull-right">
-                    <button type="button" class="btn btn-box-tool" id="btnRefresh" title="åˆ·æ–°åˆ—è¡¨">
+                    <button type="button" class="btn btn-box-tool" id="btnRefresh" title="Ë¢ĞÂÁĞ±í">
                         <i class="fa fa-refresh"></i></button>
                 </div>
             </div>
@@ -26,48 +26,48 @@
                     <input type="hidden" name="blogId" th:value="${blog.blogId}">
                     <input type="hidden" id="blogContentInit" th:value="${blog.content}">
                     <div class="form-group">
-                        <label class="control-label">å°é¢:</label>
+                        <label class="control-label">·âÃæ:</label>
                         <img src="/img/blog-default.png" width="100%" onclick="changeImg()"
-                             height="150px" id="header" name="headerImg" title="ç‚¹å‡»å›¾ç‰‡æ›´æ¢æ ‡å›¾" th:src="${blog.headerImg}"/>
+                             height="150px" id="header" name="headerImg" title="µã»÷Í¼Æ¬¸ü»»±êÍ¼" th:src="${blog.headerImg}"/>
                     </div>
                     <div class="form-group">
-                        <label class=" control-label">æ ‡é¢˜:</label>
+                        <label class=" control-label">±êÌâ:</label>
                         <div class="">
-                            <input type="text" class="form-control" name="title" placeholder="åœ¨è¿™é‡Œè¾“å…¥æ ‡é¢˜"
+                            <input type="text" class="form-control" name="title" placeholder="ÔÚÕâÀïÊäÈë±êÌâ"
                                    th:value="${blog.title}">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class=" control-label">æ‘˜è¦:</label>
+                        <label class=" control-label">ÕªÒª:</label>
                         <div class="">
-                            <input type="text" class="form-control" name="summary" placeholder="åœ¨è¿™é‡Œè¾“å…¥æ‘˜è¦"
+                            <input type="text" class="form-control" name="summary" placeholder="ÔÚÕâÀïÊäÈëÕªÒª"
                                    th:value="${blog.summary}">
                             <span class="help-block m-b-none">
-                                    <i class="fa fa-info-circle"></i> ç•™ç©ºåˆ™é»˜è®¤ä¸ºåšæ–‡å‰150å­—èŠ‚ä¸ºåšæ–‡çš„æ‘˜è¦</span>
+                                    <i class="fa fa-info-circle"></i> Áô¿ÕÔòÄ¬ÈÏÎª²©ÎÄÇ°150×Ö½ÚÎª²©ÎÄµÄÕªÒª</span>
                         </div>
                     </div>
                     <div>
-                        <label class="">æ ‡ç­¾:</label>
+                        <label class="">±êÇ©:</label>
                         <div class="tagsinput-primary form-group">
                             <input name="tags" id="tags" class="tagsinput" data-role="tagsinput"
-                                   placeholder="è¾“å…¥åå›è½¦">
+                                   placeholder="ÊäÈëºó»Ø³µ">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class=" control-label">æƒé‡:</label>
+                        <label class=" control-label">È¨ÖØ:</label>
                         <div class="">
-                            <input name="weight" class="form-control" type="text" value="0" placeholder="åœ¨è¿™é‡Œè¾“å…¥æƒé‡"
+                            <input name="weight" class="form-control" type="text" value="0" placeholder="ÔÚÕâÀïÊäÈëÈ¨ÖØ"
                                    th:value="${blog.weight}">
                             <span class="help-block m-b-none">
-                                <i class="fa fa-info-circle"></i> å‰å°é¦–é¡µå±•ç¤ºä¼šä»¥æƒé‡ä½œä¸ºæ’åºæ ‡å‡†</span>
+                                <i class="fa fa-info-circle"></i> Ç°Ì¨Ê×Ò³Õ¹Ê¾»áÒÔÈ¨ÖØ×÷ÎªÅÅĞò±ê×¼</span>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class=" control-label">åˆ†ç±»:</label>
+                        <label class=" control-label">·ÖÀà:</label>
                         <div class="">
                             <div class="input-group" style="width: 100%">
                                 <select name="categoryId" class="form-control m-b">
-                                    <option value="">è¯·é€‰æ‹©åˆ†ç±»</option>
+                                    <option value="">ÇëÑ¡Ôñ·ÖÀà</option>
                                     <option th:each="category : ${categories}"
                                             th:text="${category.categoryTitle}"
                                             th:value="${category.categoryId}"
@@ -88,12 +88,12 @@
         <div class="mail-box-header">
             <div class="pull-right tooltip-demo">
                 <a class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top"
-                   onclick="editOrPreview(this)" title="é¢„è§ˆ"><i class="fa fa-pencil"></i> é¢„è§ˆ</a>
+                   onclick="editOrPreview(this)" title="Ô¤ÀÀ"><i class="fa fa-pencil"></i> Ô¤ÀÀ</a>
                 <a class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top"
-                   onclick="uploadMd()" title="ä¸Šä¼ MDæ–‡ä»¶"><i class="fa fa-pencil"></i> ä¸Šä¼ </a>
+                   onclick="uploadMd()" title="ÉÏ´«MDÎÄ¼ş"><i class="fa fa-pencil"></i> ÉÏ´«</a>
             </div>
             <h2>
-                åšå®¢å†…å®¹
+                ²©¿ÍÄÚÈİ
             </h2>
         </div>
         <div class="mail-box">
@@ -103,10 +103,10 @@
             </div>
             <div class="mail-body text-right tooltip-demo">
                 <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler()"><i
-                        class="fa fa-check"></i>ä¿ å­˜
+                        class="fa fa-check"></i>±£ ´æ
                 </button>&nbsp;
                 <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i
-                        class="fa fa-reply-all"></i>å…³ é—­
+                        class="fa fa-reply-all"></i>¹Ø ±Õ
                 </button>
             </div>
             <div class="clearfix"></div>
@@ -121,7 +121,7 @@
 <script th:inline="javascript">
     var tags = [[${blog.tags}]];
     $(function () {
-        //æ·»åŠ å·²æœ‰æ ‡ç­¾
+        //Ìí¼ÓÒÑÓĞ±êÇ©
         if (tags != null) {
             $("#tags").tagsinput('add', tags.join(","));
         }
@@ -156,25 +156,25 @@
             },
             messages: {
                 "headerImg": {
-                    required: "è¯·é€‰æ‹©é¢„è§ˆå›¾",
+                    required: "ÇëÑ¡ÔñÔ¤ÀÀÍ¼",
                 },
                 "title": {
-                    required: "è¯·è¾“å…¥æ ‡é¢˜",
-                    rangelength: "è¯·è¾“å…¥é•¿åº¦ä¸º {0} è‡³ {1} ä¹‹é—´çš„æ ‡é¢˜"
+                    required: "ÇëÊäÈë±êÌâ",
+                    rangelength: "ÇëÊäÈë³¤¶ÈÎª {0} ÖÁ {1} Ö®¼äµÄ±êÌâ"
                 },
                 "summary": {
-                    maxlength: "æœ€å¤šè¾“å…¥{0}ä¸ªå­—ç¬¦"
+                    maxlength: "×î¶àÊäÈë{0}¸ö×Ö·û"
                 },
                 "weight": {
-                    required: "è¯·è¾“å…¥æƒé‡",
-                    rangelength: "è¯·è¾“å…¥æ­£ç¡®æ ¼å¼çš„æƒé‡"
+                    required: "ÇëÊäÈëÈ¨ÖØ",
+                    rangelength: "ÇëÊäÈëÕıÈ·¸ñÊ½µÄÈ¨ÖØ"
                 },
                 "tags": {
-                    required: "è¯·è¾“å…¥æ ‡ç­¾",
-                    rangelength: "è¯·è¾“å…¥é•¿åº¦ä¸º {0} è‡³ {1} ä¹‹é—´çš„æ ‡ç­¾"
+                    required: "ÇëÊäÈë±êÇ©",
+                    rangelength: "ÇëÊäÈë³¤¶ÈÎª {0} ÖÁ {1} Ö®¼äµÄ±êÇ©"
                 },
                 "categoryId": {
-                    required: "è¯·é€‰æ‹©åˆ†ç±»",
+                    required: "ÇëÑ¡Ôñ·ÖÀà",
                 },
             },
         });
@@ -182,21 +182,21 @@
         if ($(this).width() < 769) {
             panehHidden = true;
         }
-        //åˆå§‹åŒ–åˆ†æ 
+        //³õÊ¼»¯·ÖÀ¸
         $('body').layout({initClosed: panehHidden, west__size: 350});
     });
 
     /**
-     *æ‰“å¼€é€‰æ‹©å›¾ç‰‡çš„çª—å£
+     *´ò¿ªÑ¡ÔñÍ¼Æ¬µÄ´°¿Ú
      */
     function imageSelect(index, layero) {
         var body = layer.getChildFrame('body', index);
-        //è·å–ä¸Šä¼ æ–‡ä»¶çš„URL
+        //»ñÈ¡ÉÏ´«ÎÄ¼şµÄURL
         var url = body.find("#url").val();
-        //è·å–ç½‘ç»œåœ°å€URL
+        //»ñÈ¡ÍøÂçµØÖ·URL
         var netUrl = body.find("#netUrl").val();
         if ($.common.isNotEmpty(url) && $.common.isNotEmpty(netUrl)) {
-            $.modal.alertError("åšæ–‡å°é¢åªèƒ½é€‰æ‹©ä¸€ä¸ªå“¦~ï¼Œè¯·æ£€æŸ¥æ˜¯å¦æœ‰é€‰ä¸­å›¾ç‰‡ã€ä¸Šä¼ å›¾ç‰‡æˆ–è€…å›¾ç‰‡åœ°å€è¾“å…¥ï¼");
+            $.modal.alertError("²©ÎÄ·âÃæÖ»ÄÜÑ¡ÔñÒ»¸öÅ¶~£¬Çë¼ì²éÊÇ·ñÓĞÑ¡ÖĞÍ¼Æ¬¡¢ÉÏ´«Í¼Æ¬»òÕßÍ¼Æ¬µØÖ·ÊäÈë£¡");
             return;
         }
         var urlFinal = $.common.isNotEmpty(url) ? url : netUrl;
@@ -207,7 +207,7 @@
     function changeImg() {
         var option = {
             url: "/blog/blog/image",
-            title: "ç´ æåº“",
+            title: "ËØ²Ä¿â",
             width: $(window).width() / 1.5,
             callBack: imageSelect
         };
@@ -215,7 +215,7 @@
     }
 
 
-    //è·å–è¡¨å•æ•°æ®
+    //»ñÈ¡±íµ¥Êı¾İ
     function getData() {
         var blogId = $("input[name='blogId']").val();
         var headerUrl = $("#header")[0].src;
