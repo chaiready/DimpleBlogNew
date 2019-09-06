@@ -2,6 +2,7 @@ package com.dimple.common.utils.file;
 
 import com.dimple.common.exception.file.FileNameLengthLimitExceededException;
 import com.dimple.common.exception.file.FileSizeLimitExceededException;
+import com.dimple.common.utils.ImageUtil;
 import com.dimple.common.utils.spring.SpringUtils;
 import com.dimple.framework.config.ServerConfig;
 import com.dimple.framework.config.SystemConfig;
@@ -36,6 +37,8 @@ public class FileUploadUtils {
      * 默认上传的地址
      */
     private static String defaultBaseDir = SystemConfig.getProfile();
+    
+    public static String uploadFilePath ="/profile/upload";
 
     /**
      * 系统配置：用于获取系统的绝对访问逻辑
@@ -92,6 +95,12 @@ public class FileUploadUtils {
 
         File desc = getAbsoluteFile(baseDir, baseDir + fileName);
         file.transferTo(desc);
+        
+        //压缩图
+        String smallThumbnailPath = ImageUtil.generateSize(72, 72,baseDir + fileName);
+        String largeThumbnailPath = ImageUtil.generateSize(800,356,baseDir + fileName);
+        System.out.println(largeThumbnailPath+">>>>>>>>"+smallThumbnailPath);
+        
         FileItemInfo fileItemInfo = new FileItemInfo(fileName, String.valueOf(file.hashCode()), file.getSize(), file.getContentType(), new Date(), FileItemInfo.ServerType.LOCAL.getServerType(), baseDir + "/" + fileName);
 
         return fileItemInfo;
