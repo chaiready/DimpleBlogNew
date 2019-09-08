@@ -350,4 +350,16 @@ public class UserServiceImpl implements UserService {
         }
         return userMapper.updateUser(user);
     }
+    
+    @Override
+	public int regUser(User user) {
+		 user.randomSalt();
+	        user.setPassword(passwordService.encryptPassword(user.getLoginName(), user.getPassword(), user.getSalt()));
+	        user.setCreateBy("前端注册");
+	        // 新增用户信息
+	        int rows = userMapper.insertUser(user);
+	        // 新增用户与角色管理
+	        insertUserRole(user);
+	        return rows;
+	}
 }

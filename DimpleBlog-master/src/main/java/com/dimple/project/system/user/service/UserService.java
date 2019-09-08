@@ -149,4 +149,7 @@ import java.util.List;
      * @return 结果
      */
      int changeStatus(User user);
+
+     
+	 int regUser(User user);
 }

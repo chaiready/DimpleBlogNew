@@ -1,48 +1,41 @@
 package com.dimple.framework.config;
 
-import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
-import com.dimple.common.utils.StringUtils;
-import com.dimple.common.utils.file.FileUploadUtils;
-import com.dimple.framework.shiro.realm.UserRealm;
-import com.dimple.framework.shiro.session.OnlineSessionDAO;
-import com.dimple.framework.shiro.session.OnlineSessionFactory;
-import com.dimple.framework.shiro.session.ShiroSessionListener;
-import com.dimple.framework.shiro.web.filter.KickoutSessionControlFilter;
-import com.dimple.framework.shiro.web.filter.LogoutFilter;
-import com.dimple.framework.shiro.web.filter.captcha.CaptchaValidateFilter;
-import com.dimple.framework.shiro.web.filter.online.OnlineSessionFilter;
-import com.dimple.framework.shiro.web.filter.sync.SyncOnlineSessionFilter;
-import com.dimple.framework.shiro.web.session.OnlineWebSessionManager;
-import com.dimple.framework.shiro.web.session.SpringSessionValidationScheduler;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import javax.servlet.Filter;
+
 import org.apache.commons.io.IOUtils;
-import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.codec.Base64;
 import org.apache.shiro.config.ConfigurationException;
 import org.apache.shiro.io.ResourceUtils;
 import org.apache.shiro.mgt.SecurityManager;
-import org.apache.shiro.session.SessionListener;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
+import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
+import org.crazycake.shiro.RedisCacheManager;
+import org.crazycake.shiro.RedisManager;
+import org.crazycake.shiro.RedisSessionDAO;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.servlet.Filter;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
-import org.crazycake.shiro.RedisCacheManager;
-import org.crazycake.shiro.RedisManager;
-import org.crazycake.shiro.RedisSessionDAO;
+import com.dimple.common.utils.file.FileUploadUtils;
+import com.dimple.framework.shiro.realm.UserRealm;
+import com.dimple.framework.shiro.session.ShiroSessionListener;
+import com.dimple.framework.shiro.web.filter.FrontLogoutFilter;
+import com.dimple.framework.shiro.web.filter.KickoutSessionControlFilter;
+import com.dimple.framework.shiro.web.filter.LogoutFilter;
+import com.dimple.framework.shiro.web.filter.captcha.CaptchaValidateFilter;
+
+import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 
 /**
  * @className: ShiroConfig

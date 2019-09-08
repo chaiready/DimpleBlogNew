@@ -37,8 +37,8 @@ public class UserOnlineController extends BaseController {
     @Autowired
     private IUserOnlineService userOnlineService;
 
-    @Autowired
-    private OnlineSessionDAO onlineSessionDAO;
+//    @Autowired
+//    private OnlineSessionDAO onlineSessionDAO;
 
     @RequiresPermissions("monitor:online:view")
     @GetMapping()
@@ -65,15 +65,15 @@ public class UserOnlineController extends BaseController {
             if (online == null) {
                 return error("用户已下线");
             }
-            OnlineSession onlineSession = (OnlineSession) onlineSessionDAO.readSession(online.getSessionId());
-            if (onlineSession == null) {
-                return error("用户已下线");
-            }
+//            OnlineSession onlineSession = (OnlineSession) onlineSessionDAO.readSession(online.getSessionId());
+//            if (onlineSession == null) {
+//                return error("用户已下线");
+//            }
             if (sessionId.equals(ShiroUtils.getSessionId())) {
                 return error("当前登陆用户无法强退");
             }
-            onlineSession.setStatus(OnlineStatus.off_line);
-            onlineSessionDAO.update(onlineSession);
+//            onlineSession.setStatus(OnlineStatus.off_line);
+//            onlineSessionDAO.update(onlineSession);
             online.setStatus(OnlineStatus.off_line);
             userOnlineService.saveOnline(online);
         }
@@ -92,12 +92,12 @@ public class UserOnlineController extends BaseController {
         if (online == null) {
             return error("用户已下线");
         }
-        OnlineSession onlineSession = (OnlineSession) onlineSessionDAO.readSession(online.getSessionId());
-        if (onlineSession == null) {
-            return error("用户已下线");
-        }
-        onlineSession.setStatus(OnlineStatus.off_line);
-        onlineSessionDAO.update(onlineSession);
+//        OnlineSession onlineSession = (OnlineSession) onlineSessionDAO.readSession(online.getSessionId());
+//        if (onlineSession == null) {
+//            return error("用户已下线");
+//        }
+//        onlineSession.setStatus(OnlineStatus.off_line);
+//        onlineSessionDAO.update(onlineSession);
         online.setStatus(OnlineStatus.off_line);
         userOnlineService.saveOnline(online);
         return success();

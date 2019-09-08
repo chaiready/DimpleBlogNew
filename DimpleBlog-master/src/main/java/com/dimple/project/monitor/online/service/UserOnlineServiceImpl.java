@@ -24,8 +24,8 @@ public class UserOnlineServiceImpl implements IUserOnlineService {
     @Autowired
     private UserOnlineMapper userOnlineDao;
 
-    @Autowired
-    private OnlineSessionDAO onlineSessionDAO;
+//    @Autowired
+//    private OnlineSessionDAO onlineSessionDAO;
 
     /**
      * 通过会话序号查询信息
@@ -95,11 +95,11 @@ public class UserOnlineServiceImpl implements IUserOnlineService {
      */
     @Override
     public void forceLogout(String sessionId) {
-        Session session = onlineSessionDAO.readSession(sessionId);
-        if (session == null) {
-            return;
-        }
-        session.setTimeout(1000);
+//        Session session = onlineSessionDAO.readSession(sessionId);
+//        if (session == null) {
+//            return;
+//        }
+//        session.setTimeout(1000);
         userOnlineDao.deleteOnlineById(sessionId);
     }
 

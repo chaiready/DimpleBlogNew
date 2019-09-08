@@ -3,11 +3,9 @@ package com.dimple.framework.shiro.web.filter;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
-import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.session.SessionException;
 import org.apache.shiro.subject.Subject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import com.dimple.common.constant.Constants;
 import com.dimple.common.utils.MessageUtils;
 import com.dimple.common.utils.StringUtils;
@@ -15,6 +13,8 @@ import com.dimple.common.utils.security.ShiroUtils;
 import com.dimple.framework.manager.AsyncManager;
 import com.dimple.framework.manager.factory.AsyncFactory;
 import com.dimple.project.system.user.domain.User;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @className: LogoutFilter
