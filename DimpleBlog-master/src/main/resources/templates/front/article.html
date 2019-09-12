@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="zh" xmlns:th="https://www.thymeleaf.org">
 <head>
-    <th:block th:include="include-front :: head(${blog.title+'¡ªDimpleµÄ¸öÈË²©¿Í'},${blog.summary})"/>
+    <th:block th:include="include-front :: head(${blog.title+'â€”Dimpleçš„ä¸ªäººåšå®¢'},${blog.summary})"/>
     <th:block th:include="include-front :: highlight-css"/>
     <th:block th:include="include-front :: highlight-js"/>
     <link rel="stylesheet" th:href="@{/front/css/comment.css}"/>
@@ -15,42 +15,42 @@
 </head>
 <body class="nobg">
 <th:block th:replace="include-front :: header"/>
-<!--ÄÚÈİÇø¿ªÊ¼-->
+<!--å†…å®¹åŒºå¼€å§‹-->
 <div class="container">
     <input type="hidden" id="pageId" th:value="${blog.blogId}"/>
-    <!--×ó²à¿ªÊ¼-->
+    <!--å·¦ä¾§å¼€å§‹-->
     <section>
         <article>
-            <!--µ¼º½-->
+            <!--å¯¼èˆª-->
             <div class="mbnav">
                 <i class="fa fa-home"></i>
-                <a href="/" title="">Ê×Ò³</a>
+                <a href="/" title="">é¦–é¡µ</a>
                 &gt;
                 <a th:href="${'/f/category/'+blog.category.categoryId+'.html'}"
-                   th:text="${blog.category.categoryTitle}"></a>&gt;ÕıÎÄ
+                   th:text="${blog.category.categoryTitle}"></a>&gt;æ­£æ–‡
             </div>
-            <!--±êÌâ-->
+            <!--æ ‡é¢˜-->
             <h3 class="act-title" th:text="${blog.title}"></h3>
-            <!--¸±±êÌâĞÅÏ¢-->
+            <!--å‰¯æ ‡é¢˜ä¿¡æ¯-->
             <div class="post-line bg-color">
                 <ul>
                     <li>
-                        <a th:title="${'±ßĞ¡·á·¢±íÓÚ'+#dates.format(blog.createTime,'yyyy-MM-dd')}">
+                        <a th:title="${'è¾¹å°ä¸°å‘è¡¨äº'+#dates.format(blog.createTime,'yyyy-MM-dd')}">
                             <i class="fa fa-clock-o"></i>
                             <time th:text="${#dates.format(blog.createTime,'yyyy-MM-dd')}"></time>
                         </a>
                     </li>
                     <li>
-                        <a href="/f/about.html" title="±¾ÎÄ×÷Õß£º±ßĞ¡·á">
-                            <i class="fa fa-user"></i>±ßĞ¡·á</a>
+                        <a href="/f/about.html" title="æœ¬æ–‡ä½œè€…ï¼šè¾¹å°ä¸°">
+                            <i class="fa fa-user"></i>è¾¹å°ä¸°</a>
                     </li>
                     <li>
-                        <a href="#Comment" th:title="${'µ±Ç°¹²ÓĞ '+comments.size()+' ÌõÆÀÂÛ£¬µã»÷×ªµ½ÆÀÂÛ'}">
+                        <a href="#Comment" th:title="${'å½“å‰å…±æœ‰ '+comments.size()+' æ¡è¯„è®ºï¼Œç‚¹å‡»è½¬åˆ°è¯„è®º'}">
                             <i class="fa fa-comments-o"></i>
                             <span th:text="${'('+comments.size()+')'}">15</span></a>
                     </li>
                     <li>
-                        <a th:title="${'ÒÑÓĞ'+blog.click+'´Îä¯ÀÀ'}">
+                        <a th:title="${'å·²æœ‰'+blog.click+'æ¬¡æµè§ˆ'}">
                             <i class="fa fa-eye"></i>
                             <span th:text="${'('+blog.click+')'}"></span>
                         </a>
@@ -62,24 +62,24 @@
             </div>
             <div class=" article-content bg-color">
                 <div class="article-content bg-color" th:id="${blog.support==1}?'tuijian':''">
-                    <!--ÎÄÕÂÕıÎÄ-->
+                    <!--æ–‡ç« æ­£æ–‡-->
                     <div class="article-body" th:utext="${blog.content}">
                     </div>
-                    <!--END ÎÄÕÂÕıÎÄ-->
-                    <!--´òÉÍºÍ·ÖÏí-->
+                    <!--END æ–‡ç« æ­£æ–‡-->
+                    <!--æ‰“èµå’Œåˆ†äº«-->
                     <div class="article-fx">
-                        <span class="img-circle" href="javascript:void(0)" onClick="dashangToggle()">´òÉÍ</span>&nbsp;&nbsp;&nbsp;
-                        <a class="fx-btn img-circle img-circle" href="javascript:;">·ÖÏí</a>
+                        <span class="img-circle" href="javascript:void(0)" onClick="dashangToggle()">æ‰“èµ</span>&nbsp;&nbsp;&nbsp;
+                        <a class="fx-btn img-circle img-circle" href="javascript:;">åˆ†äº«</a>
                         <div class="bd-fx arc-bdfx">
                             <i class="fa fa-close fx-close"></i>
                             <ul class="bdsharebuttonbox">
-                                <li><a href="javascript:void(0)" class="bds_weixin" data-cmd="weixin" title="·ÖÏíµ½Î¢ĞÅ"></a>
+                                <li><a href="javascript:void(0)" class="bds_weixin" data-cmd="weixin" title="åˆ†äº«åˆ°å¾®ä¿¡"></a>
                                 </li>
-                                <li><a href="javascript:void(0)" class="bds_tsina" data-cmd="tsina" title="·ÖÏíµ½ĞÂÀËÎ¢²©"></a>
+                                <li><a href="javascript:void(0)" class="bds_tsina" data-cmd="tsina" title="åˆ†äº«åˆ°æ–°æµªå¾®åš"></a>
                                 </li>
-                                <li><a href="javascript:void(0)" class="bds_qzone" data-cmd="qzone" title="·ÖÏíµ½QQ¿Õ¼ä"></a>
+                                <li><a href="javascript:void(0)" class="bds_qzone" data-cmd="qzone" title="åˆ†äº«åˆ°QQç©ºé—´"></a>
                                 </li>
-                                <li><a href="javascript:void(0)" class="bds_tieba" data-cmd="tieba" title="·ÖÏíµ½°Ù¶ÈÌù°É"></a>
+                                <li><a href="javascript:void(0)" class="bds_tieba" data-cmd="tieba" title="åˆ†äº«åˆ°ç™¾åº¦è´´å§"></a>
                                 </li>
                                 <script th:inline="javascript"> window._bd_share_config = {
                                     "common": {
@@ -97,47 +97,47 @@
                             </ul>
                         </div>
                     </div>
-                    <!--END ·ÖÏí-->
+                    <!--END åˆ†äº«-->
                     <hr>
-                    <!--·ÖÀàºÍ±êÇ©-->
+                    <!--åˆ†ç±»å’Œæ ‡ç­¾-->
                     <div class="article_tag">
                         <ul>
                             <li><a th:href="${'/f/category/'+blog.category.categoryId+'.html'}"
-                                   th:title="${'¹éÀà£º'+blog.category.categoryTitle}"
+                                   th:title="${'å½’ç±»ï¼š'+blog.category.categoryTitle}"
                                    th:text="${blog.category.categoryTitle}"></a>
                             </li>
                             <li th:each="tag:${blog.tags}">
-                                <a class="b-tag-name" th:title="${'±êÇ©£º'+tag}" th:text="${tag}">
+                                <a class="b-tag-name" th:title="${'æ ‡ç­¾ï¼š'+tag}" th:text="${tag}">
                                 </a>
                             </li>
                         </ul>
                     </div>
-                    <!--End ·ÖÀàºÍ±êÇ©-->
+                    <!--End åˆ†ç±»å’Œæ ‡ç­¾-->
                 </div>
             </div>
         </article>
 
-        <!--ÉÏÒ»Æª£¬ÏÂÒ»Æª-->
+        <!--ä¸Šä¸€ç¯‡ï¼Œä¸‹ä¸€ç¯‡-->
         <div class="shangyip bg-color">
             <span>
-                <i class="fa fa-arrow-up"></i>ÉÏÒ»Æª£º
+                <i class="fa fa-arrow-up"></i>ä¸Šä¸€ç¯‡ï¼š
                   <a class='blue-text' th:if="${previousBlog!=null}"
                      th:href="${'/f/article/'+previousBlog.blogId+'.html'}"
                      th:title='${previousBlog.title}'
                      th:text="${previousBlog.title}"></a>
-                <a th:if="${previousBlog==null}" class='blue-text' href="javascript:void(0)">Ã»ÓĞÁË</a>
+                <a th:if="${previousBlog==null}" class='blue-text' href="javascript:void(0)">æ²¡æœ‰äº†</a>
             </span>
             <span>
-                <i class="fa fa-arrow-down"></i>ÏÂÒ»Æª£º
+                <i class="fa fa-arrow-down"></i>ä¸‹ä¸€ç¯‡ï¼š
                 <a class='blue-text' th:if="${nextBlog!=null}" th:href="${'/f/article/'+nextBlog.blogId+'.html'}"
                    th:title='${nextBlog.title}'
                    th:text="${nextBlog.title}"></a>
-                 <a th:if="${nextBlog==null}" class='blue-text' href="javascript:void(0)">Ã»ÓĞÁË</a>
+                 <a th:if="${nextBlog==null}" class='blue-text' href="javascript:void(0)">æ²¡æœ‰äº†</a>
             </span>
         </div>
-        <!--Ëæ»úÍÆ¼ö-->
+        <!--éšæœºæ¨è-->
         <div class="maybe-love">
-            <h4 class="index-title"><i class="fa fa-heart"></i>Äú»¹¿ÉÄÜÏ²»¶</h4>
+            <h4 class="index-title"><i class="fa fa-heart"></i>æ‚¨è¿˜å¯èƒ½å–œæ¬¢</h4>
             <ul>
                 <li th:each="blog:${randBlogList}">
                     <a th:href="${'/f/article/'+blog.blogId+'.html'}">
@@ -149,16 +149,16 @@
                 </li>
             </ul>
         </div>
-        <!--END Ëæ»úÍÆ¼ö-->
+        <!--END éšæœºæ¨è-->
         <h3 class="form-btn blue-text">
             <a href="javascript:;">
-                <i class="fa fa-edit"></i>ÎÒÒªÁôÑÔ
+                <i class="fa fa-edit"></i>æˆ‘è¦ç•™è¨€
             </a>
         </h3>
-        <!-- Í¨ÓÃÆÀÂÛ¿ªÊ¼ -->
+        <!-- é€šç”¨è¯„è®ºå¼€å§‹ -->
         <div class="comment-area" th:fragment="comment" id="Comment">
             <h4 class="index-title">
-                <i class="fa fa-comments-o"></i>[[${'µ±Ç°¹²ÓĞ '+comments.size()+' ÌõÆÀÂÛ'}]]
+                <i class="fa fa-comments-o"></i>[[${'å½“å‰å…±æœ‰ '+comments.size()+' æ¡è¯„è®º'}]]
             </h4>
             <div id="Space"></div>
 
@@ -207,14 +207,14 @@
                             <div class="sign" th:id="${'commentDiv-'+comment.id}">
                                 <a href="javascript:void(0);" class="comment-up"
                                    th:onclick="good(event,[[${comment.id}]])">
-                                    <i class="fa fa-thumbs-o-up"></i>ÔŞ(<span class="count"
+                                    <i class="fa fa-thumbs-o-up"></i>èµ(<span class="count"
                                                                              th:id="${'good-count-'+comment.id}"
                                                                              th:text="${comment.good}">0</span>)
                                     <i class="sepa"></i>
                                 </a>
                                 <a href="javascript:void(0);" class="comment-down" t
                                    th:onclick="bad(event,[[${comment.id}]])">
-                                    <i class="fa fa-thumbs-o-down"></i>²È(<span class="count"
+                                    <i class="fa fa-thumbs-o-down"></i>è¸©(<span class="count"
                                                                                th:id="${'bad-count-'+comment.id}"
                                                                                th:text="${comment.bad}">0</span>)
                                     <i class="sepa"></i>
@@ -222,7 +222,7 @@
                                 <a href="javascript:void(0);" class="comment-reply" th:id="${'reply-'+comment.id}"
                                    th:onclick="reply([[${comment.id}]])"
                                    style="display: inline;">
-                                    <i class="fa fa-reply"></i>»Ø¸´
+                                    <i class="fa fa-reply"></i>å›å¤
                                 </a>
                             </div>
                         </div>
@@ -230,55 +230,55 @@
                 </ul>
             </div>
         </div>
-        <!-- Í¨ÓÃÆÀÂÛ½áÊø -->
+        <!-- é€šç”¨è¯„è®ºç»“æŸ -->
     </section>
     <th:block th:replace="include-front :: side"/>
 </div>
 <div class="hide_box"></div>
 <div class="shang_box">
-    <a class="shang_close" href="javascript:void(0)" onclick="dashangToggle()" title="¹Ø±Õ"><img
-            src="/front/images/close.jpg" alt="È¡Ïû"></a>
-    <img class="shang_logo" src="/front/images/logo.png" alt="Dimple µÄ¸öÈË²©¿Í"/>
+    <a class="shang_close" href="javascript:void(0)" onclick="dashangToggle()" title="å…³é—­"><img
+            src="/front/images/close.jpg" alt="å–æ¶ˆ"></a>
+    <img class="shang_logo" src="/front/images/logo.png" alt="Dimple çš„ä¸ªäººåšå®¢"/>
     <div class="shang_tit">
-        <p>¸ĞĞ»</p>
+        <p>æ„Ÿè°¢</p>
     </div>
     <div class="shang_payimg">
-        <img src="/front/images/alipay.png" alt="É¨Âë²é¿´" title="É¨Ò»É¨">
+        <img src="/front/images/alipay.png" alt="æ‰«ç æŸ¥çœ‹" title="æ‰«ä¸€æ‰«">
     </div>
     <div class="shang_payselect">
         <div class="pay_item checked" data-id="alipay">
             <span class="radiobox"></span>
-            <span class="pay_logo"><img src="/front/images/alipay-logo.jpg" alt="Ö§¸¶±¦"></span>
+            <span class="pay_logo"><img src="/front/images/alipay-logo.jpg" alt="æ”¯ä»˜å®"></span>
         </div>
         <div class="pay_item" data-id="weipay">
             <span class="radiobox"></span>
-            <span class="pay_logo"><img src="/front/images/wechat-logo.jpg" alt="Î¢ĞÅ"></span>
+            <span class="pay_logo"><img src="/front/images/wechat-logo.jpg" alt="å¾®ä¿¡"></span>
         </div>
     </div>
 </div>
-<!-- ÊÖ»ú¶Ë -->
+<!-- æ‰‹æœºç«¯ -->
 <div class="shang_box_wap">
-    <a class="shang_close" href="javascript:void(0)" onClick="dashangToggle()" title="¹Ø±Õ"><img
+    <a class="shang_close" href="javascript:void(0)" onClick="dashangToggle()" title="å…³é—­"><img
             src="/front/images/close.jpg"
-            alt="È¡Ïû"/></a>
+            alt="å–æ¶ˆ"/></a>
     <div class="shang_tit">
-        <p>¸ĞĞ»ÄúµÄÖ§³Ö£¬ÎÒ»á¼ÌĞøÅ¬Á¦µÄ!</p>
+        <p>æ„Ÿè°¢æ‚¨çš„æ”¯æŒï¼Œæˆ‘ä¼šç»§ç»­åŠªåŠ›çš„!</p>
     </div>
     <div class="shang_payimg">
-        <img src="/front/images/alipay.png" alt="É¨Âë²é¿´"
-             title="É¨Ò»É¨"/>
+        <img src="/front/images/alipay.png" alt="æ‰«ç æŸ¥çœ‹"
+             title="æ‰«ä¸€æ‰«"/>
     </div>
-    <div class="pay_explain">³¤°´¶şÎ¬Âë´òÉÍ£¬ÄãËµ¶àÉÙ¾Í¶àÉÙ</div>
+    <div class="pay_explain">é•¿æŒ‰äºŒç»´ç æ‰“èµï¼Œä½ è¯´å¤šå°‘å°±å¤šå°‘</div>
     <div class="shang_payselect">
         <div class="pay_item checked" data-id="alipay">
             <span class="radiobox"></span>
             <span class="pay_logo">
-                <img src="/front/images/alipay.png" alt="Ö§¸¶±¦"/></span>
+                <img src="/front/images/alipay.png" alt="æ”¯ä»˜å®"/></span>
         </div>
         <div class="pay_item" data-id="weipay">
             <span class="radiobox"></span>
             <span class="pay_logo">
-                <img src="/front/images/weichart.png" alt="Î¢ĞÅ"/></span>
+                <img src="/front/images/weichart.png" alt="å¾®ä¿¡"/></span>
         </div>
     </div>
 </div>
@@ -298,7 +298,7 @@
             $(this).addClass('checked').siblings('.pay_item').removeClass('checked');
             var dataid = $(this).attr('data-id');
             $(".shang_payimg img").attr("src", dataid == "alipay" ? "/front/images/alipay.png" : "/front/images/weichart.png");
-            $("#shang_pay_txt").text(dataid == "alipay" ? "Ö§¸¶±¦" : "Î¢ĞÅ");
+            $("#shang_pay_txt").text(dataid == "alipay" ? "æ”¯ä»˜å®" : "å¾®ä¿¡");
         });
     });
 
@@ -312,7 +312,7 @@
         }
     }
 
-    // ÅĞ¶ÏÊÇ²»ÊÇÊÖ»ú¶Ë
+    // åˆ¤æ–­æ˜¯ä¸æ˜¯æ‰‹æœºç«¯
     function IsPC() {
         var userAgentInfo = navigator.userAgent;
         var Agents = ["Android", "iPhone",
@@ -332,25 +332,25 @@
         if (display == false) {
             $(".comment-reply").remove();
             $("#CommentEditor").remove();
-            $("#Space").append("<div style='border: 1px solid #ff6700;padding-top: 30px; padding-bottom: 30px;text-align: center;font-size: 24px;'>¹ÜÀíÔ±ÉèÖÃµ±Ç°²©¿Í½ûÖ¹ÆÀÂÛ</div>");
+            $("#Space").append("<div style='border: 1px solid #ff6700;padding-top: 30px; padding-bottom: 30px;text-align: center;font-size: 24px;'>ç®¡ç†å‘˜è®¾ç½®å½“å‰åšå®¢ç¦æ­¢è¯„è®º</div>");
         } else {
             initCommentEditor("#Space");
         }
     });
 
     $(function () {
-        //´úÂë¸ßÁÁ×Ô¶¨Òå
+        //ä»£ç é«˜äº®è‡ªå®šä¹‰
         $("code").each(function () {
             $(this).html("<ul><li>" + $(this).html().replace(/\n/g, "\n</li><li>") + "\n</li></ul>");
         });
     });
     jQuery(document).ready(function ($) {
-        //´¦ÀíÄ¿Â¼
+        //å¤„ç†ç›®å½•
         $.CateNav('.article-body', '#Catalog_box');
         $('#Catalog_box').height($('#Catalog_box').height() - 120);
         $('#toolbar-c').height($('#odl').height() / 4);
         $('#toolbar').height($('#Catalog_box').height());
-        //´¦Àí¹Ì¶¨ÔªËØ
+        //å¤„ç†å›ºå®šå…ƒç´ 
         //aside
         var $sticky = $('#Catalog_box');
         $sticky.hcSticky({

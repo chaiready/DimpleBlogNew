@@ -2,18 +2,18 @@
 
 <html lang="zh" xmlns:th="https://www.thymeleaf.org">
 <head>
-    <th:block th:include="include-front :: head('ÓÑÁ´¡ªDimpleµÄ¸öÈË²©¿Í','ÓÑÇéÁ´½Ó')"/>
+    <th:block th:include="include-front :: head('å‹é“¾â€”Dimpleçš„ä¸ªäººåšå®¢','å‹æƒ…é“¾æ¥')"/>
     <script th:src="@{/ajax/libs/layer/layer.min.js}"></script>
     <script th:src="@{/ajax/libs/layui/layui.js}"></script>
 </head>
 <body class="nobg">
 <th:block th:replace="include-front :: header"/>
 
-<!--ÄÚÈİÇø¿ªÊ¼-->l
+<!--å†…å®¹åŒºå¼€å§‹-->l
 <div class="container">
     <section>
         <div class="">
-            <h4 class="index-title" id="New2"><i class="fa fa-paperclip"></i> ±¾Õ¾ÓÑÇéÁ´½Ó£º</h4>
+            <h4 class="index-title" id="New2"><i class="fa fa-paperclip"></i> æœ¬ç«™å‹æƒ…é“¾æ¥ï¼š</h4>
 
             <ul class="link-list">
                 <li th:each="link:${links}">
@@ -29,65 +29,65 @@
         </div>
         <article>
 
-            <!--±à¼­µÄÄÚÈİ-->
+            <!--ç¼–è¾‘çš„å†…å®¹-->
             <div class="link-edit">
                 <h4 class="index-title">
                     <i class="fa fa-info-circle"></i><span
-                        style="font-size:14px;font-family:'Microsoft YaHei';">ÉêÇëËµÃ÷:</span>
+                        style="font-size:14px;font-family:'Microsoft YaHei';">ç”³è¯·è¯´æ˜:</span>
                 </h4>
                 <p>
-                    <span style="font-size:14px;font-family:'Microsoft YaHei';">¢Ù .</span><span
-                        style="color:#E53333;font-size:14px;font-family:'Microsoft YaHei';"><strong>¹óÕ¾ĞèÒªÏÈÌí¼Ó±¾Õ¾ÓÑÁ´£¬ÓÑÁ´ĞÅÏ¢¼ûÏÂ·½£¬±¾Õ¾»á¶¨Ê±É¨ÃèËùÓĞÓÑÁ´£¬ÇëÈ·±£ÍøÕ¾·ÃÎÊÕı³££¬<strong>±¾Õ¾×Ô¶¯ÉóºË³ÌĞòÔËĞĞÖĞ£¬×î³Ù»áÔÚ24Ğ¡Ê±ÄÚ¸úÉÏÁ´½Ó</strong></strong></span><span
-                        style="font-size:14px;font-family:'Microsoft YaHei';">£¬Ğ»Ğ»£¡</span><br/>
-                    <span style="font-size:14px;font-family:'Microsoft YaHei';">¢Ú .ÉêÇëÌá½»ºóÈôÎŞÆäËüÔ­Òò½«ÔÚ24Ğ¡Ê±ÄÚÉóºË,Èç³¬¹ıÊ±¼ä»¹Î´Í¨¹ı,ÇëÍ¨¹ıÊ×Ò³ÓÊ¼şµØÖ·ÁªÏµÎÒ¡£(¸÷ÖÖ¶îÍâÒòËØ)</span><br/>
+                    <span style="font-size:14px;font-family:'Microsoft YaHei';">â‘  .</span><span
+                        style="color:#E53333;font-size:14px;font-family:'Microsoft YaHei';"><strong>è´µç«™éœ€è¦å…ˆæ·»åŠ æœ¬ç«™å‹é“¾ï¼Œå‹é“¾ä¿¡æ¯è§ä¸‹æ–¹ï¼Œæœ¬ç«™ä¼šå®šæ—¶æ‰«ææ‰€æœ‰å‹é“¾ï¼Œè¯·ç¡®ä¿ç½‘ç«™è®¿é—®æ­£å¸¸ï¼Œ<strong>æœ¬ç«™è‡ªåŠ¨å®¡æ ¸ç¨‹åºè¿è¡Œä¸­ï¼Œæœ€è¿Ÿä¼šåœ¨24å°æ—¶å†…è·Ÿä¸Šé“¾æ¥</strong></strong></span><span
+                        style="font-size:14px;font-family:'Microsoft YaHei';">ï¼Œè°¢è°¢ï¼</span><br/>
+                    <span style="font-size:14px;font-family:'Microsoft YaHei';">â‘¡ .ç”³è¯·æäº¤åè‹¥æ— å…¶å®ƒåŸå› å°†åœ¨24å°æ—¶å†…å®¡æ ¸,å¦‚è¶…è¿‡æ—¶é—´è¿˜æœªé€šè¿‡,è¯·é€šè¿‡é¦–é¡µé‚®ä»¶åœ°å€è”ç³»æˆ‘ã€‚(å„ç§é¢å¤–å› ç´ )</span><br/>
                 </p>
                 <br/>
                 <h4 class="index-title">
-                    <i class="el-idea"></i><span style="font-size:14px;font-family:'Microsoft YaHei';"> Õ¾µãĞÅÏ¢:</span>
+                    <i class="el-idea"></i><span style="font-size:14px;font-family:'Microsoft YaHei';"> ç«™ç‚¹ä¿¡æ¯:</span>
                 </h4>
                 <p>
-                    <span style="font-size:14px;font-family:'Microsoft YaHei';">Ê×Ò³µØÖ·£º</span><a href="/"
+                    <span style="font-size:14px;font-family:'Microsoft YaHei';">é¦–é¡µåœ°å€ï¼š</span><a href="/"
                                                                                                target="_blank"><span
                         style="font-size:14px;font-family:'Microsoft YaHei';">https://www.bianxiaofeng.com</span></a><br/>
-                    <span style="font-size:14px;font-family:'Microsoft YaHei';">ÓÑÁ´µØÖ·£ºhttps://www.bianxiaofeng.com/link.html</span><br/>
-                    <span style="font-size:14px;font-family:'Microsoft YaHei';"> ÍøÕ¾Ãû³Æ£ºDimpleµÄ¸öÈË²©¿Í</span><br/>
-                    <span style="font-size:14px;font-family:'Microsoft YaHei';"> ÍøÕ¾ÃèÊö£º±ßĞ¡·áµÄ¸öÈË²©¿Í£¬¼ÇÂ¼Ñ§Ï°£¬¼ÇÂ¼Éú»î¡£</span><br/>
-                    <span style="font-size:14px;font-family:'Microsoft YaHei';"> ÍøÕ¾Í¼±êµØÖ·£ºhttps://www.bianxiaofeng.com/favicon.ico</span><br/>
+                    <span style="font-size:14px;font-family:'Microsoft YaHei';">å‹é“¾åœ°å€ï¼šhttps://www.bianxiaofeng.com/link.html</span><br/>
+                    <span style="font-size:14px;font-family:'Microsoft YaHei';"> ç½‘ç«™åç§°ï¼šDimpleçš„ä¸ªäººåšå®¢</span><br/>
+                    <span style="font-size:14px;font-family:'Microsoft YaHei';"> ç½‘ç«™æè¿°ï¼šè¾¹å°ä¸°çš„ä¸ªäººåšå®¢ï¼Œè®°å½•å­¦ä¹ ï¼Œè®°å½•ç”Ÿæ´»ã€‚</span><br/>
+                    <span style="font-size:14px;font-family:'Microsoft YaHei';"> ç½‘ç«™å›¾æ ‡åœ°å€ï¼šhttps://www.bianxiaofeng.com/favicon.ico</span><br/>
                 </p>
             </div>
 
-            <h4 class="index-title"><i class="fa fa-edit"></i> ¿ªÊ¼ÉêÇë: »¶Ó­½»»»ÓÑÁ´</h4>
+            <h4 class="index-title"><i class="fa fa-edit"></i> å¼€å§‹ç”³è¯·: æ¬¢è¿äº¤æ¢å‹é“¾</h4>
             <div id="Join" class="form-zd form-in">
                 <form action="#" id="contact-form" method="post" onsubmit="return false">
-                    <!----êÇ³Æ------->
+                    <!----æ˜µç§°------->
                     <div class="input-prepend">
                         <span class="add-on"><i class="fa fa-user"></i></span>
-                        <input name="title" type="text" id="title" size="16" placeholder="ÍøÕ¾Ãû³Æ£¨±ØĞë£©"/>
+                        <input name="title" type="text" id="title" size="16" placeholder="ç½‘ç«™åç§°ï¼ˆå¿…é¡»ï¼‰"/>
                     </div>
-                    <!------ÓÊÏä----->
+                    <!------é‚®ç®±----->
                     <div class="input-prepend">
                         <span class="add-on"><i class="fa fa-envelope"></i></span>
-                        <input name="email" type="text" id="email" size="16" placeholder="ÄúµÄÓÊÏä£¨±ØĞë£©"/>
+                        <input name="email" type="text" id="email" size="16" placeholder="æ‚¨çš„é‚®ç®±ï¼ˆå¿…é¡»ï¼‰"/>
                     </div>
-                    <!----ÍøÖ·------->
+                    <!----ç½‘å€------->
                     <div class="input-prepend">
                         <span class="add-on"><i class="fa fa-globe"></i></span>
-                        <input name="url" type="text" id="url" size="16" placeholder="ÄúµÄÍøÕ¾£¨±ØĞë£©"/>
+                        <input name="url" type="text" id="url" size="16" placeholder="æ‚¨çš„ç½‘ç«™ï¼ˆå¿…é¡»ï¼‰"/>
                     </div>
                     <div class="input-prepend">
                         <span class="add-on"><i class="fa fa-braille"></i></span>
-                        <input name="description" type="text" id="description" size="16" placeholder="ÍøÕ¾½éÉÜ£¨±ØĞë£©"/>
+                        <input name="description" type="text" id="description" size="16" placeholder="ç½‘ç«™ä»‹ç»ï¼ˆå¿…é¡»ï¼‰"/>
                     </div>
                     <div class="input-prepend">
                         <span class="add-on"><i class="fa fa-braille"></i></span>
-                        <input name="headerImg" type="text" id="headerImg" size="16" placeholder="ÍøÕ¾Í¼±êµØÖ·£¨±ØĞë£©"/>
+                        <input name="headerImg" type="text" id="headerImg" size="16" placeholder="ç½‘ç«™å›¾æ ‡åœ°å€ï¼ˆå¿…é¡»ï¼‰"/>
                     </div>
-                    <!----ÄÚÈİ------->
+                    <!----å†…å®¹------->
                     <!--                    <textarea class="link-text" style="height:150px;width:70%;" name="u_content" id="info"-->
-                    <!--                              placeholder="ÍøÕ¾½éÉÜ£¨±ØĞë£©"></textarea>-->
-                    <!--Ìá½»±íµ¥--------->
+                    <!--                              placeholder="ç½‘ç«™ä»‹ç»ï¼ˆå¿…é¡»ï¼‰"></textarea>-->
+                    <!--æäº¤è¡¨å•--------->
                     <div class="feed-sub"><input type="submit" class="btn btn-inverse" onclick="return link()"
-                                                 value="Ìá½»ÉêÇë"/></div>
+                                                 value="æäº¤ç”³è¯·"/></div>
                 </form>
             </div>
         </article>
@@ -108,17 +108,17 @@
 
     function link() {
         if ($("#title").val() == "") {
-            layer.msg('ÍøÕ¾Ãû³Æ²»ÄÜÎª¿Õ', {icon: 2});
+            layer.msg('ç½‘ç«™åç§°ä¸èƒ½ä¸ºç©º', {icon: 2});
             return false;
         }
         if ($("#email").val() == "") {
-            layer.msg('ÓÊÏä²»ÄÜÎª¿Õà¸', {icon: 2});
+            layer.msg('é‚®ç®±ä¸èƒ½ä¸ºç©ºå–”', {icon: 2});
             return false;
         } else {
             var reg = /\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;
             var email = $("#email").val();
             if (!reg.test(email)) {
-                layer.msg('ÓÊÏä¸ñÊ½´íÎóà¸', {icon: 2});
+                layer.msg('é‚®ç®±æ ¼å¼é”™è¯¯å–”', {icon: 2});
                 return false;
             }
         }
@@ -126,27 +126,27 @@
             var reg = /(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/;
             var url = $("#url").val();
             if (!reg.test(url)) {
-                layer.msg('ÍøÕ¾¸ñÊ½´íÎóà¸£¬ÇëÊäÈë´øhttp¸ñÊ½µÄÍøÖ·', {icon: 2});
+                layer.msg('ç½‘ç«™æ ¼å¼é”™è¯¯å–”ï¼Œè¯·è¾“å…¥å¸¦httpæ ¼å¼çš„ç½‘å€', {icon: 2});
                 return false;
             }
         } else {
-            layer.msg('ÍøÕ¾µØÖ·²»ÄÜÎª¿Õ', {icon: 2});
+            layer.msg('ç½‘ç«™åœ°å€ä¸èƒ½ä¸ºç©º', {icon: 2});
         }
         if ($("#description").val() == "") {
-            layer.msg('ÍøÕ¾ÃèÊö²»ÄÜÎª¿Õ', {icon: 2});
+            layer.msg('ç½‘ç«™æè¿°ä¸èƒ½ä¸ºç©º', {icon: 2});
         }
         if ($("#description").val() == "") {
-            layer.msg('ÍøÕ¾ÃèÊö²»ÄÜÎª¿Õ', {icon: 2});
+            layer.msg('ç½‘ç«™æè¿°ä¸èƒ½ä¸ºç©º', {icon: 2});
         }
         if ($("#headerImg").val() != "") {
             var reg = /(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/;
             var url = $("#headerImg").val();
             if (!reg.test(url)) {
-                layer.msg('Í¼±ê¸ñÊ½´íÎóà¸£¬ÇëÊäÈë´øhttp¸ñÊ½µÄÍ¼±ê', {icon: 2});
+                layer.msg('å›¾æ ‡æ ¼å¼é”™è¯¯å–”ï¼Œè¯·è¾“å…¥å¸¦httpæ ¼å¼çš„å›¾æ ‡', {icon: 2});
                 return false;
             }
         } else {
-            layer.msg('Í¼±êµØÖ·²»ÄÜÎª¿Õ', {icon: 2});
+            layer.msg('å›¾æ ‡åœ°å€ä¸èƒ½ä¸ºç©º', {icon: 2});
         }
         var title = $("#title").val();
         var email = $("#email").val();
@@ -166,7 +166,7 @@
                     $("#url").val("");
                     $("#description").val("");
                     $("#headerImg").val("");
-                    layer.msg('¹§Ï²Ìá½»³É¹¦£¡´ı¹ÜÀíÔ±ÉóºËÍ¨¹ıºóÏÔÊ¾!', {icon: 1});
+                    layer.msg('æ­å–œæäº¤æˆåŠŸï¼å¾…ç®¡ç†å‘˜å®¡æ ¸é€šè¿‡åæ˜¾ç¤º!', {icon: 1});
                     $("html, body").animate({
                         scrollTop: $("#applink").offset().top
                     }, {duration: 500, easing: "swing"});
@@ -174,7 +174,7 @@
                 }
             },
             error: function (jqXHR) {
-                layer.msg('·¢ËÍ´íÎó£º' + jqXHR.status, {icon: 2});
+                layer.msg('å‘é€é”™è¯¯ï¼š' + jqXHR.status, {icon: 2});
             },
         });
 
