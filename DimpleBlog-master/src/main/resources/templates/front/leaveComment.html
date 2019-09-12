@@ -2,7 +2,7 @@
 <html lang="zh" xmlns:th="https://www.thymeleaf.org">
 
 <head>
-    <th:block th:include="include-front :: head('ÁïôË®Ä‚ÄîDimpleÁöÑ‰∏™‰∫∫ÂçöÂÆ¢','ÁïôË®ÄÊùø')"/>
+    <th:block th:include="include-front :: head('¡Ù—‘°™Dimpleµƒ∏ˆ»À≤©øÕ','¡Ù—‘∞Â')"/>
     <link rel="stylesheet" th:href="@{/front/css/comment.css}"/>
     <link rel="stylesheet" th:href="@{/front/css/font-awesome.min.css}"/>
     <link rel="stylesheet" th:href="@{/front/plugin/simplemde/simplemde.min.css}"/>
@@ -12,22 +12,22 @@
 <body class="nobg">
 <th:block th:replace="include-front :: header"/>
 <div class="container" id="location">
-    <!--Â∑¶‰æßÂºÄÂßã-->
+    <!--◊Û≤‡ø™ º-->
     <section>
         <div class="comment-area">
             <img src="/front/images/leaveComment-bg.png"
                  style="width:100%;"
-                 alt="Dimple‰∏™‰∫∫ÂçöÂÆ¢ÁïôË®ÄÊùø"/>
+                 alt="Dimple∏ˆ»À≤©øÕ¡Ù—‘∞Â"/>
             <h3 class="form-btn blue-text">
                 <a href="javascript:;">
-                    <i class="fa fa-edit"></i>ÊàëË¶ÅÁïôË®Ä
+                    <i class="fa fa-edit"></i>Œ““™¡Ù—‘
                 </a>
             </h3>
-            <!-- ÈÄöÁî®ËØÑËÆ∫ÂºÄÂßã -->
+            <!-- Õ®”√∆¿¬€ø™ º -->
             <div class="comment-area" th:fragment="comment" id="Comment">
                 <h4 class="index-title">
                     <input type="hidden" id="pageId" th:value="${pageId}">
-                    <i class="fa fa-comments-o"></i>[[${'ÂΩìÂâçÂÖ±Êúâ '+comments.size()+' Êù°ËØÑËÆ∫'}]]
+                    <i class="fa fa-comments-o"></i>[[${'µ±«∞π≤”– '+comments.size()+' Ãı∆¿¬€'}]]
                 </h4>
                 <div id="Space"></div>
 
@@ -76,14 +76,14 @@
                                 <div class="sign" th:id="${'commentDiv-'+comment.id}">
                                     <a href="javascript:void(0);" class="comment-up"
                                        th:onclick="good(event,[[${comment.id}]])">
-                                        <i class="fa fa-thumbs-o-up"></i>Ëµû(<span class="count"
+                                        <i class="fa fa-thumbs-o-up"></i>‘ﬁ(<span class="count"
                                                                                  th:id="${'good-count-'+comment.id}"
                                                                                  th:text="${comment.good}">0</span>)
                                         <i class="sepa"></i>
                                     </a>
                                     <a href="javascript:void(0);" class="comment-down" t
                                        th:onclick="bad(event,[[${comment.id}]])">
-                                        <i class="fa fa-thumbs-o-down"></i>Ë∏©(<span class="count"
+                                        <i class="fa fa-thumbs-o-down"></i>≤»(<span class="count"
                                                                                    th:id="${'bad-count-'+comment.id}"
                                                                                    th:text="${comment.bad}">0</span>)
                                         <i class="sepa"></i>
@@ -91,7 +91,7 @@
                                     <a href="javascript:void(0);" class="comment-reply" th:id="${'reply-'+comment.id}"
                                        th:onclick="reply([[${comment.id}]])"
                                        style="display: inline;">
-                                        <i class="fa fa-reply"></i>ÂõûÂ§ç
+                                        <i class="fa fa-reply"></i>ªÿ∏¥
                                     </a>
                                 </div>
                             </div>
@@ -99,7 +99,7 @@
                     </ul>
                 </div>
             </div>
-            <!-- ÈÄöÁî®ËØÑËÆ∫ÁªìÊùü -->
+            <!-- Õ®”√∆¿¬€Ω· ¯ -->
         </div>
     </section>
     <th:block th:replace="include-front :: side"/>
