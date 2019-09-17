@@ -95,7 +95,7 @@
 		            dataType: "json",
 		            success: function (data) {
 		            	console.info(data);
-		                if (data.code == 0) {
+		                if (data.code == 200) {
 		                	window.location.href="/"+data.msg+".html";
 		                }else{
 		                	$("#operTip").html(data.msg);
