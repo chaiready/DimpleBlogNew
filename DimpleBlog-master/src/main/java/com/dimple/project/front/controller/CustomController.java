@@ -41,100 +41,109 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * 用户定义
+ * 
  * @author 90907
  *
  */
 @Slf4j
 @Controller
-public class CustomController  extends BaseController {
-	 @Autowired
-	    HomeService homeService;
-	    @Autowired
-	    BlogService blogService;
-	    @Autowired
-	    CategoryService categoryService;
-	    @Autowired
-	    TagService tagService;
-	    @Autowired
-	    LinkService linkService;
-	    @Autowired
-	    INoticeService noticeService;
-	    @Autowired
-	    CarouselMapService carouselMapService;
-	    @Autowired
-	    private UserService userService;
+public class CustomController extends BaseController {
+	@Autowired
+	HomeService homeService;
+	@Autowired
+	BlogService blogService;
+	@Autowired
+	CategoryService categoryService;
+	@Autowired
+	TagService tagService;
+	@Autowired
+	LinkService linkService;
+	@Autowired
+	INoticeService noticeService;
+	@Autowired
+	CarouselMapService carouselMapService;
+	@Autowired
+	private UserService userService;
 
-	    /**
-	     * 设置前台页面公用的部分代码
-	     * 均设置Redis缓存
-	     */
-	    private void setCommonMessage(Model model,String loginName) {
-	        //获取分类下拉项中的分类
-//	        model.addAttribute("categories", categoryService.selectSupportCategoryList());
+	/**
+	 * 设置前台页面公用的部分代码 均设置Redis缓存
+	 */
+	private void setCommonMessage(Model model, String loginName) {
+		// 获取分类下拉项中的分类
+		// model.addAttribute("categories",
+		// categoryService.selectSupportCategoryList());
 
-	    	List<CustomFunc> funcList = new ArrayList<>();
-	    	funcList.add(new CustomFunc("/"+loginName+"/index.html", "首页"));
-	    	funcList.add(new CustomFunc("/"+loginName+"/images.html", "图片"));
-	    	model.addAttribute("funcList", funcList);
+		List<CustomFunc> funcList = new ArrayList<>();
+		funcList.add(new CustomFunc("/" + loginName + "/index.html", "首页"));
+		funcList.add(new CustomFunc("/" + loginName + "/images.html", "生活互助"));
+		funcList.add(new CustomFunc("/" + loginName + "/images.html", "吐槽大会"));
+		funcList.add(new CustomFunc("/" + loginName + "/images.html", "图片"));
+		model.addAttribute("funcList", funcList);
 
-	        //查询所有的标签
-	        model.addAttribute("tags", tagService.selectTagList(new Tag()));
-	        //查询最近更新的文章
-	        model.addAttribute("newestUpdateBlog", blogService.selectNewestUpdateBlog());
-	        //查询文章排行
-	        model.addAttribute("blogRanking", blogService.selectBlogRanking());
-	        //查询推荐博文
-	        model.addAttribute("supportBlog", blogService.selectSupportBlog());
-	        //查询通知
-	        model.addAttribute("notices", noticeService.selectNoticeListDisplay());
-	        //获取友链信息
-	        model.addAttribute("links", linkService.selectLinkListFront());
-	    }
+		// 查询所有的标签
+		model.addAttribute("tags", tagService.selectTagList(new Tag()));
+		// 查询最近更新的文章
+		model.addAttribute("newestUpdateBlog", blogService.selectNewestUpdateBlog());
+		// 查询文章排行
+		model.addAttribute("blogRanking", blogService.selectBlogRanking());
+		// 查询推荐博文
+		model.addAttribute("supportBlog", blogService.selectSupportBlog());
+		// 查询通知
+		model.addAttribute("notices", noticeService.selectNoticeListDisplay());
+		// 获取友链信息
+		model.addAttribute("links", linkService.selectLinkListFront());
+	}
 
-    @GetMapping("/{loginName}.html")
-    @VLog(title = "用户首页")
-    public String defaultIndex(@PathVariable String loginName,Integer pageNum,  Model model) {
-        setCommonMessage(model,loginName);
-        PageHelper.startPage(pageNum == null ? 1 : pageNum, 12, "create_time desc");
-        model.addAttribute("blogs", new PageInfo<>(homeService.selectFrontBlogList(new Blog())));
-        //放置轮播图
-        model.addAttribute("carouselMaps", carouselMapService.selectCarouselMapListFront());
-        model.addAttribute("curUser", ShiroUtils.getSysUser());
+	@GetMapping("/{loginName}.html")
+	@VLog(title = "用户首页")
+	public String defaultIndex(@PathVariable String loginName, Integer pageNum, Model model) {
+		setCommonMessage(model, loginName);
+		PageHelper.startPage(pageNum == null ? 1 : pageNum, 12, "create_time desc");
+		model.addAttribute("blogs", new PageInfo<>(homeService.selectFrontBlogList(new Blog())));
+		// 放置轮播图
+		model.addAttribute("carouselMaps", carouselMapService.selectCarouselMapListFront());
+		model.addAttribute("curUser", ShiroUtils.getSysUser());
 
-        // 查询用户信息
-        User user = userService.selectUserByLoginName(loginName);
-        if(user!=null){
-        	model.addAttribute("user", user);
-        	return "front/custom/index";
-        }
-        return "front/index";        
-    }
+		// 查询用户信息
+		User user = userService.selectUserByLoginName(loginName);
+		if (user != null) {
+			model.addAttribute("user", user);
+			return "front/custom/index";
+		}
+		return "front/index";
+	}
 
-    @GetMapping("/{loginName}/index.html")
-    @VLog(title = "用户首页")
-    public String loginNameIndex(@PathVariable String loginName,Integer pageNum,  Model model) {
-        return defaultIndex(loginName, pageNum, model);        
-    }
-    
+	@GetMapping("/{loginName}/index.html")
+	@VLog(title = "用户首页")
+	public String loginNameIndex(@PathVariable String loginName, Integer pageNum, Model model) {
+		return defaultIndex(loginName, pageNum, model);
+	}
 
-    @PostMapping("/front/login")
-    @ResponseBody
-    public AjaxResult frontLogin(String loginName,String password,  Model model) {
-    	UsernamePasswordToken token = new UsernamePasswordToken(loginName, password, false);
-        Subject subject = SecurityUtils.getSubject();
-        try {
-            subject.login(token);
-            return success(loginName);
-        } catch (AuthenticationException e) {
-            String msg = "用户或密码错误";
-            if (StringUtils.isNotEmpty(e.getMessage())) {
-                msg = e.getMessage();
-            }
-            return error(msg);
-        }
-    }
+	@GetMapping("/{loginName}/images.html")
+	@VLog(title = "用户首页")
+	public String images(@PathVariable String loginName, Integer pageNum, Model model) {
+		setCommonMessage(model, loginName);
+		return "front/images";
+	}
 
-    @RequestMapping("/front/loginSuc")
+	@PostMapping("/front/login")
+	@ResponseBody
+	public AjaxResult frontLogin(String loginName, String password, Model model) {
+		UsernamePasswordToken token = new UsernamePasswordToken(loginName, password, false);
+		Subject subject = SecurityUtils.getSubject();
+		try {
+			subject.login(token);
+			return success(loginName);
+		} catch (AuthenticationException e) {
+			String msg = "用户或密码错误";
+			if (StringUtils.isNotEmpty(e.getMessage())) {
+				msg = e.getMessage();
+			}
+			return error(msg);
+		}
+	}
+
+	@RequestMapping("/front/loginSuc")
 	public String loginSuc(Model model) {
 		User user = ShiroUtils.getSysUser();
 		if (user != null) {

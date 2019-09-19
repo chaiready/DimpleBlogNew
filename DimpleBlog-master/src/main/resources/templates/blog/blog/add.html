@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="https://www.thymeleaf.org">
 <head>
-    <th:block th:include="include :: header('ĞÂÔö²©ÎÄ')"/>
+    <th:block th:include="include :: header('æ–°å¢åšæ–‡')"/>
     <th:block th:include="include :: layout-latest-css"/>
     <th:block th:include="include :: summernote-css"/>
     <th:block th:include="include :: bootstrap-tagsinput-css"/>
@@ -12,56 +12,56 @@
         <div class="box box-main">
             <div class="box-header">
                 <div class="box-title">
-                    <i class="fa icon-grid"></i> ²©¿Í¸ÅÀÀ
+                    <i class="fa icon-grid"></i> åšå®¢æ¦‚è§ˆ
                 </div>
                 <div class="box-tools pull-right">
-                    <button type="button" class="btn btn-box-tool" id="btnRefresh" title="Ë¢ĞÂÁĞ±í"><i
+                    <button type="button" class="btn btn-box-tool" id="btnRefresh" title="åˆ·æ–°åˆ—è¡¨"><i
                             class="fa fa-refresh"></i></button>
                 </div>
             </div>
             <div class="ui-layout-content">
                 <form id="blogAddForm">
                     <div class="form-group">
-                        <label class="control-label">·âÃæ:</label>
+                        <label class="control-label">å°é¢:</label>
                         <img src="/img/blog-default.png" width="100%" onclick="changeImg()"
                              height="150px"
-                             id="header" name="headerImg" title="µã»÷Í¼Æ¬¸ü»»±êÍ¼"/>
+                             id="header" name="headerImg" title="ç‚¹å‡»å›¾ç‰‡æ›´æ¢æ ‡å›¾"/>
                     </div>
                     <div class="form-group">
-                        <label class=" control-label">±êÌâ:</label>
+                        <label class=" control-label">æ ‡é¢˜:</label>
                         <div class="">
-                            <input type="text" class="form-control" name="title" placeholder="ÔÚÕâÀïÊäÈë±êÌâ">
+                            <input type="text" class="form-control" name="title" placeholder="åœ¨è¿™é‡Œè¾“å…¥æ ‡é¢˜">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class=" control-label">ÕªÒª:</label>
+                        <label class=" control-label">æ‘˜è¦:</label>
                         <div class="">
-                            <input type="text" class="form-control" name="summary" placeholder="ÔÚÕâÀïÊäÈëÕªÒª">
+                            <input type="text" class="form-control" name="summary" placeholder="åœ¨è¿™é‡Œè¾“å…¥æ‘˜è¦">
                             <span class="help-block m-b-none">
-                                    <i class="fa fa-info-circle"></i> Áô¿ÕÔòÄ¬ÈÏÎª²©ÎÄÇ°150×Ö½ÚÎª²©ÎÄµÄÕªÒª</span>
+                                    <i class="fa fa-info-circle"></i> ç•™ç©ºåˆ™é»˜è®¤ä¸ºåšæ–‡å‰150å­—èŠ‚ä¸ºåšæ–‡çš„æ‘˜è¦</span>
                         </div>
                     </div>
                     <div>
-                        <label class="">±êÇ©:</label>
+                        <label class="">æ ‡ç­¾:</label>
                         <div class="tagsinput-primary form-group">
                             <input name="tags" id="tags" class="tagsinput" data-role="tagsinput"
-                                   placeholder="ÊäÈëºó»Ø³µ">
+                                   placeholder="è¾“å…¥åå›è½¦">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class=" control-label">È¨ÖØ:</label>
+                        <label class=" control-label">æƒé‡:</label>
                         <div class="">
-                            <input name="weight" class="form-control" type="text" value="0" placeholder="ÔÚÕâÀïÊäÈëÈ¨ÖØ">
+                            <input name="weight" class="form-control" type="text" value="0" placeholder="åœ¨è¿™é‡Œè¾“å…¥æƒé‡">
                             <span class="help-block m-b-none"><i
-                                    class="fa fa-info-circle"></i> Ç°Ì¨Ê×Ò³Õ¹Ê¾»áÒÔÈ¨ÖØ×÷ÎªÅÅĞò±ê×¼</span>
+                                    class="fa fa-info-circle"></i> å‰å°é¦–é¡µå±•ç¤ºä¼šä»¥æƒé‡ä½œä¸ºæ’åºæ ‡å‡†</span>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class=" control-label">·ÖÀà:</label>
+                        <label class=" control-label">åˆ†ç±»:</label>
                         <div class="">
                             <div class="input-group" style="width: 100%">
                                 <select name="categoryId" class="form-control m-b">
-                                    <option value="">ÇëÑ¡Ôñ·ÖÀà</option>
+                                    <option value="">è¯·é€‰æ‹©åˆ†ç±»</option>
                                     <option th:each="category : ${categories}"
                                             th:text="${category.categoryTitle}"
                                             th:value="${category.categoryId}">
@@ -81,12 +81,12 @@
         <div class="mail-box-header">
             <div class="pull-right tooltip-demo">
                 <a class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top"
-                   onclick="editOrPreview(this)" title="Ô¤ÀÀ"><i class="fa fa-pencil"></i> Ô¤ÀÀ</a>
+                   onclick="editOrPreview(this)" title="é¢„è§ˆ"><i class="fa fa-pencil"></i> é¢„è§ˆ</a>
                 <a class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top"
-                   onclick="uploadMd()" title="ÉÏ´«MDÎÄ¼ş"><i class="fa fa-pencil"></i> ÉÏ´«</a>
+                   onclick="uploadMd()" title="ä¸Šä¼ MDæ–‡ä»¶"><i class="fa fa-pencil"></i> ä¸Šä¼ </a>
             </div>
             <h2>
-                ²©¿ÍÄÚÈİ
+                åšå®¢å†…å®¹
             </h2>
         </div>
         <div class="mail-box">
@@ -96,10 +96,10 @@
             </div>
             <div class="mail-body text-right tooltip-demo">
                 <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler()"><i
-                        class="fa fa-check"></i>±£ ´æ
+                        class="fa fa-check"></i>ä¿ å­˜
                 </button>&nbsp;
                 <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i
-                        class="fa fa-reply-all"></i>¹Ø ±Õ
+                        class="fa fa-reply-all"></i>å…³ é—­
                 </button>
             </div>
             <div class="clearfix"></div>
@@ -136,25 +136,25 @@
             },
             messages: {
                 "headerImg": {
-                    required: "ÇëÑ¡ÔñÔ¤ÀÀÍ¼",
+                    required: "è¯·é€‰æ‹©é¢„è§ˆå›¾",
                 },
                 "title": {
-                    required: "ÇëÊäÈë±êÌâ",
-                    rangelength: "ÇëÊäÈë³¤¶ÈÎª {0} ÖÁ {1} Ö®¼äµÄ±êÌâ"
+                    required: "è¯·è¾“å…¥æ ‡é¢˜",
+                    rangelength: "è¯·è¾“å…¥é•¿åº¦ä¸º {0} è‡³ {1} ä¹‹é—´çš„æ ‡é¢˜"
                 },
                 "summary": {
-                    maxlength: "×î¶àÊäÈë{0}¸ö×Ö·û"
+                    maxlength: "æœ€å¤šè¾“å…¥{0}ä¸ªå­—ç¬¦"
                 },
                 "weight": {
-                    required: "ÇëÊäÈëÈ¨ÖØ",
-                    rangelength: "ÇëÊäÈëÕıÈ·¸ñÊ½µÄÈ¨ÖØ"
+                    required: "è¯·è¾“å…¥æƒé‡",
+                    rangelength: "è¯·è¾“å…¥æ­£ç¡®æ ¼å¼çš„æƒé‡"
                 },
                 "tags": {
-                    required: "ÇëÊäÈë±êÇ©",
-                    rangelength: "ÇëÊäÈë³¤¶ÈÎª {0} ÖÁ {1} Ö®¼äµÄ±êÇ©"
+                    required: "è¯·è¾“å…¥æ ‡ç­¾",
+                    rangelength: "è¯·è¾“å…¥é•¿åº¦ä¸º {0} è‡³ {1} ä¹‹é—´çš„æ ‡ç­¾"
                 },
                 "categoryId": {
-                    required: "ÇëÑ¡Ôñ·ÖÀà",
+                    required: "è¯·é€‰æ‹©åˆ†ç±»",
                 },
             },
         });
@@ -162,21 +162,21 @@
         if ($(this).width() < 769) {
             panehHidden = true;
         }
-        //³õÊ¼»¯·ÖÀ¸
+        //åˆå§‹åŒ–åˆ†æ 
         $('body').layout({initClosed: panehHidden, west__size: 350});
     });
 
     /**
-     *´ò¿ªÑ¡ÔñÍ¼Æ¬µÄ´°¿Ú
+     *æ‰“å¼€é€‰æ‹©å›¾ç‰‡çš„çª—å£
      */
     function imageSelect(index, layero) {
         var body = layer.getChildFrame('body', index);
-        //»ñÈ¡ÉÏ´«ÎÄ¼şµÄURL
+        //è·å–ä¸Šä¼ æ–‡ä»¶çš„URL
         var url = body.find("#url").val();
-        //»ñÈ¡ÍøÂçµØÖ·URL
+        //è·å–ç½‘ç»œåœ°å€URL
         var netUrl = body.find("#netUrl").val();
         if ($.common.isNotEmpty(url) && $.common.isNotEmpty(netUrl)) {
-            $.modal.alertError("²©ÎÄ·âÃæÖ»ÄÜÑ¡ÔñÒ»¸öÅ¶~£¬Çë¼ì²éÊÇ·ñÓĞÑ¡ÖĞÍ¼Æ¬¡¢ÉÏ´«Í¼Æ¬»òÕßÍ¼Æ¬µØÖ·ÊäÈë£¡");
+            $.modal.alertError("åšæ–‡å°é¢åªèƒ½é€‰æ‹©ä¸€ä¸ªå“¦~ï¼Œè¯·æ£€æŸ¥æ˜¯å¦æœ‰é€‰ä¸­å›¾ç‰‡ã€ä¸Šä¼ å›¾ç‰‡æˆ–è€…å›¾ç‰‡åœ°å€è¾“å…¥ï¼");
             return;
         }
         var urlFinal = $.common.isNotEmpty(url) ? url : netUrl;
@@ -187,14 +187,14 @@
     function changeImg() {
         var option = {
             url: "/blog/blog/image",
-            title: "ËØ²Ä¿â",
+            title: "ç´ æåº“",
             width: $(window).width() / 1.5,
             callBack: imageSelect
         };
         $.modal.openOptions(option);
     }
 
-    //»ñÈ¡±íµ¥Êı¾İ
+    //è·å–è¡¨å•æ•°æ®
     function getData() {
         var headerImg = $("#header")[0].src;
         var title = $("input[name='title']").val();

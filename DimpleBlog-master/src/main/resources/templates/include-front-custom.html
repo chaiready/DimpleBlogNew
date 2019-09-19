@@ -104,13 +104,13 @@
                         </ul>
                     </div>
                 </li>
-                <!-- <li th:if="${curUser==null}">
+                <li th:if="${curUser==null}">
                 	<a href="/front/toLogin">
 		                <img class="img-circle"
 		                     src="/front/images/default_head_img.gif"
 		                     alt="登录" title="登录" style="margin-top: 12px;">
 		          	 </a>
-                </li> -->
+                </li>
             </ul>
             
             
@@ -119,13 +119,13 @@
             <!--移动的滑动 end-->
         </nav>
         <!--登录-->
-        <div class="vip" style="width: 4%;float: right;text-align: right;">
+        <!-- <div class="vip" style="width: 4%;float: right;text-align: right;">
             <a href="/front/toLogin">
                 <img class="img-circle"
                      src="/front/images/default_head_img.gif"
                      alt="登录" title="登录" style="margin-top: 17px;">
             </a>
-        </div>
+        </div> -->
         <!--手机导航-->
         <div class="mob-menu">
             <!--手机下拉菜单-->
@@ -149,6 +149,13 @@
                  <li th:each="func:${funcList}">
                     <a th:href="${func.funcHref}"
                        th:text="${func.funcText}"></a>
+                </li>
+                <li th:if="${curUser==null}">
+                	<a href="/front/toLogin">
+		                <img class="img-circle"
+		                     src="/front/images/default_head_img.gif"
+		                     alt="登录" title="登录" style="margin-top: 12px;">
+		          	 </a>
                 </li>
             </ul>
         </div>
