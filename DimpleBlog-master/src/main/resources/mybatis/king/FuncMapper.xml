@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dimple.project.king.func.mapper.FuncMapper">
+
+    <resultMap type="Func" id="FuncResult">
+        <id property="funcId" column="func_id"/>
+        <result property="funcName" column="func_name"/>
+        <result property="parentName" column="parent_name"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="orderNum" column="order_num"/>
+        <result property="url" column="url"/>
+        <result property="funcType" column="func_type"/>
+        <result property="visible" column="visible"/>
+        <result property="perms" column="perms"/>
+        <result property="icon" column="icon"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="selectFuncVo">
+        select func_id, func_name, parent_id, order_num, url, func_type, visible, perms, icon, create_by, create_time 
+		from sys_func
+    </sql>
+
+    <select id="selectFuncsByUserId" parameterType="Long" resultMap="FuncResult">
+		select distinct m.func_id, m.parent_id, m.func_name, m.url, m.perms , m.func_type, m.icon, m.order_num, m.create_time
+		from sys_func m
+			 left join sys_role_func rm on m.func_id = rm.func_id
+			 left join sys_user_role ur on rm.role_id = ur.role_id
+			 LEFT JOIN sys_role ro on ur.role_id = ro.role_id
+		where ur.user_id = #{userId} and m.func_type in ('M', 'C') and m.visible = 0  AND ro.status = 0
+		order by m.order_num
+	</select>
+
+    <select id="selectFuncNormalAll" resultMap="FuncResult">
+		select distinct m.func_id, m.parent_id, m.func_name, m.url, m.perms , m.func_type, m.icon, m.order_num, m.create_time
+		from sys_func m
+		where m.func_type in ('M', 'C') and m.visible = 0
+		order by m.order_num
+	</select>
+
+    <select id="selectFuncAll" resultMap="FuncResult">
+        <include refid="selectFuncVo"/>
+        order by order_num
+    </select>
+
+    <select id="selectPermsByUserId" parameterType="Long" resultType="String">
+		select distinct m.perms
+		from sys_func m
+			 left join sys_role_func rm on m.func_id = rm.func_id
+			 left join sys_user_role ur on rm.role_id = ur.role_id
+		where ur.user_id = #{userId}
+	</select>
+
+    <select id="selectFuncTree" parameterType="Long" resultType="String">
+		select concat(m.func_id, m.perms) as perms
+		from sys_func m
+			left join sys_role_func rm on m.func_id = rm.func_id
+		where rm.role_id = #{roleId}
+		order by m.parent_id, m.order_num
+	</select>
+
+    <select id="selectFuncList" parameterType="Func" resultMap="FuncResult">
+        <include refid="selectFuncVo"/>
+        <where>
+            <if test="funcName != null and funcName != ''">
+                AND func_name like concat('%', #{funcName}, '%')
+            </if>
+            <if test="visible != null and visible != ''">
+                AND visible = #{visible}
+            </if>
+        </where>
+        order by order_num
+    </select>
+
+    <delete id="deleteFuncById" parameterType="Long">
+	    delete from sys_func where func_id = #{funcId} or parent_id = #{funcId}
+	</delete>
+
+    <select id="selectFuncById" parameterType="Long" resultMap="FuncResult">
+		SELECT t.func_id, t.parent_id, t.func_name, t.order_num, t.url, t.func_type, t.visible, t.perms, t.icon, t.remark,
+			(SELECT func_name FROM sys_func WHERE func_id = t.parent_id) parent_name
+		FROM sys_func t
+		where t.func_id = #{funcId}
+	</select>
+
+    <select id="checkFuncNameUnique" parameterType="Func" resultMap="FuncResult">
+        <include refid="selectFuncVo"/>
+        where func_name=#{funcName} and parent_id = #{parentId}
+    </select>
+
+    <update id="updateFunc" parameterType="Func">
+        update sys_func
+        <set>
+            <if test="funcName != null and funcName != ''">func_name = #{funcName},</if>
+            <if test="parentId != null and parentId != 0">parent_id = #{parentId},</if>
+            <if test="orderNum != null and orderNum != ''">order_num = #{orderNum},</if>
+            <if test="url != null and url != ''">url = #{url},</if>
+            <if test="funcType != null and funcType != ''">func_type = #{funcType},</if>
+            <if test="visible != null">visible = #{visible},</if>
+            <if test="perms !=null">perms = #{perms},</if>
+            <if test="icon !=null and icon != ''">icon = #{icon},</if>
+            <if test="remark != null and remark != ''">remark = #{remark},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            update_time = sysdate()
+        </set>
+        where func_id = #{funcId}
+    </update>
+
+    <insert id="insertFunc" parameterType="Func">
+        insert into sys_func(
+        <if test="funcId != null and funcId != 0">func_id,</if>
+        <if test="parentId != null and parentId != 0">parent_id,</if>
+        <if test="funcName != null and funcName != ''">func_name,</if>
+        <if test="orderNum != null and orderNum != ''">order_num,</if>
+        <if test="url != null and url != ''">url,</if>
+        <if test="funcType != null and funcType != ''">func_type,</if>
+        <if test="visible != null">visible,</if>
+        <if test="perms !=null and perms != ''">perms,</if>
+        <if test="icon != null and icon != ''">icon,</if>
+        <if test="remark != null and remark != ''">remark,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        create_time
+        )values(
+        <if test="funcId != null and funcId != 0">#{funcId},</if>
+        <if test="parentId != null and parentId != 0">#{parentId},</if>
+        <if test="funcName != null and funcName != ''">#{funcName},</if>
+        <if test="orderNum != null and orderNum != ''">#{orderNum},</if>
+        <if test="url != null and url != ''">#{url},</if>
+        <if test="funcType != null and funcType != ''">#{funcType},</if>
+        <if test="visible != null">#{visible},</if>
+        <if test="perms !=null and perms != ''">#{perms},</if>
+        <if test="icon != null and icon != ''">#{icon},</if>
+        <if test="remark != null and remark != ''">#{remark},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        sysdate()
+        )
+    </insert>
+
+</mapper> 
