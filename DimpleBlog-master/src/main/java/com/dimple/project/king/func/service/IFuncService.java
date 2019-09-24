@@ -118,4 +118,7 @@ public interface IFuncService {
      * @return 结果
      */
     public String checkFuncNameUnique(Func func);
+
+    
+	public List<Func> findByCreator(String loginName);
 }

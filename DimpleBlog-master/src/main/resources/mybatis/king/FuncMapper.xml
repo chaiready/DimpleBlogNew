@@ -48,6 +48,14 @@
         <include refid="selectFuncVo"/>
         order by order_num
     </select>
+    
+    
+   <select id="findByCreator" resultMap="FuncResult">
+        <include refid="selectFuncVo"/>
+        where create_by= #{loginName}
+        order by order_num
+    </select>
+    
 
     <select id="selectPermsByUserId" parameterType="Long" resultType="String">
 		select distinct m.perms

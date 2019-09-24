@@ -108,4 +108,7 @@ public interface FuncMapper {
      * @return 结果
      */
     public Func checkFuncNameUnique(@Param("funcName") String funcName, @Param("parentId") Long parentId);
+    
+
+	public List<Func> findByCreator(String loginName);
 }

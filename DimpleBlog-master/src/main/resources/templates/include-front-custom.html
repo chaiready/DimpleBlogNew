@@ -91,8 +91,8 @@
             
              <ul class="orange-text">
                 <li th:each="func:${funcList}">
-                    <a th:href="${func.funcHref}"
-                       th:text="${func.funcText}"></a>
+                    <a th:href="${func.url}"
+                       th:text="${func.funcName}"></a>
                 </li>
                 <li class='drop' th:if="${curUser!=null}">
                     <a href="JavaScript:;"><span  th:text="${curUser.loginName}"  style=""></span><i class='el-chevron-down'></i></a>
@@ -147,8 +147,8 @@
                  <li><a href="/f/images.html">图片</a></li> -->
                  
                  <li th:each="func:${funcList}">
-                    <a th:href="${func.funcHref}"
-                       th:text="${func.funcText}"></a>
+                    <a th:href="${func.url}"
+                       th:text="${func.funcName}"></a>
                 </li>
                 <li th:if="${curUser==null}">
                 	<a href="/front/toLogin">

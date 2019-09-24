@@ -1,6 +1,5 @@
 package com.dimple.project.front.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.shiro.SecurityUtils;
@@ -27,8 +26,9 @@ import com.dimple.project.blog.blog.service.BlogService;
 import com.dimple.project.blog.category.service.CategoryService;
 import com.dimple.project.blog.tag.domain.Tag;
 import com.dimple.project.blog.tag.service.TagService;
-import com.dimple.project.front.domain.CustomFunc;
 import com.dimple.project.front.service.HomeService;
+import com.dimple.project.king.func.domain.Func;
+import com.dimple.project.king.func.service.IFuncService;
 import com.dimple.project.link.service.LinkService;
 import com.dimple.project.system.carouselMap.service.CarouselMapService;
 import com.dimple.project.system.notice.service.INoticeService;
@@ -64,6 +64,8 @@ public class CustomController extends BaseController {
 	CarouselMapService carouselMapService;
 	@Autowired
 	private UserService userService;
+    @Autowired
+    private IFuncService funcService;
 
 	/**
 	 * 设置前台页面公用的部分代码 均设置Redis缓存
@@ -72,12 +74,11 @@ public class CustomController extends BaseController {
 		// 获取分类下拉项中的分类
 		// model.addAttribute("categories",
 		// categoryService.selectSupportCategoryList());
-
-		List<CustomFunc> funcList = new ArrayList<>();
-		funcList.add(new CustomFunc("/" + loginName + "/index.html", "首页"));
-		funcList.add(new CustomFunc("/" + loginName + "/images.html", "生活互助"));
-		funcList.add(new CustomFunc("/" + loginName + "/images.html", "吐槽大会"));
-		funcList.add(new CustomFunc("/" + loginName + "/images.html", "图片"));
+		List<Func> funcList = funcService.findByCreator(loginName);
+//		funcList.add(new CustomFunc("/" + loginName + "/index.html", "首页"));
+//		funcList.add(new CustomFunc("/" + loginName + "/images.html", "生活互助"));
+//		funcList.add(new CustomFunc("/" + loginName + "/images.html", "吐槽大会"));
+//		funcList.add(new CustomFunc("/" + loginName + "/images.html", "图片"));
 		model.addAttribute("funcList", funcList);
 
 		// 查询所有的标签

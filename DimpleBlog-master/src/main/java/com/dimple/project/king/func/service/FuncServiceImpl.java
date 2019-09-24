@@ -31,6 +31,7 @@ import com.dimple.project.system.user.domain.User;
  */
 @Service
 public class FuncServiceImpl implements IFuncService {
+	
     public static final String PREMISSION_STRING = "perms[\"{0}\"]";
 
     @Autowired
@@ -262,5 +263,10 @@ public class FuncServiceImpl implements IFuncService {
         }
         return UserConstants.MENU_NAME_UNIQUE;
     }
+
+	@Override
+	public List<Func> findByCreator(String loginName) {
+		 return funcMapper.findByCreator(loginName);
+	}
 
 }
