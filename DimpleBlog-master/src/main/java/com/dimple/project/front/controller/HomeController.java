@@ -147,7 +147,8 @@ public class HomeController extends BaseController {
         comment.setPageId(blogId);
         comment.setDisplay(true);
         model.addAttribute("comments", commentService.selectCommentListForFront(comment));
-        return "front/article";
+//        return "front/article";
+        return "front/article_summernote";//将simpleMde 改成 summerNote 编辑器
     }
 
     @VLog(title = "分类")
