@@ -1,5 +1,6 @@
 package com.dimple.project.front.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.shiro.SecurityUtils;
@@ -75,11 +76,17 @@ public class CustomController extends BaseController {
 		// model.addAttribute("categories",
 		// categoryService.selectSupportCategoryList());
 		List<Func> funcList = funcService.findByCreator(loginName);
+		List<Func> defaultFucs =new ArrayList<Func>();
+		Func indexFunc = new Func();
+		indexFunc.setUrl("/" + loginName + "/index.html");
+		indexFunc.setFuncName("首页");
+		defaultFucs.add(indexFunc);
+		defaultFucs.addAll(funcList);
 //		funcList.add(new CustomFunc("/" + loginName + "/index.html", "首页"));
 //		funcList.add(new CustomFunc("/" + loginName + "/images.html", "生活互助"));
 //		funcList.add(new CustomFunc("/" + loginName + "/images.html", "吐槽大会"));
 //		funcList.add(new CustomFunc("/" + loginName + "/images.html", "图片"));
-		model.addAttribute("funcList", funcList);
+		model.addAttribute("funcList", defaultFucs);
 
 		// 查询所有的标签
 		model.addAttribute("tags", tagService.selectTagList(new Tag()));
