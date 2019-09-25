@@ -1,5 +1,6 @@
 package com.dimple.project.front.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -30,10 +31,12 @@ import com.dimple.project.blog.comment.service.CommentService;
 import com.dimple.project.blog.tag.domain.Tag;
 import com.dimple.project.blog.tag.service.TagService;
 import com.dimple.project.front.service.HomeService;
+import com.dimple.project.king.func.domain.Func;
 import com.dimple.project.link.domain.Link;
 import com.dimple.project.link.service.LinkService;
 import com.dimple.project.system.carouselMap.service.CarouselMapService;
 import com.dimple.project.system.notice.service.INoticeService;
+import com.dimple.project.system.user.domain.User;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
@@ -70,6 +73,20 @@ public class HomeController extends BaseController {
      * 均设置Redis缓存
      */
     private void setCommonMessage(Model model) {
+		List<Func> funcList = new ArrayList<Func>();
+		String loginName = "admin";
+		funcList.add(new Func("首页","/" + loginName + "/index.html"));
+		funcList.add(new Func("生活互助","/" + loginName + "/index.html"));
+		funcList.add(new Func("吐槽大会","/" + loginName + "/index.html"));
+		funcList.add(new Func("图片","/" + loginName + "/index.html"));
+		model.addAttribute("funcList", funcList);
+		model.addAttribute("curUser", ShiroUtils.getSysUser());
+
+		// 查询用户信息
+		User user = ShiroUtils.getSysUser();
+		model.addAttribute("user", user);
+		
+		
         //获取分类下拉项中的分类
         model.addAttribute("categories", categoryService.selectSupportCategoryList());
         //查询所有的标签

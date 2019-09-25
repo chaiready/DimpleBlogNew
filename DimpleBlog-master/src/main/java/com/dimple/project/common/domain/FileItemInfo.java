@@ -14,7 +14,10 @@ import java.util.Date;
  */
 @Data
 public class FileItemInfo extends BaseEntity {
-    private Integer id;
+	
+	private static final long serialVersionUID = 1L;
+	
+	private Integer id;
     /**
      * 资源名。
      */

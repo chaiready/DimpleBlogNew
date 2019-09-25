@@ -65,8 +65,44 @@ function initSimpleMDE(id) {
 			  ['insert', ['picture']],
 			  ['view', ['fullscreen']],
 			],
+			onImageUpload: function(files, editor, $editable) {
+				console.info("onImageUpload >>>>>>>>>>>>>>");
+			    saveFile(files, editor, $editable);
+		    },
+		    callbacks:{
+		        onImageUpload: function(files, editor, $editable) {
+			       console.info("callBack>>>>>>>>>>>>>");
+			       sendFile(summernode, files[0]);
+		        }
+		    },
 	        height: 100
 	      });
+}
+
+function saveFile(files, editor, $editable) {
+	console.info("sendFile>>>>>>>>>>>>>>");
+}
+
+//ajax上传图片
+function sendFile(t_summernode, file) {
+    var formData = new FormData();
+    formData.append("file", file);
+    $.ajax({
+        url: "/common/upload",//路径是你控制器中上传图片的方法，下面controller里面我会写到
+        data: formData,
+        cache: false,
+        contentType: false,
+        processData: false,
+        type: 'POST',
+        success: function (data) {
+        	console.info(data);
+        	t_summernode.summernote('insertImage', data.url, function ($image) {
+                $image.attr('src', data.url);
+            });
+        },error:function(){
+           layer.msg("上传失败", {icon: 2});
+        }
+    });
 }
 
 function reply(commentId) {

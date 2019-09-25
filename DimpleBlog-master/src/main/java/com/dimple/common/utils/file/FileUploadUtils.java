@@ -1,5 +1,11 @@
 package com.dimple.common.utils.file;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Date;
+
+import org.springframework.web.multipart.MultipartFile;
+
 import com.dimple.common.exception.file.FileNameLengthLimitExceededException;
 import com.dimple.common.exception.file.FileSizeLimitExceededException;
 import com.dimple.common.utils.ImageUtil;
@@ -7,12 +13,8 @@ import com.dimple.common.utils.spring.SpringUtils;
 import com.dimple.framework.config.ServerConfig;
 import com.dimple.framework.config.SystemConfig;
 import com.dimple.project.common.domain.FileItemInfo;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Date;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @className: FileUploadUtils
@@ -97,10 +99,38 @@ public class FileUploadUtils {
         file.transferTo(desc);
         
         //压缩图
-        String smallThumbnailPath = ImageUtil.generateSize(72, 72,baseDir + fileName);
-        String largeThumbnailPath = ImageUtil.generateSize(800,356,baseDir + fileName);
-        System.out.println(largeThumbnailPath+">>>>>>>>"+smallThumbnailPath);
+//        String smallThumbnailPath = ImageUtil.generateSize(72, 72,baseDir + fileName);
+        String smallThumbnailPath = ImageUtil.generateSmall(baseDir + fileName);
+        System.out.println(">>>>>>>>"+smallThumbnailPath);
         
+        FileItemInfo fileItemInfo = new FileItemInfo(fileName, String.valueOf(file.hashCode()), file.getSize(), file.getContentType(), new Date(), FileItemInfo.ServerType.LOCAL.getServerType(), baseDir + "/" + fileName);
+
+        return fileItemInfo;
+    }
+    
+    
+    public static final FileItemInfo uploadImg(MultipartFile file)
+            throws FileSizeLimitExceededException, IOException, FileNameLengthLimitExceededException {
+    	// 上传文件路径
+        String baseDir = SystemConfig.getUploadPath(); 
+        int fileNameLength = file.getOriginalFilename().length();
+        if (fileNameLength > FileUploadUtils.DEFAULT_FILE_NAME_LENGTH) {
+            throw new FileNameLengthLimitExceededException(FileUploadUtils.DEFAULT_FILE_NAME_LENGTH);
+        }
+
+        assertAllowed(file);
+
+        String fileName = FileUtils.generateFileName(file);
+
+        File desc = getAbsoluteFile(baseDir, baseDir + fileName);
+        file.transferTo(desc);
+        
+        //压缩图
+//        String smallThumbnailPath = ImageUtil.generateSize(72, 72,baseDir + fileName);
+        String smallThumbnailPath = ImageUtil.generateSmall(baseDir + fileName);
+        System.out.println(">>>>>>>>"+smallThumbnailPath);
+        
+        fileName = ImageUtil.appendSuffix(fileName, ImageUtil.SUFFIX);
         FileItemInfo fileItemInfo = new FileItemInfo(fileName, String.valueOf(file.hashCode()), file.getSize(), file.getContentType(), new Date(), FileItemInfo.ServerType.LOCAL.getServerType(), baseDir + "/" + fileName);
 
         return fileItemInfo;

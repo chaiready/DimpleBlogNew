@@ -72,6 +72,14 @@ public class Func extends BaseEntity implements TreeModel{
      */
     private List<Func> children = new ArrayList<Func>();
 
+
+    public Func() {
+	}
+	public Func(String funcName, String url) {
+		this.funcName = funcName;
+		this.url = url;
+	}
+
 	public Long getFuncId() {
 		return funcId;
 	}
