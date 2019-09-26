@@ -36,4 +36,9 @@ public class HomeServiceImpl implements HomeService {
         }
         return archives;
     }
+
+	@Override
+	public List<Blog> selectBlogsByCreator(Blog blog) {
+		return  blogMapper.selectBlogsByCreator(blog);
+	}
 }

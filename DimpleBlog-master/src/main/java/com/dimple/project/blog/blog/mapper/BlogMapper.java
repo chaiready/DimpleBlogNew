@@ -200,4 +200,7 @@ public interface BlogMapper {
      * @return 受影响的函数
      */
     int updateBlogAllowCommentByBlogId(@Param("allowComment") Boolean allowComment, @Param("blogId") Integer blogId);
+    
+    
+    List<Blog> selectBlogsByCreator(Blog blog);
 }

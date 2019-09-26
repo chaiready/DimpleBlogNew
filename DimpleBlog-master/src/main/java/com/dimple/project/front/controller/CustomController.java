@@ -107,7 +107,7 @@ public class CustomController extends BaseController {
 	public String defaultIndex(@PathVariable String loginName, Integer pageNum, Model model) {
 		setCommonMessage(model, loginName);
 		PageHelper.startPage(pageNum == null ? 1 : pageNum, 12, "create_time desc");
-		model.addAttribute("blogs", new PageInfo<>(homeService.selectFrontBlogList(new Blog())));
+		model.addAttribute("blogs", new PageInfo<>(homeService.selectBlogsByCreator(new Blog())));
 		// 放置轮播图
 		model.addAttribute("carouselMaps", carouselMapService.selectCarouselMapListFront());
 		model.addAttribute("curUser", ShiroUtils.getSysUser());

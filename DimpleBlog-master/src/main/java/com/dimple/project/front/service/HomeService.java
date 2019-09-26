@@ -27,4 +27,7 @@ public interface HomeService {
      * @return 归档集合
      */
     List<Archives> selectArchives();
+    
+    
+    List<Blog> selectBlogsByCreator(Blog blog);
 }
