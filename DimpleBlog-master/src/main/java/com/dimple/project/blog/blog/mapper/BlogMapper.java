@@ -1,5 +1,6 @@
 package com.dimple.project.blog.blog.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.dimple.project.blog.blog.domain.Blog;
 import com.dimple.project.dashboard.domain.BusinessCommonData;
 import com.dimple.project.front.domain.Archives;
@@ -14,7 +15,7 @@ import java.util.List;
  * @Date: 2019/3/16
  * @Version: 1.0
  */
-public interface BlogMapper {
+public interface BlogMapper  extends BaseMapper<Blog> {
     /**
      * 根据条件查询博客信息
      *
