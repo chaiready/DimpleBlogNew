@@ -202,47 +202,65 @@ var closeItem = function (dataId) {
 
 /** 创建选项卡 */
 function createMenuItem(dataUrl, menuName) {
-    var panelUrl = window.frameElement.getAttribute('data-id');
-    dataIndex = $.common.random(1, 100),
-        flag = true;
-    if (dataUrl == undefined || $.trim(dataUrl).length == 0) return false;
-    var topWindow = $(window.parent.document);
-    // 选项卡菜单已存在
-    $('.menuTab', topWindow).each(function () {
-        if ($(this).data('id') == dataUrl) {
-            if (!$(this).hasClass('active')) {
-                $(this).addClass('active').siblings('.menuTab').removeClass('active');
-                $('.page-tabs-content').animate({marginLeft: ""}, "fast");
-                // 显示tab对应的内容区
-                $('.mainContent .Dimple_iframe', topWindow).each(function () {
-                    if ($(this).data('id') == dataUrl) {
-                        $(this).show().siblings('.Dimple_iframe').hide();
-                        return false;
-                    }
-                });
-            }
-            flag = false;
-            return false;
-        }
-    });
-    // 选项卡菜单不存在
-    if (flag) {
-        var str = '<a href="javascript:;" class="active menuTab" data-id="' + dataUrl + '" data-panel="' + panelUrl + '">' + menuName + ' <i class="fa fa-times-circle"></i></a>';
-        $('.menuTab', topWindow).removeClass('active');
+	var curTheme = getThemeName();
+	if(curTheme =='tab'){
+		var panelUrl = window.frameElement.getAttribute('data-id');
+	    dataIndex = $.common.random(1, 100),
+	        flag = true;
+	    if (dataUrl == undefined || $.trim(dataUrl).length == 0) return false;
+	    var topWindow = $(window.parent.document);
+	    // 选项卡菜单已存在
+	    $('.menuTab', topWindow).each(function () {
+	        if ($(this).data('id') == dataUrl) {
+	            if (!$(this).hasClass('active')) {
+	                $(this).addClass('active').siblings('.menuTab').removeClass('active');
+	                $('.page-tabs-content').animate({marginLeft: ""}, "fast");
+	                // 显示tab对应的内容区
+	                $('.mainContent .Dimple_iframe', topWindow).each(function () {
+	                    if ($(this).data('id') == dataUrl) {
+	                        $(this).show().siblings('.Dimple_iframe').hide();
+	                        return false;
+	                    }
+	                });
+	            }
+	            flag = false;
+	            return false;
+	        }
+	    });
+	    // 选项卡菜单不存在
+	    if (flag) {
+	        var str = '<a href="javascript:;" class="active menuTab" data-id="' + dataUrl + '" data-panel="' + panelUrl + '">' + menuName + ' <i class="fa fa-times-circle"></i></a>';
+	        $('.menuTab', topWindow).removeClass('active');
 
-        // 添加选项卡对应的iframe
-        var str1 = '<iframe class="Dimple_iframe" name="iframe' + dataIndex + '" width="100%" height="100%" src="' + dataUrl + '" frameborder="0" data-id="' + dataUrl + '" data-panel="' + panelUrl + '" seamless></iframe>';
-        $('.mainContent', topWindow).find('iframe.Dimple_iframe').hide().parents('.mainContent').append(str1);
+	        // 添加选项卡对应的iframe
+	        var str1 = '<iframe class="Dimple_iframe" name="iframe' + dataIndex + '" width="100%" height="100%" src="' + dataUrl + '" frameborder="0" data-id="' + dataUrl + '" data-panel="' + panelUrl + '" seamless></iframe>';
+	        $('.mainContent', topWindow).find('iframe.Dimple_iframe').hide().parents('.mainContent').append(str1);
 
-        window.parent.$.modal.loading("数据加载中，请稍后...");
-        $('.mainContent iframe:visible', topWindow).load(function () {
-            window.parent.$.modal.closeLoading();
-        });
+	        window.parent.$.modal.loading("数据加载中，请稍后...");
+	        $('.mainContent iframe:visible', topWindow).load(function () {
+	            window.parent.$.modal.closeLoading();
+	        });
 
-        // 添加选项卡
-        $('.menuTabs .page-tabs-content', topWindow).append(str);
-    }
-    return false;
+	        // 添加选项卡
+	        $('.menuTabs .page-tabs-content', topWindow).append(str);
+	    }
+	    return false;
+	}else{
+		layer.open({
+			type : 2,
+			title : false,//标题
+			shadeClose : false,//是否点击遮罩关闭
+			shade : 0.8,//透明度
+			closeBtn : 0,//关闭按钮
+			area : [ '100%', '100%' ],
+			content : dataUrl//iframe的url
+		});
+	}
+}
+
+//ls2008 获取主题是tab模式还是nomal模式
+function getThemeName(){
+	return top.parent.$("#page-wrapper .dropdown-menu .curThemeCls").attr("curTheme");
 }
 
 //日志打印封装处理

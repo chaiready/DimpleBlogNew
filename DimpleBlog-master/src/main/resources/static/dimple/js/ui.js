@@ -1054,25 +1054,37 @@
             },
             // 选项卡成功回调执行事件（父窗体静默更新）
             successTabCallback: function (result) {
-                if (result.code == web_status.SUCCESS) {
-                    var topWindow = $(window.parent.document);
-                    var currentId = $('.page-tabs-content', topWindow).find('.active').attr('data-panel');
-                    var $contentWindow = $('.Dimple_iframe[data-id="' + currentId + '"]', topWindow)[0].contentWindow;
-                    $.modal.close();
-                    $contentWindow.$.modal.msgSuccess(result.msg);
-                    $contentWindow.$(".layui-layer-padding").removeAttr("style");
-                    if ($contentWindow.$.table._option.type == table_type.bootstrapTable) {
-                        $contentWindow.$.table.refresh();
-                    } else if ($contentWindow.$.table._option.type == table_type.bootstrapTreeTable) {
-                        $contentWindow.$.treeTable.refresh();
+            	var curTheme = getThemeName();
+            	if(curTheme =='tab'){
+                    if (result.code == web_status.SUCCESS) {
+                        var topWindow = $(window.parent.document);
+                        var currentId = $('.page-tabs-content', topWindow).find('.active').attr('data-panel');
+                        var $contentWindow = $('.Dimple_iframe[data-id="' + currentId + '"]', topWindow)[0].contentWindow;
+                        $.modal.close();
+                        $contentWindow.$.modal.msgSuccess(result.msg);
+                        $contentWindow.$(".layui-layer-padding").removeAttr("style");
+                        if ($contentWindow.$.table._option.type == table_type.bootstrapTable) {
+                            $contentWindow.$.table.refresh();
+                        } else if ($contentWindow.$.table._option.type == table_type.bootstrapTreeTable) {
+                            $contentWindow.$.treeTable.refresh();
+                        }
+                        $.modal.closeTab();
+                    } else if (result.code == web_status.WARNING) {
+                        $.modal.alertWarning(result.msg)
+                    } else {
+                        $.modal.alertError(result.msg);
                     }
-                    $.modal.closeTab();
-                } else if (result.code == web_status.WARNING) {
-                    $.modal.alertWarning(result.msg)
-                } else {
-                    $.modal.alertError(result.msg);
-                }
-                $.modal.closeLoading();
+                    $.modal.closeLoading();
+            	}else{
+            		window.parent.$.modal.msgSuccess(result.msg);
+					if (window.parent.$.table._option.type == table_type.bootstrapTable) {
+						window.parent.$.table.refresh();
+                    } else if (window.parent.$.table._option.type == table_type.bootstrapTreeTable) {
+                    	window.parent.$.treeTable.refresh();
+                    }
+					var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+					parent.layer.close(index); //再执行关闭 
+            	}
             },
             //发送get请求获取数据
             ajaxSend: function (url, type, dataType, data, callback) {
