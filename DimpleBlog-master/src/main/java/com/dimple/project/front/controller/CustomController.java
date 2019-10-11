@@ -48,6 +48,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Controller
+@RequestMapping("/bbs")
 public class CustomController extends BaseController {
 	@Autowired
 	HomeService homeService;

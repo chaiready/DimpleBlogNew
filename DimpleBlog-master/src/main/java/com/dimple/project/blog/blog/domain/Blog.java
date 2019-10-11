@@ -1,11 +1,18 @@
 package com.dimple.project.blog.blog.domain;
 
+import java.util.List;
+
+import org.springframework.data.annotation.Id;
+
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.dimple.framework.web.domain.BaseEntity;
 import com.dimple.project.blog.category.domain.Category;
 import com.dimple.project.blog.tag.domain.Tag;
-import lombok.Data;
 
-import java.util.List;
+import lombok.Data;
+import lombok.ToString;
 
 /**
  * @className: Blog
@@ -15,6 +22,8 @@ import java.util.List;
  * @Version: 1.1
  */
 @Data
+@ToString
+@TableName(value = "bg_blog")
 public class Blog extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
@@ -22,6 +31,8 @@ public class Blog extends BaseEntity {
     /**
      * 博客id
      */
+    @TableId(value = "blog_id", type = IdType.AUTO)
+    @Id
     private Integer blogId;
 
     /**

@@ -217,12 +217,13 @@
                 <div class="swiper-wrapper">
                     <div class="swiper-slide" th:each="carouselMap:${carouselMaps}">
                         <div class="content">
-                            <div class="txt"><h3 th:text="${carouselMap.title}"></h3>
+                            <div class="txtXXXX"><h3 th:text="${carouselMap.title}" style="background:none;"></h3>
                                 <p th:text="${carouselMap.subTitle}"></p>
                             </div>
-                            <a th:target="${(carouselMap.target=='1')?'_blank':''}"
+                            <!-- <a th:target="${(carouselMap.target=='1')?'_blank':''}"
                                th:href="${'/f/carouselMap/'+carouselMap.carouselId+'?url='+carouselMap.url}"
-                               class="link">详情点击</a></div>
+                               class="link">详情点击</a> -->
+                         </div>
                         <div class="img-fix">
                             <div class="img-inner">
                                 <img th:src="${carouselMap.imgUrl}" class="imgs">
@@ -262,13 +263,13 @@
                         <p th:text="${blog.summary}"></p>
                         <ul>
                             <li>
-                                <a th:title="${'边小丰'+#dates.format(blog.createTime, 'yyyy-MM-dd')+'发表'}">
+                                <a th:title="${'ls2008'+#dates.format(blog.createTime, 'yyyy-MM-dd')+'发表'}">
                                     <i class="fa fa-clock-o"></i>
                                     <span th:text="${#dates.format(blog.createTime, 'yyyy-MM-dd')}"></span>
                                 </a>
                             </li>
                             <li>
-                                <a href="/f/about.html" title="作者： 边小丰"><i class="fa fa-user"></i>边小丰</a>
+                                <a href="/f/about.html" title="作者： ls2008"><i class="fa fa-user"></i>ls2008</a>
                             </li>
                             <li><a th:title="${'已有'+blog.commentCount+'条评论'}"
                                    th:href="${'/f/article/'+blog.blogId+'.html#Comment'}"

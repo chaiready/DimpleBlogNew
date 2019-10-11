@@ -132,7 +132,7 @@
 <footer th:fragment="footer">
     <!--底部导航-->
     <div class="foot-nav">
-        <div class="copy-right"><span>CopyRight &#169; 2017-2019 Dimple &#160;</span></div>
+        <div class="copy-right"><span>CopyRight &#169; 2017-2019 King &#160;</span></div>
         <div>
             <span>
                 <a href="/f/copyright.html" target="_blank">版权说明</a>
@@ -205,10 +205,10 @@
     <div class="web-author bg-color animation-div">
         <div class="author-tx">
             <a class="img-circle" href="/f/about.html" title="点击查看详细信息">
-                <img class="img-circle" src="/front/images/ava.png"/>
+                <img class="img-circle" src="/front/images/headimg.png"/>
             </a>
         </div>
-        <div class="author-name"><span class="blue-text">边小丰</span>
+        <div class="author-name"><span class="blue-text">ls2008</span>
             <p></p>
         </div>
     </div>
@@ -282,7 +282,7 @@
                         src="https://i.tianqi.com/index.php?c=code&id=34&icon=1&num=3"></iframe>
             </li>
             <li th:each="blog:${newestUpdateBlog}">
-                <span><i class="fa fa-arrow-up"></i>最近：<font class="blue-text">边小丰</font><span
+                <span><i class="fa fa-arrow-up"></i>最近：<font class="blue-text">ls2008</font><span
                         th:text="${#dates.format(blog.updateTime, 'MM-dd hh:mm')}"> 03-01 09:30</span></span>
                 <a th:href="${'/f/article/'+blog.blogId+'.html'}" th:title="${blog.title}"> 更新了<b
                         class="lable">文章</b></a>

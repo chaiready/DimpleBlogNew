@@ -33,13 +33,13 @@
                         <p th:text="${blog.summary}"></p>
                         <ul>
                             <li>
-                                <a th:title="${'边小丰'+#dates.format(blog.createTime, 'yyyy-MM-dd')+'发表'}">
+                                <a th:title="${'ls2008'+#dates.format(blog.createTime, 'yyyy-MM-dd')+'发表'}">
                                     <i class="fa fa-clock-o"></i>
                                     <span th:text="${#dates.format(blog.createTime, 'yyyy-MM-dd')}"></span>
                                 </a>
                             </li>
                             <li>
-                                <a href="about.html" title="作者： 边小丰"><i class="fa fa-user"></i>边小丰</a>
+                                <a href="about.html" title="作者： ls2008"><i class="fa fa-user"></i>ls2008</a>
                             </li>
                             <li><a th:title="${'已有'+blog.commentCount+'条评论'}" th:href="${'/f/article/'+blog.blogId+'.html#Comment'}">
                                 <i class="fa fa-comments-o"></i>
