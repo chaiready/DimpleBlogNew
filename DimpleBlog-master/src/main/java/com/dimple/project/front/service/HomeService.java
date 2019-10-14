@@ -30,4 +30,6 @@ public interface HomeService {
     
     
     List<Blog> selectBlogsByCreator(Blog blog);
+
+	List<Blog> selectBlogListByFuncId(Integer funcId);
 }

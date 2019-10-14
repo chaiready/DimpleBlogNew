@@ -117,7 +117,8 @@ public class FileUtils {
         File file = new File(SystemConfig.getImagePath());
         File[] files = file.listFiles();
         List<FileItemInfo> fileItemInfos = Arrays.stream(files).map(f ->
-                new FileItemInfo(f.getName(), String.valueOf(f.hashCode()), f.getUsableSpace(), "", new Date(f.lastModified()), FileItemInfo.ServerType.LOCAL.getServerType(), getImageFilePath(f.getName()))
+                new FileItemInfo(f.getName(), String.valueOf(f.hashCode()), f.getUsableSpace(), "", new Date(f.lastModified()), 
+                		FileItemInfo.ServerType.LOCAL.getServerType(), getImageFilePath(f.getName()), getImageFilePath(f.getName()))
         ).collect(Collectors.toList());
         return fileItemInfos;
     }

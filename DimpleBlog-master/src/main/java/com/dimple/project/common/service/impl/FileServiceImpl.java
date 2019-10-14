@@ -48,7 +48,9 @@ public class FileServiceImpl implements FileService {
         }
 
         //将fileListing.item转换为FileItem类型
-        List<FileItemInfo> fileItemsQiNiuYunInfo = Arrays.stream(fileListing.items).map(item -> new FileItemInfo(item.key, item.hash, item.fsize, item.mimeType, new Date(Long.valueOf(String.valueOf(item.putTime).substring(0, String.valueOf(item.putTime).length() - 7))), FileItemInfo.ServerType.QI_NIU_YUN.getServerType(), QiNiuUtils.getPathByName(item.key))).collect(Collectors.toList());
+        List<FileItemInfo> fileItemsQiNiuYunInfo = Arrays.stream(fileListing.items).map(item -> 
+        new FileItemInfo(item.key, item.hash, item.fsize, item.mimeType, new Date(Long.valueOf(String.valueOf(item.putTime).substring(0, String.valueOf(item.putTime).length() - 7))),
+        		FileItemInfo.ServerType.QI_NIU_YUN.getServerType(), QiNiuUtils.getPathByName(item.key),QiNiuUtils.getPathByName(item.key))).collect(Collectors.toList());
 
         //删除数据库现有的在七牛云上的记录
         fileItemInfoMapper.deleteByServerType(FileItemInfo.ServerType.QI_NIU_YUN.getServerType());
@@ -87,9 +89,9 @@ public class FileServiceImpl implements FileService {
     @Override
     @Transactional
     public String insertLocalImageFile(MultipartFile file) throws IOException {
-        FileItemInfo fileItemInfo = FileUploadUtils.upload(SystemConfig.getImagePath(), file);
+        FileItemInfo fileItemInfo = FileUploadUtils.upload(SystemConfig.getImagePath(),SystemConfig.getRelativeImagePath(), file);
         fileItemInfoMapper.insertFileItem(fileItemInfo);
-        return fileItemInfo.getPath();
+        return fileItemInfo.getRelativePath();//fileItemInfo.getPath();
     }
 
     @Override

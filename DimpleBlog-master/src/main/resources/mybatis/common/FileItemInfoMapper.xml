@@ -10,7 +10,8 @@
         <if test="mimeType != null and mimeType != '' ">mime_type,</if>
         <if test="putTime != null">put_time,</if>
         <if test="serverType != null and serverType != ''">server_type,</if>
-        <if test="path != null and path != ''">path</if>
+        <if test="path != null and path != ''">path,</if>
+        <if test="relativePath != null and relativePath != ''">relative_path</if>
         )values(
         <if test="name != null and name != ''">#{name},</if>
         <if test="hash != null and hash != ''">#{hash},</if>
@@ -18,7 +19,8 @@
         <if test="mimeType != null and mimeType != ''">#{mimeType},</if>
         <if test="putTime != null">#{putTime},</if>
         <if test="serverType != null and serverType != ''">#{serverType},</if>
-        <if test="path != null and path != ''">#{path}</if>
+        <if test="path != null and path != ''">#{path},</if>
+        <if test="relativePath != null and relativePath != ''">#{relativePath}</if>
         )
     </insert>
 

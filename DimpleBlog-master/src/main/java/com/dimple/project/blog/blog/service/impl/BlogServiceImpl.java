@@ -68,6 +68,7 @@ public class BlogServiceImpl implements BlogService {
         return blogMapper.selectBlogById(blogId);
     }
 
+    @CacheEvict(value = CacheConstant.BUSINESS_CACHE_BLOG_ITEM, key = "#blog.blogId")
     @Override
     public int updateBlog(Blog blog) {
         blog.setUpdateBy(ShiroUtils.getLoginName());

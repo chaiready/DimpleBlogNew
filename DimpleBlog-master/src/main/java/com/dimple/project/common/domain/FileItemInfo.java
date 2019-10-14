@@ -46,12 +46,14 @@ public class FileItemInfo extends BaseEntity {
      * 访问路径
      */
     private String path;
+    
+    private String relativePath;//相对路径
 
     public FileItemInfo() {
         super();
     }
 
-    public FileItemInfo(String name, String hash, Long size, String mimeType, Date putTime, Integer serverType, String path) {
+    public FileItemInfo(String name, String hash, Long size, String mimeType, Date putTime, Integer serverType, String path,String relativePath) {
         this.name = name;
         this.hash = hash;
         this.size = size;
@@ -59,6 +61,7 @@ public class FileItemInfo extends BaseEntity {
         this.putTime = putTime;
         this.serverType = serverType;
         this.path = path;
+        this.relativePath = relativePath;
     }
 
     public enum ServerType {

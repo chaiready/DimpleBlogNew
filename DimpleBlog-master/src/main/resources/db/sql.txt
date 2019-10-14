@@ -1,0 +1,18 @@
+
+
+#2019/10/12
+CREATE TABLE `bd_func_blog` (
+  `func_id` int(11) NOT NULL COMMENT '菜单ID',
+  `blog_id` int(11) NOT NULL COMMENT '博客ID',
+  PRIMARY KEY (`func_id`,`blog_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='菜单和博客关联表'
+
+
+
+#2019/10/14
+ALTER TABLE bg_file_item_info ADD COLUMN relative_path VARCHAR(128);
+
+
+
+
+

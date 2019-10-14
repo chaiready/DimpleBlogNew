@@ -1,6 +1,7 @@
 package com.dimple.project.front.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.shiro.SecurityUtils;
@@ -24,6 +25,7 @@ import com.dimple.framework.web.controller.BaseController;
 import com.dimple.framework.web.domain.AjaxResult;
 import com.dimple.project.blog.blog.domain.Blog;
 import com.dimple.project.blog.blog.service.BlogService;
+import com.dimple.project.blog.category.domain.Category;
 import com.dimple.project.blog.category.service.CategoryService;
 import com.dimple.project.blog.tag.domain.Tag;
 import com.dimple.project.blog.tag.service.TagService;
@@ -79,14 +81,13 @@ public class CustomController extends BaseController {
 		List<Func> funcList = funcService.findByCreator(loginName);
 		List<Func> defaultFucs =new ArrayList<Func>();
 		Func indexFunc = new Func();
-		indexFunc.setUrl("/" + loginName + "/index.html");
+		indexFunc.setUrl("/bbs/" + loginName + "/index.html");
 		indexFunc.setFuncName("首页");
 		defaultFucs.add(indexFunc);
-		defaultFucs.addAll(funcList);
-//		funcList.add(new CustomFunc("/" + loginName + "/index.html", "首页"));
-//		funcList.add(new CustomFunc("/" + loginName + "/images.html", "生活互助"));
-//		funcList.add(new CustomFunc("/" + loginName + "/images.html", "吐槽大会"));
-//		funcList.add(new CustomFunc("/" + loginName + "/images.html", "图片"));
+		for(Func func:funcList){
+			func.setUrl("/bbs/"+loginName+func.getUrl());
+			defaultFucs.add(func);
+		}
 		model.addAttribute("funcList", defaultFucs);
 
 		// 查询所有的标签
@@ -101,6 +102,8 @@ public class CustomController extends BaseController {
 		model.addAttribute("notices", noticeService.selectNoticeListDisplay());
 		// 获取友链信息
 		model.addAttribute("links", linkService.selectLinkListFront());
+		//设置当前访问主页名
+		model.addAttribute("loginName", loginName);
 	}
 
 	@GetMapping("/{loginName}.html")
@@ -197,4 +200,22 @@ public class CustomController extends BaseController {
 			return error("注册失败，请联系管理员");
 		}
 	}
+	
+	
+    
+    @VLog(title = "分类")
+    @GetMapping({"/{loginName}/func/{funcId}.html"})
+    public String funcBlog(@PathVariable String loginName,@PathVariable Integer funcId, Integer pageNum, Model model) {
+        setCommonMessage(model,loginName);
+        //model.addAttribute("category", categoryService.selectCategoryById(categoryId));
+        Category category = new Category();
+        category.setCategoryTitle("");
+        category.setDescription("");
+        category.setCreateTime(new Date());
+        model.addAttribute("category", category);
+        PageHelper.startPage(pageNum == null ? 1 : pageNum, 10, "create_time desc");
+        model.addAttribute("blogs", new PageInfo<>(homeService.selectBlogListByFuncId(funcId)));
+        model.addAttribute("funcId", funcId);
+        return "front/custom/category";
+    }
 }

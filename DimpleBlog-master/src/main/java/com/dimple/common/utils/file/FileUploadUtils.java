@@ -66,7 +66,7 @@ public class FileUploadUtils {
      */
     public static final FileItemInfo upload(MultipartFile file) throws IOException {
         try {
-            return upload(getDefaultBaseDir(), file);
+            return upload(getDefaultBaseDir(),SystemConfig.getRelativeProfile(), file);
         } catch (Exception e) {
             throw new IOException(e.getMessage(), e);
         }
@@ -83,7 +83,7 @@ public class FileUploadUtils {
      * @throws FileNameLengthLimitExceededException 文件名太长
      * @throws IOException                          比如读写文件出错时
      */
-    public static final FileItemInfo upload(String baseDir, MultipartFile file)
+    public static final FileItemInfo upload(String baseDir,String relativePath, MultipartFile file)
             throws FileSizeLimitExceededException, IOException, FileNameLengthLimitExceededException {
 
         int fileNameLength = file.getOriginalFilename().length();
@@ -103,7 +103,8 @@ public class FileUploadUtils {
         String smallThumbnailPath = ImageUtil.generateSmall(baseDir + fileName);
         System.out.println(">>>>>>>>"+smallThumbnailPath);
         
-        FileItemInfo fileItemInfo = new FileItemInfo(fileName, String.valueOf(file.hashCode()), file.getSize(), file.getContentType(), new Date(), FileItemInfo.ServerType.LOCAL.getServerType(), baseDir + "/" + fileName);
+        FileItemInfo fileItemInfo = new FileItemInfo(fileName, String.valueOf(file.hashCode()), file.getSize(), file.getContentType(), new Date(), 
+        		FileItemInfo.ServerType.LOCAL.getServerType(), baseDir + "/" + fileName,relativePath+"/"+fileName);
 
         return fileItemInfo;
     }
@@ -131,7 +132,8 @@ public class FileUploadUtils {
         System.out.println(">>>>>>>>"+smallThumbnailPath);
         
         fileName = ImageUtil.appendSuffix(fileName, ImageUtil.SUFFIX);
-        FileItemInfo fileItemInfo = new FileItemInfo(fileName, String.valueOf(file.hashCode()), file.getSize(), file.getContentType(), new Date(), FileItemInfo.ServerType.LOCAL.getServerType(), baseDir + "/" + fileName);
+        FileItemInfo fileItemInfo = new FileItemInfo(fileName, String.valueOf(file.hashCode()), file.getSize(), file.getContentType(), new Date(),
+        		FileItemInfo.ServerType.LOCAL.getServerType(), baseDir + "/" + fileName,SystemConfig.getImagePath()+"/"+fileName);
 
         return fileItemInfo;
     }
