@@ -24,3 +24,9 @@ https://github.com/DimpleFeng/DimpleBlog
     }
 
 
+[[${'当前共有 '+comments.size()+' 条评论'}]]
+
+
+
+
+

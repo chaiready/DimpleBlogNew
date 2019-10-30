@@ -5,7 +5,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	
-	<title>HTML5响应式第三方登录页面模板</title>
+	<title>注册页面</title>
 	<meta name="keywords" content="" />
 	<meta name="description" content="" /> 
 
@@ -72,7 +72,7 @@
 					</div> -->
 
 					<div class="flex-col-c p-t-25">
-						<a href="/front/toLogin" class="txt2">立即登录</a>
+						<a href="/bbs/front/toLogin" class="txt2">立即登录</a>
 					</div>
 				</form>
 			</div>
@@ -90,19 +90,20 @@
 		 $(".login100-form-btn").click(function(){
 			 $.ajax({
 		            type: "POST",
-		            url: "/front/reg",
+		            url: "/bbs/front/reg",
 		            data: $("#regForm").serialize(),
 		            dataType: "json",
 		            success: function (data) {
 		            	console.info(data);
 		                if (data.code == 200) {
-		                	window.location.href="/"+data.msg+".html";
+		                	window.location.href="/bbs/"+data.msg+".html";
 		                }else{
 		                	$("#operTip").html(data.msg);
 		                }
 		            },
 		            error: function (jqXHR) {
-		                layer.msg('发送错误：' + jqXHR.status, {icon: 2});
+		            	  //layer.msg('发送错误：' + jqXHR.status, {icon: 2});
+		                $("#operTip").html('发送错误：' + jqXHR.status);
 		            },
 		        });
 		 });

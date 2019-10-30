@@ -147,6 +147,7 @@ header .mynav{width:60%;float:left;height:100%;position:relative;}
 .xiangguan div span{display:block;width:100%;padding-top:10px;color:#777;}
 .xiangguan .benbo{background:#0cabd3;}
 .xiangguan > div >.mail-btn{background:#0cd38f;padding:0;}
+.xiangguan > div >.alipay-btn{background:#ee4f08;padding:0;}
 .xiangguan .github{background:#ee4f08;}
 .xiangguan .side-fx{background:#8aee08;cursor:pointer;}
 .xiangguan a:hover{opacity:0.8;transform:rotate(360deg) scale(1.3);}
@@ -294,6 +295,18 @@ footer{width:100%;background:rgba(0,67,94,0.65);margin-top:35px;clear:both;}
 .mail-btn{width:98%;margin:auto;padding-bottom:10px;position:relative;}
 .mail-btn >a{display:inline-block;width:100%;padding:15px 0;background:#0bbd84;text-align:center;border-radius:0;-webkit-border-radius:0;transition:all 0.5s;-webkit-transition:all 0.5s;}
 .mail-btn >a:hover{background:#0af5aa;border-radius:10px ;-webkit-border-radius:10px;}
+
+.alipay-dy {position:absolute;padding:10px;background:rgba(255,255,255,0.9);box-shadow:0 0 20px #777;display:none;z-index:999;width:300px;height: 350px;}
+.alipay-dy img{width: 100%;height: 100%}
+.alipay-dy .fa-remove{position:absolute;right:5px;top:5px;font-size:12px;}
+.alipay-dy form{overflow:hidden;padding:15px 0;height:2em;}
+.alipay-dy form input{font-size:12px;color:#333;height:100%;width:60%;float:left;background:#fff;}
+.alipay-dy .el-envelope{height:100%;width:19%;background:#0ddb9e;color:#fff;text-align:center;font-size:16px;line-height:2em;}
+.alipay-dy input[type="submit"]{cursor:pointer;position:relative;top:-32px;background:none;width:100%;border:none;}
+.alipay-dy span{width:19%;float:left;background:#0ddb9e;color:#fff;text-align:center;font-size:14px;height:100%;line-height:33px;text-align:center;}
+.alipay-btn{width:98%;margin:auto;padding-bottom:10px;position:relative;}
+.alipay-btn >a{display:inline-block;width:100%;padding:15px 0;background:#0bbd84;text-align:center;border-radius:0;-webkit-border-radius:0;transition:all 0.5s;-webkit-transition:all 0.5s;}
+.alipay-btn >a:hover{background:#0af5aa;border-radius:10px ;-webkit-border-radius:10px;}
 /*RSS*/
 .img-feed{width:100%;padding:10px 0;}
 .img-feed a{float:left;padding-top:5px;}

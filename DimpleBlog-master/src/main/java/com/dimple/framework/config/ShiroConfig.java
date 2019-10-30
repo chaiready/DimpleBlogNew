@@ -364,6 +364,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/about**", "anon");
         filterChainDefinitionMap.put("/f/about**", "anon");
         filterChainDefinitionMap.put("/front/**", "anon");
+        filterChainDefinitionMap.put("/bbs/front/**", "anon");
         filterChainDefinitionMap.put("/common/upload", "anon");//上传文件
 
         filterChainDefinitionMap.put("/captcha/captchaImage**", "anon");

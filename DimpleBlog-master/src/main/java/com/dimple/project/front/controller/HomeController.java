@@ -359,12 +359,4 @@ public class HomeController extends BaseController {
     }
     
 
-    /**
-     * 图片显示
-     */
-    @VLog(title = "图片显示")
-    @GetMapping("/front/toLogin")
-    public String toLogin(Model model) {
-        return "front/login/login";
-    }
 }

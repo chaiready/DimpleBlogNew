@@ -272,27 +272,38 @@ $(document).ready(function () {
 
 
     //邮箱弹窗
-
     $(".mail-btn").click(function (e) {
 
 
         $(".mail-dy").show();
+        $(".alipay-dy").hide();
 
         $(".side-bdfx").hide();
 
         $(document).one("click", function () {
-
-
             $(".side-bdfx").hide();
-
             $(".mail-dy").hide();
-
-
+            $(".alipay-dy").hide();
         });
-
         e.stopPropagation();
 
     });
+    
+    $(".alipay-btn").click(function (e) {
+
+        $(".mail-dy").hide();
+        $(".alipay-dy").show();
+
+        $(".side-bdfx").hide();
+
+        $(document).one("click", function () {
+            $(".side-bdfx").hide();
+            $(".mail-dy").hide();
+            $(".alipay-dy").hide();
+        });
+        e.stopPropagation();
+    });
+    
 
     //返回顶部
 
@@ -353,6 +364,7 @@ $(document).ready(function () {
         $(".side-bdfx").show();
 
         $(".mail-dy").hide();
+        $(".alipay-dy").hide();
 
         $(document).one("click", function () {
 
@@ -360,6 +372,7 @@ $(document).ready(function () {
             $(".side-bdfx").hide();
 
             $(".mail-dy").hide();
+            $(".alipay-dy").hide();
 
 
         });
@@ -374,6 +387,7 @@ $(document).ready(function () {
         $(".arc-bdfx").hide();
 
         $(".mail-dy").hide();
+        $(".alipay-dy").hide();
 
         $(".side-bdfx").hide();
 
@@ -384,9 +398,11 @@ $(document).ready(function () {
     //图片查看器
 
     $(".mail-dy").click(function (e) {
-
         e.stopPropagation();
-
+    });
+    
+    $(".alipay-dy").click(function (e) {
+        e.stopPropagation();
     });
 
 
