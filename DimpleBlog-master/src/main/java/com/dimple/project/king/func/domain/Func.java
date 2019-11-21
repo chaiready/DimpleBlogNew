@@ -8,7 +8,7 @@ import com.dimple.project.king.util.TreeModel;
 
 /**
  * @className: Menu
- * @description: 菜单权限表 sys_func
+ * @description: 菜单权限表 bg_func
  * @auther: Dimple
  * @Date: 2019/3/13
  * @Version: 1.1
