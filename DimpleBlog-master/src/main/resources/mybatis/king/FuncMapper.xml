@@ -16,6 +16,7 @@
         <result property="perms" column="perms"/>
         <result property="icon" column="icon"/>
         <result property="createBy" column="create_by"/>
+        <result property="creator" column="creator"/>
         <result property="createTime" column="create_time"/>
         <result property="updateTime" column="update_time"/>
         <result property="updateBy" column="update_by"/>
@@ -23,7 +24,7 @@
     </resultMap>
 
     <sql id="selectFuncVo">
-        select func_id, func_name, parent_id, order_num, url, func_type, visible, perms, icon, create_by, create_time 
+        select func_id, func_name, parent_id, order_num, url, func_type, visible, perms, icon, create_by, creator,create_time
 		from sys_func
     </sql>
 
@@ -81,6 +82,9 @@
             </if>
             <if test="visible != null and visible != ''">
                 AND visible = #{visible}
+            </if>
+            <if test="creator != null and creator != ''">
+                AND creator = #{creator}
             </if>
         </where>
         order by order_num
@@ -149,5 +153,9 @@
         sysdate()
         )
     </insert>
+
+    <select id="selectCountFuncByParentId" resultType="Integer">
+	    select count(1) from sys_func where parent_id=#{parentId}
+	</select>
 
 </mapper> 

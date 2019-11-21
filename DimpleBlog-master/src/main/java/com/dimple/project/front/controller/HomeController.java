@@ -85,8 +85,8 @@ public class HomeController extends BaseController {
 		// 查询用户信息
 		User user = ShiroUtils.getSysUser();
 		model.addAttribute("user", user);
-		
-		
+
+
         //获取分类下拉项中的分类
         model.addAttribute("categories", categoryService.selectSupportCategoryList());
         //查询所有的标签
@@ -346,8 +346,8 @@ public class HomeController extends BaseController {
         return AjaxResult.success();
     }
 
-    
-    
+
+
     /**
      * 图片显示
      */
@@ -357,6 +357,6 @@ public class HomeController extends BaseController {
         setCommonMessage(model);
         return "front/images";
     }
-    
+
 
 }

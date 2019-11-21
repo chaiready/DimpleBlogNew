@@ -1,6 +1,7 @@
 package com.dimple.project.blog.blog.controller;
 
 import com.dimple.common.constant.BlogConstants;
+import com.dimple.common.utils.security.ShiroUtils;
 import com.dimple.framework.aspectj.lang.annotation.Log;
 import com.dimple.framework.aspectj.lang.enums.BusinessType;
 import com.dimple.framework.web.controller.BaseController;
@@ -10,6 +11,7 @@ import com.dimple.project.blog.blog.domain.Blog;
 import com.dimple.project.blog.blog.service.BlogService;
 import com.dimple.project.blog.category.domain.Category;
 import com.dimple.project.blog.category.service.CategoryService;
+import com.dimple.project.system.user.domain.User;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -56,6 +58,10 @@ public class BlogController extends BaseController {
     @ResponseBody
     public TableDataInfo list(Blog blog) {
         startPage();
+        User user = ShiroUtils.getSysUser();
+        if (!user.isAdmin()) {
+          blog.setCreateBy(user.getLoginName());
+        }
         List<Blog> list = blogService.selectBlogList(blog);
         return getDataTable(list);
     }

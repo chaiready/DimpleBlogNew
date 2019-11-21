@@ -14,13 +14,13 @@
                         <li>
                             菜单名称：<input type="text" name="funcName"/>
                         </li>
-                        <li>
+                        <!--<li>
                             菜单状态：<select name="visible" th:with="type=${@dict.getType('sys_show_hide')}">
                             <option value="">所有</option>
                             <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
                                     th:value="${dict.dictValue}"></option>
                         </select>
-                        </li>
+                        </li>-->
                         <li>
                             <a class="btn btn-primary btn-rounded btn-sm" onclick="$.treeTable.search()"><i
                                     class="fa fa-search"></i> 搜索</a>

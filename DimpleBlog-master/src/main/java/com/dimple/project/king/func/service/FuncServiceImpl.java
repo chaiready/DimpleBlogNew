@@ -63,6 +63,10 @@ public class FuncServiceImpl implements IFuncService {
      */
     @Override
     public List<Func> selectFuncList(Func func) {
+        User user = ShiroUtils.getSysUser();
+        if (!user.isAdmin()) {
+            func.setCreator(ShiroUtils.getUserId());
+        }
         return funcMapper.selectFuncList(func);
     }
 
@@ -230,7 +234,8 @@ public class FuncServiceImpl implements IFuncService {
      */
     @Override
     public int insertFunc(Func func) {
-        func.setCreateBy(ShiroUtils.getLoginName());
+        User user = ShiroUtils.getSysUser();
+        func.setCreator(ShiroUtils.getUserId());
         ShiroUtils.clearCachedAuthorizationInfo();
         return funcMapper.insertFunc(func);
     }

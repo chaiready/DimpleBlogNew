@@ -72,6 +72,7 @@ public class Func extends BaseEntity implements TreeModel{
      */
     private List<Func> children = new ArrayList<Func>();
 
+    private Long creator;
 
     public Func() {
 	}
@@ -195,5 +196,11 @@ public class Func extends BaseEntity implements TreeModel{
 		setFuncName(name);
 	}
 
+	public Long getCreator() {
+		return creator;
+	}
 
+	public void setCreator(Long creator) {
+		this.creator = creator;
+	}
 }
