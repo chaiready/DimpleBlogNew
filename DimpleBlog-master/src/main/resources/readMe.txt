@@ -27,6 +27,9 @@ https://github.com/DimpleFeng/DimpleBlog
 [[${'当前共有 '+comments.size()+' 条评论'}]]
 
 
+<li th:each="func,funcStat:${funcList}"  th:class="${funcStat.index==0}? 'active' : ''">
+    <a th:href="@{#func_}+${func.funcId}" data-toggle="tab" th:attr="aria-expanded=${funcStat.first}" th:text="${func.funcName}"></a>
+</li>
 
 
-
+<a class="btn btn-success btn-xs " href="javascript:void(0)" th:onclick="openModal('/blog/blog/edit/[[${blog.blogId}]]');"><i class="fa fa-edit"></i> 编辑</a>

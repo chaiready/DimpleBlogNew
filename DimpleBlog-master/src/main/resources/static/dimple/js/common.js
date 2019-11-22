@@ -263,6 +263,27 @@ function getThemeName(){
 	return top.parent.$("#page-wrapper .dropdown-menu .curThemeCls").attr("curTheme");
 }
 
+function openModal(url,width,height,title){
+    if(typeof(width) == 'undefined'){
+        width = '100%';
+    }
+    if(typeof(height) == 'undefined'){
+        height = '100%';
+    }
+    if(typeof(title) == 'undefined'){
+        title = false;
+    }
+    layer.open({
+        type : 2,
+        title : title,//标题
+        shadeClose : false,//是否点击遮罩关闭
+        shade : 0.8,//透明度
+        closeBtn : 1,//关闭按钮
+        area : [ width , height ],
+        content : url
+    });
+}
+
 //日志打印封装处理
 var log = {
     log: function (msg) {

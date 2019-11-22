@@ -206,5 +206,5 @@ public interface BlogMapper  extends BaseMapper<Blog> {
     List<Blog> selectBlogsByCreator(Blog blog);
 
     
-	List<Blog> selectBlogListByFuncId(@Param("funcId")Integer funcId);
+	List<Blog> selectBlogListByFuncId(@Param("funcId")Long funcId);
 }

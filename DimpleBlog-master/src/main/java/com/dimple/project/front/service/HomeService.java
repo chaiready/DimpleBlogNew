@@ -31,5 +31,5 @@ public interface HomeService {
     
     List<Blog> selectBlogsByCreator(Blog blog);
 
-	List<Blog> selectBlogListByFuncId(Integer funcId);
+	List<Blog> selectBlogListByFuncId(Long funcId);
 }

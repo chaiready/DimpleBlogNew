@@ -274,4 +274,15 @@ public class FuncServiceImpl implements IFuncService {
 		 return funcMapper.findByCreator(loginName);
 	}
 
+    @Override
+    public List<Func> findBbsByCreator(String loginName) {
+        List<Func> funcList = findByCreator(loginName);
+        List<Func> defaultFucs = new ArrayList<Func>();
+        for (Func func : funcList) {
+            func.setUrl("/bbs/" + loginName + func.getUrl());
+            defaultFucs.add(func);
+        }
+        return defaultFucs;
+    }
+
 }

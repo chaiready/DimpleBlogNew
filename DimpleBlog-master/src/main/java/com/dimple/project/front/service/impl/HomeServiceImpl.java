@@ -43,7 +43,7 @@ public class HomeServiceImpl implements HomeService {
 	}
 	
     @Override
-    public List<Blog> selectBlogListByFuncId(Integer funcId) {
+    public List<Blog> selectBlogListByFuncId(Long funcId) {
         List<Blog> blogs = blogMapper.selectBlogListByFuncId(funcId);
         return blogs;
     }

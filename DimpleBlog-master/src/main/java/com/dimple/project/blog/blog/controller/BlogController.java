@@ -88,6 +88,13 @@ public class BlogController extends BaseController {
         return "blog/blog/edit";
     }
 
+    @GetMapping("/func/edit/{blogId}")
+    public String funcEdit(@PathVariable Integer blogId, Model model) {
+        model.addAttribute("blog", blogService.selectBlogWithTextAndTagsAndCategoryByBlogId(blogId));
+        model.addAttribute("categories", categoryService.selectCategoryList(new Category()));
+        return "blog/blog/func_edit";
+    }
+
     @PutMapping("/edit")
     @RequiresPermissions("blog:blog:edit")
     @Log(title = "系统博客", businessType = BusinessType.UPDATE)
@@ -126,7 +133,7 @@ public class BlogController extends BaseController {
     @ResponseBody
     public AjaxResult remove(Integer[] ids) {
 
-        return toAjax(blogService.deleteBlogById(ids));
+        return toAjax(1);//blogService.deleteBlogById(ids)
     }
 
 

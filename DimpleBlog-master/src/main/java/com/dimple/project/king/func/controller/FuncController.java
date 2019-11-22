@@ -1,7 +1,15 @@
 package com.dimple.project.king.func.controller;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import com.dimple.common.utils.security.ShiroUtils;
+import com.dimple.project.blog.category.domain.Category;
+import com.dimple.project.front.service.HomeService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -36,12 +44,33 @@ public class FuncController extends BaseController {
 
     @Autowired
     private IFuncService funcService;
+    @Autowired
+    HomeService homeService;
 
     @RequiresPermissions("king:func:view")
-    @GetMapping()
-    public String func() {
+    @GetMapping({"","/{funcId}.html"})
+    public String func(Model model,@PathVariable(required = false) Long funcId,Integer pageNum) {
+        String loginName = ShiroUtils.getSysUser().getLoginName();
+        List<Func> funcList = funcService.findBbsByCreator(loginName);
+        model.addAttribute("funcList", funcList);
+
+        String funcName = "";
+        if(CollectionUtils.isNotEmpty(funcList)){
+            if(funcId==null){
+                funcId = funcList.get(0).getFuncId();
+
+            }
+            for(Func func:funcList){
+                funcName = func.getFuncName();
+            }
+        }
+        PageHelper.startPage(pageNum == null ? 1 : pageNum, 10, "create_time desc");
+        model.addAttribute("blogs", new PageInfo<>(homeService.selectBlogListByFuncId(funcId)));
+        model.addAttribute("funcId", funcId);
+        model.addAttribute("funcName", funcName);
         return prefix + "/func";
     }
+
 
     @RequiresPermissions("king:func:list")
     @GetMapping("/list")

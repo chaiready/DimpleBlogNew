@@ -121,4 +121,6 @@ public interface IFuncService {
 
     
 	public List<Func> findByCreator(String loginName);
+
+    public List<Func> findBbsByCreator(String loginName);
 }
