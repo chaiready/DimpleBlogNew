@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="zh" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <th:block th:include="include-front-custom :: head('5180it.com','娆㈣繋杩涘叆')"/>
+
+    <!-- 閬僵灞� -->
+    <script th:src="@{/ajax/libs/blockUI/jquery.blockUI.js}"></script>
+
+    <script th:src="@{/ajax/libs/layer/layer.min.js}"></script>
+   <!-- <script th:src="@{/ajax/libs/layui/layui.js}"></script>-->
+    <script th:src="@{/dimple/js/common.js}"></script>
+    <script th:src="@{/dimple/js/ui.js}"></script>
+</head>
+
+<body class="nobg">
+<!--<th:block th:replace="include-front-custom :: header"/>-->
+<header class="myheader" th:fragment="header">
+    <!--瀵艰埅寮�濮�-->
+    <div class="top">
+        <div class="top-left">
+            <!--logo閮ㄥ垎-->
+            <div class="logo">
+                <a href="/">
+                    <img src="/front/images/logo.png"/>
+                </a>
+            </div>
+            <!--婊氬姩娑堟伅-->
+            <div class="web-xiaoxi">
+                <i class="fa fa-volume-up"></i>
+                <ul class="mulitline">
+                    <li th:each="notice:${notices}" th:text="${notice.noticeTitle}"></li>
+                </ul>
+            </div>
+            <!--鎵嬫満鑿滃崟鎸夐挳-->
+            <div class="mobile-nav"><i class="fa fa-list"></i><i class="fa fa-remove"></i></div>
+        </div>
+        <!--鐢佃剳瀵艰埅寮�濮�-->
+        <nav class="mynav">
+            <ul class="orange-text">
+                <li th:each="func:${funcList}">
+                    <a th:href="${'/king/func/'+func.funcId+'.html'}"
+                       th:text="${func.funcName}"></a>
+                </li>
+            </ul>
+
+            <!--绉诲姩鐨勬粦鍔�-->
+            <div class="move-bg"></div>
+            <!--绉诲姩鐨勬粦鍔� end-->
+        </nav>
+
+        <!--鎵嬫満瀵艰埅-->
+        <div class="mob-menu">
+            <!--鎵嬫満涓嬫媺鑿滃崟-->
+            <ul class="mob-ulnav">
+                <li th:each="func:${funcList}">
+                    <a th:href="${func.url}"
+                       th:text="${func.funcName}"></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!--瀵艰埅缁撴潫-->
+</header>
+
+<!--鍐呭鍖哄紑濮�-->
+<div class="container">
+    <!--鏈�鏂版枃绔�-->
+    <section class="mysection" style="width: 95%;">
+        <h4 class="index-title">
+            <a href="/"><i class="fa fa-home"></i>褰撳墠椤�: &nbsp;> </a>
+            <span class="orange-text" th:text="${funcName}"></span>
+            <span style="float:right;margin-right:10px;">鍏辨湁鏂囩珷:<font class="orange-text"
+                th:text="${blogs.total}"> 11 </font>绡�</span>
+        </h4>
+        <!--<div>
+            <p class="smallText" th:text="${'鍒嗙被鎻忚堪锛�'+funcName}"></p>
+            <p class="smallText" th:text="${'鍒涘缓鏃堕棿锛�'+funcName}"></p>
+        </div>-->
+        <hr/>
+        <div class="arclist">
+            <!--鍒楄〃寮�濮�-->
+            <ul>
+                <li th:each="question:${questionList.list}">
+                    <div class="arc-right">
+                        <h4 class="blue-text">
+                        	 [[${question.questionOrder}]]
+                            <a 
+                               th:title="${question.content}"
+                               th:text="${question.content}">
+                            </a>
+                        </h4>
+                            <p style="height: 32px;" th:each="qo:${question.optionList}" th:text="${qo.optionOrder+'、'+qo.optionVal}">
+                            </p>
+                        <p th:text="${'正確答案：'+question.answer}"></p>
+                    </div>
+                </li>
+            </ul>
+            <!--鍒楄〃缁撴潫-->
+        </div>
+        <!--鍒嗛〉寮�濮�-->
+        <div th:replace="navigation :: navigation(${questionList},'kaoshi',${funcId})"></div>
+        <!--鍒嗛〉缁撴潫-->
+    </section>
+    <!--宸︿晶缁撴潫-->
+    <!--<th:block th:replace="include-front-custom :: side"/>-->
+</div>
+<!--<th:block th:replace="include-front-custom :: footer"/>-->
+
+<script>
+    function delObj(objId){
+        layer.confirm('纭畾鍒犻櫎璇ヨ褰曞悧?', {
+            icon: 3,
+            title: "绯荤粺鎻愮ず",
+            btn: ['纭', '鍙栨秷']
+        }, function (index) {
+            layer.close(index);
+            $.operate.submit ('/blog/blog/remove', 'delete', 'json', {"ids":objId}, function(result){
+               window.location.href="/king/func?funcId=[[${funcId}]]";
+            });
+        });
+    }
+</script>
+</body>
+</html>

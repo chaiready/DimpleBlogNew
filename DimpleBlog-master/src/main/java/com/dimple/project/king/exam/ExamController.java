@@ -1,6 +1,8 @@
 package com.dimple.project.king.exam;
 
+import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,13 +13,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import com.dimple.common.utils.security.ShiroUtils;
+
+import com.alibaba.fastjson.JSON;
 import com.dimple.framework.aspectj.lang.annotation.Log;
 import com.dimple.framework.aspectj.lang.enums.BusinessType;
 import com.dimple.framework.web.controller.BaseController;
 import com.dimple.framework.web.domain.AjaxResult;
 import com.dimple.framework.web.domain.Ztree;
 import com.dimple.project.front.service.HomeService;
+import com.dimple.project.king.exam.domain.Question;
+import com.dimple.project.king.exam.domain.QuestionOption;
 import com.dimple.project.king.func.domain.Func;
 import com.dimple.project.king.func.service.IFuncService;
 import com.dimple.project.system.role.domain.Role;
@@ -42,10 +47,39 @@ public class ExamController extends BaseController {
     @Autowired
     HomeService homeService;
 
+    @Autowired
+    QuestionService questionService;
+    @Autowired
+    QuestionOptionService questionOptionService;
+    
     @GetMapping()
     public String func(Model model,@PathVariable(required = false) Long funcId,Integer pageNum) {
-        String loginName = ShiroUtils.getSysUser().getLoginName();
-        List<Func> funcList = funcService.findBbsByCreator(loginName);
+    	
+//    	questionService.insertObj(null);
+    	
+    	PageHelper.startPage(pageNum == null ? 1 : pageNum, 10, "id asc");
+    	
+    	List<Question>  questionList = questionService.selectQuestion();
+    	if(CollectionUtils.isNotEmpty(questionList)){
+    		Long[] questionIds = new Long [questionList.size()];
+    		for(int i=0;i<questionList.size();i++){
+    			questionIds[i] = questionList.get(i).getId();
+    		}
+    		List<QuestionOption> optionList = questionOptionService.selectByQuestionIds(questionIds);
+    		for(Question question:questionList){
+    			List<QuestionOption>  oList = new ArrayList<>();
+    			for(QuestionOption qo:optionList){
+    				if(qo.getQuestionId().longValue()==question.getId().longValue()){
+    					oList.add(qo);
+    				}
+    			}
+    			question.setOptionList(oList);
+    		}
+    	}
+        model.addAttribute("questionList", new PageInfo<>(questionList));
+//    	
+    	
+        List<Func> funcList = new ArrayList<Func>();
         model.addAttribute("funcList", funcList);
 
         String funcName = "";
@@ -61,10 +95,10 @@ public class ExamController extends BaseController {
             }
         }
         PageHelper.startPage(pageNum == null ? 1 : pageNum, 10, "create_time desc");
-        model.addAttribute("blogs", new PageInfo<>(homeService.selectBlogListByFuncId(funcId)));
+        model.addAttribute("blogs", new PageInfo<>(new ArrayList<>()));
         model.addAttribute("funcId", funcId);
         model.addAttribute("funcName", funcName);
-        return prefix + "/func";
+        return prefix + "/exam";
     }
 
 

@@ -14,5 +14,33 @@ ALTER TABLE bg_file_item_info ADD COLUMN relative_path VARCHAR(128);
 
 
 
+CREATE TABLE `bg_question` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '问题id\n',
+  `question_order` VARCHAR(5) DEFAULT NULL COMMENT '问题排序',
+  `content` varchar(256) DEFAULT NULL COMMENT '问题',
+  `answer` varchar(256) DEFAULT NULL COMMENT '答案',
+  `type` varchar(10) DEFAULT NULL COMMENT '问题类型',
+  `create_by` varchar(64) DEFAULT NULL COMMENT '创建者',
+  `create_time` datetime DEFAULT NULL,
+  `update_by` varchar(64) DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='问题'
+
+
+
+CREATE TABLE `bg_question_option` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '选项id\n',
+  `question_id` int(11) DEFAULT NULL COMMENT '问题id',
+  `option_order` varchar(10) DEFAULT NULL COMMENT '排序',
+  `option_val` varchar(256) DEFAULT NULL COMMENT '选项',
+  `create_by` varchar(64) DEFAULT NULL COMMENT '创建者',
+  `create_time` datetime DEFAULT NULL,
+  `update_by` varchar(64) DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='问题选项'
+
+
 
 

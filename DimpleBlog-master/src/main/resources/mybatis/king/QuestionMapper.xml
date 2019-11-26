@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dimple.project.king.exam.mapper.QuestionMapper">
+    <!--基本的blog信息-->
+    <resultMap id="BaseResultMap" type="com.dimple.project.king.exam.domain.Question">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="question_order" property="questionOrder" jdbcType="VARCHAR"/>
+        <result column="content" property="content" jdbcType="VARCHAR"/>
+        <result column="answer" property="answer" jdbcType="VARCHAR"/>
+        <result column="type" property="type" jdbcType="VARCHAR"/>
+        <result column="create_by" property="createBy" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_by" property="updateBy" jdbcType="VARCHAR"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    
+
+    <sql id="selectBlogVo">
+        select id, question_order, content, answer, type,
+        create_by, create_time, update_by, update_time
+        from bg_question
+    </sql>
+
+    <insert id="insertObj" useGeneratedKeys="true" keyProperty="id">
+        insert into bg_question(
+        <if test="id != null and id != 0">id,</if>
+        <if test="questionOrder != null and questionOrder != ''">question_order,</if>
+        <if test="content != null and content != ''">content,</if>
+        <if test="answer != null and answer != ''">answer,</if>
+        <if test="type != null and type != ''">type,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        create_time
+        )values(
+        <if test="id != null and id != 0">#{id},</if>
+        <if test="questionOrder != null and questionOrder != ''">#{questionOrder},</if>
+        <if test="content != null and content != ''">#{content},</if>
+        <if test="answer != null and answer != ''">#{answer},</if>
+        <if test="type != null and type != ''">#{type},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        sysdate()
+        )
+    </insert>
+    <update id="updateObj">
+        update bg_question
+        <set>
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="summary != null and summary != ''">summary = #{summary},</if>
+            <if test="categoryId != null and categoryId != ''">category_id = #{categoryId},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="weight != null and weight != ''">weight = #{weight},</if>
+            <if test="support != null and support != ''">support = #{support},</if>
+            <if test="allowComment != null and allowComment != ''">allow_comment = #{allowComment},</if>
+            <if test="headerImg != null and headerImg != ''">header_img = #{headerImg},</if>
+            <if test="content != null and content != ''">content = #{content},</if>
+            <if test="type != null and type != ''">type = #{type},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            update_time = sysdate()
+        </set>
+        where blog_id = #{blogId}
+    </update>
+    
+    <select id="selectQuestion" resultType="com.dimple.project.king.exam.domain.Question">
+        select b.* from bg_question b order by id
+    </select>
+
+</mapper>
