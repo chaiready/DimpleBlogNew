@@ -22,6 +22,7 @@ import com.dimple.project.front.service.HomeService;
 import com.dimple.project.king.exam.domain.Question;
 import com.dimple.project.king.exam.domain.QuestionFavorites;
 import com.dimple.project.king.exam.domain.QuestionOption;
+import com.dimple.project.king.exam.service.QuestionAnswerService;
 import com.dimple.project.king.exam.service.QuestionFavoritesService;
 import com.dimple.project.king.exam.service.QuestionOptionService;
 import com.dimple.project.king.exam.service.QuestionService;
@@ -56,6 +57,8 @@ public class ExamController extends BaseController {
     QuestionOptionService questionOptionService;
     @Autowired
     private QuestionFavoritesService questionFavoritesService;
+    @Autowired
+    private QuestionAnswerService questionAnswerService;
     
     private void setFunc(Model model,Long funcId) {
       List<Func> funcList = new ArrayList<Func>();
@@ -76,7 +79,7 @@ public class ExamController extends BaseController {
     }
     
     @GetMapping()
-    public String func(Model model,@PathVariable(required = false) Long funcId,Integer pageNum) {
+    public String list(Model model,@PathVariable(required = false) Long funcId,Integer pageNum) {
         User user = ShiroUtils.getSysUser();
     	PageHelper.startPage(pageNum == null ? 1 : pageNum, 10, "id asc");
     	List<Question>  questionList = questionService.selectQuestion();
@@ -188,6 +191,16 @@ public class ExamController extends BaseController {
       AjaxResult result = AjaxResult.success("已取消收藏");
       result.put("hasFavorites", 0);//是否收藏
       return result;
+    }
+    
+    @PostMapping("/addAnswer")
+    @ResponseBody
+    public AjaxResult addAnswer(String questionOptionId) {
+      User user = ShiroUtils.getSysUser();
+      if(user==null){
+        return error(0, "还没登录");
+      }
+      return questionAnswerService.addAnswer(ShiroUtils.getUserId(),questionOptionId);
     }
     
 

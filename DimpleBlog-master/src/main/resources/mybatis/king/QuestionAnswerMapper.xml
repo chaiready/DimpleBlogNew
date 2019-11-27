@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dimple.project.king.exam.mapper.QuestionAnswerMapper">
+    <!--基本的blog信息-->
+    <resultMap id="BaseResultMap" type="com.dimple.project.king.exam.domain.QuestionAnswer">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="question_id" property="questionId" jdbcType="BIGINT"/>
+        <result column="user_id" property="userId" jdbcType="BIGINT"/>
+        <result column="option_id" property="optionId" jdbcType="BIGINT"/>
+        <result column="option_order" property="createBy" jdbcType="VARCHAR"/>
+        <result column="correct" property="correct" jdbcType="INTEGER"/>
+        <result column="create_by" property="optionOrder" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_by" property="updateBy" jdbcType="VARCHAR"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    
+
+    <sql id="selectBlogVo">
+        select id, question_id, userId,option_id,option_order,
+        create_by, create_time, update_by, update_time
+        from bg_question_answer
+    </sql>
+    
+    <select id="selectByQuestionIds" resultType="com.dimple.project.king.exam.domain.QuestionAnswer">
+        select b.* from bg_question_answer b where user_id=#{userId} and question_id in
+         <foreach collection="questionIds" item="questionId" open="(" separator="," close=")">
+            #{questionId}
+        </foreach>
+        order by id desc
+    </select>
+
+</mapper>

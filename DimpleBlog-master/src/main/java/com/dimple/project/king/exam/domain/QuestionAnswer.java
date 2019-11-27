@@ -8,7 +8,7 @@ import com.dimple.framework.web.domain.BaseEntity2;
 import lombok.ToString;
 
 @ToString
-@TableName(value = "bg_question_favorites")
+@TableName(value = "bg_question_answer")
 public class QuestionAnswer extends BaseEntity2 {
 
   /**
@@ -28,7 +28,7 @@ public class QuestionAnswer extends BaseEntity2 {
 
   private Long userId;
 
-  
+  private int correct;//是否正確
 
   public Long getId() {
     return id;
@@ -53,5 +53,29 @@ public class QuestionAnswer extends BaseEntity2 {
   public void setUserId(Long userId) {
     this.userId = userId;
   }
+
+public Long getOptionId() {
+	return optionId;
+}
+
+public void setOptionId(Long optionId) {
+	this.optionId = optionId;
+}
+
+public String getOptionOrder() {
+	return optionOrder;
+}
+
+public void setOptionOrder(String optionOrder) {
+	this.optionOrder = optionOrder;
+}
+
+public int getCorrect() {
+	return correct;
+}
+
+public void setCorrect(int correct) {
+	this.correct = correct;
+}
 
 }

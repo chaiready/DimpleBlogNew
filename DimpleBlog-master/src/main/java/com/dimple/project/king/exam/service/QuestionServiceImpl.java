@@ -5,9 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.alibaba.fastjson.JSON;
 import com.dimple.project.king.exam.domain.Question;
-import com.dimple.project.king.exam.domain.QuestionOption;
 import com.dimple.project.king.exam.mapper.QuestionMapper;
 
 /**
@@ -59,6 +57,11 @@ public class QuestionServiceImpl implements QuestionService {
   public List<Question> selectQuestionFavorites(Long userId) {
     return questionMapper.selectQuestionFavorites(userId);
   }
+
+	@Override
+	public Question selectOne(Long id) {
+		return questionMapper.selectById(id);
+	}
 
 
 }

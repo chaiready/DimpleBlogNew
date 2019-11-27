@@ -19,4 +19,7 @@ public interface QuestionOptionService {
 	
 
     List<QuestionOption> selectByQuestionIds(@Param("questionIds") Long[] questionIds);
+
+
+	QuestionOption selectOne(Long valueOf);
 }

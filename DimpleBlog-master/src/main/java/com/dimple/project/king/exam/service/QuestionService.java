@@ -17,4 +17,6 @@ public interface QuestionService {
   List<Question> selectQuestion();
 
   List<Question> selectQuestionFavorites(Long userId);//收藏的问题
+
+  Question selectOne(Long valueOf);
 }

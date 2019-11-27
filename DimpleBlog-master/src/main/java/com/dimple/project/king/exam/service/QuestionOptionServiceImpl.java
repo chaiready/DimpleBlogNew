@@ -31,6 +31,11 @@ public class QuestionOptionServiceImpl implements QuestionOptionService {
 		return questionOptionMapper.selectByQuestionIds(questionIds);
 	}
 
+	@Override
+	public QuestionOption selectOne(Long id) {
+		return questionOptionMapper.selectById(id);
+	}
+
 
 
 }

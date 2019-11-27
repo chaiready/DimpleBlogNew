@@ -1,9 +1,11 @@
 package com.dimple.project.king.exam.mapper;
 
 import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
+
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.dimple.project.king.exam.domain.QuestionFavorites;
+import com.dimple.project.king.exam.domain.QuestionAnswer;
 
 /**
  * @className: BlogMapper
@@ -12,10 +14,7 @@ import com.dimple.project.king.exam.domain.QuestionFavorites;
  * @Date: 2019/3/16
  * @Version: 1.0
  */
-public interface QuestionAnswerMapper  extends BaseMapper<QuestionFavorites> {
+public interface QuestionAnswerMapper  extends BaseMapper<QuestionAnswer> {
 	
-	int insertObj(QuestionFavorites questionFavorites);
-	
-
-    List<QuestionFavorites> selectByQuestionIds(@Param("userId")Long userId,@Param("questionIds") Long[] questionIds);
+    List<QuestionAnswer> selectByQuestionIds(@Param("userId")Long userId,@Param("questionIds") Long[] questionIds);
 }

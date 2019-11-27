@@ -6,14 +6,16 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.dimple.framework.web.domain.BaseEntity;
-
-import lombok.Data;
 import lombok.ToString;
 
-@Data
 @ToString
 @TableName(value = "bg_question_option")
 public class QuestionOption  extends BaseEntity{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7803458451105024714L;
 
 	@TableId(value = "id", type = IdType.AUTO)
 	@Id
