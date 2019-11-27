@@ -40,6 +40,9 @@ public class Question extends BaseEntity {
 	private String answer;
 
 	List<QuestionOption> optionList;
+	
+	private int hasFavorites=0;//是否收藏
+	
 
 	public Long getId() {
 		return id;
@@ -88,5 +91,13 @@ public class Question extends BaseEntity {
 	public void setType(String type) {
 		this.type = type;
 	}
+
+  public int getHasFavorites() {
+    return hasFavorites;
+  }
+
+  public void setHasFavorites(int hasFavorites) {
+    this.hasFavorites = hasFavorites;
+  }
 
 }

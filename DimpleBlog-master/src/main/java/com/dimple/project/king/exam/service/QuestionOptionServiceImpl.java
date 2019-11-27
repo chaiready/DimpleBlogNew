@@ -1,4 +1,4 @@
-package com.dimple.project.king.exam;
+package com.dimple.project.king.exam.service;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.dimple.project.king.exam;
+package com.dimple.project.king.exam.service;
 
 import java.util.List;
 
@@ -54,6 +54,11 @@ public class QuestionServiceImpl implements QuestionService {
 	public List<Question> selectQuestion() {
 		return questionMapper.selectQuestion();
 	}
+
+  @Override
+  public List<Question> selectQuestionFavorites(Long userId) {
+    return questionMapper.selectQuestionFavorites(userId);
+  }
 
 
 }

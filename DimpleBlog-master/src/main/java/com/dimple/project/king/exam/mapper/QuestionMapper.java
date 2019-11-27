@@ -1,7 +1,6 @@
 package com.dimple.project.king.exam.mapper;
 
 import java.util.List;
-
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.dimple.project.king.exam.domain.Question;
 
@@ -12,9 +11,11 @@ import com.dimple.project.king.exam.domain.Question;
  * @Date: 2019/3/16
  * @Version: 1.0
  */
-public interface QuestionMapper  extends BaseMapper<Question> {
-	
-	int insertObj(Question question);
-	   
-	List<Question> selectQuestion();
+public interface QuestionMapper extends BaseMapper<Question> {
+
+  int insertObj(Question question);
+
+  List<Question> selectQuestion();
+
+  List<Question> selectQuestionFavorites(Long userId);
 }

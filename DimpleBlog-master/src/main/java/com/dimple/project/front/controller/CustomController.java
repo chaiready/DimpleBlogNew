@@ -152,19 +152,24 @@ public class CustomController extends BaseController {
      */
     @VLog(title = "跳转到登录页")
     @GetMapping("/front/toLogin")
-    public String toLogin(Model model) {
+    public String toLogin(Model model,String toPage) {
+        model.addAttribute("toPage", toPage);
         return "front/login/login";
     }
 
 
     @PostMapping("/front/login")
     @ResponseBody
-    public AjaxResult frontLogin(String loginName, String password, Model model) {
+    public AjaxResult frontLogin(String loginName, String password,String toPage, Model model) {
         UsernamePasswordToken token = new UsernamePasswordToken(loginName, password, false);
         Subject subject = SecurityUtils.getSubject();
         try {
             subject.login(token);
-            return success(loginName);
+            if(StringUtils.isEmpty(toPage)){
+              return success("/bbs/"+loginName+".html");
+            }else{
+              return success("/"+toPage);
+            }
         } catch (AuthenticationException e) {
             String msg = "用户或密码错误";
             if (StringUtils.isNotEmpty(e.getMessage())) {
@@ -200,21 +205,33 @@ public class CustomController extends BaseController {
      * @return
      */
     @GetMapping("/front/toReg")
-    public String frontToReg(String loginName, String password, Model model) {
+    public String frontToReg(String toPage, Model model) {
+        model.addAttribute("toPage", toPage);
         return "front/login/reg";
     }
 
     @PostMapping("/front/reg")
     @ResponseBody
-    public AjaxResult frontReg(User user) {
+    public AjaxResult frontReg(User user,String toPage, Model model) {
         try {
+          String password = user.getPassword();
             user.setUserName(user.getLoginName());
             userService.regUser(user);
-            return success(user.getLoginName());
+            if(StringUtils.isEmpty(toPage)){
+              return success("/bbs/"+user.getLoginName()+".html");
+            }else{
+              return frontLogin(user.getLoginName(), password, toPage, model);
+            }
         } catch (DuplicateKeyException e) {
             log.error(e.getMessage());
             return error("该用户已注册");
-        } catch (Exception e) {
+        } catch (AuthenticationException e) {
+          String msg = "用户或密码错误";
+          if (StringUtils.isNotEmpty(e.getMessage())) {
+              msg = e.getMessage();
+          }
+          return error(msg);
+      } catch (Exception e) {
             log.error(e.getMessage());
             return error("注册失败，请联系管理员");
         }
@@ -247,7 +264,7 @@ public class CustomController extends BaseController {
     public String leaveComment(Model model) {
         User user = ShiroUtils.getSysUser();
         if (user == null) {
-            return toLogin(model);
+            return toLogin(model,"");
         }
         setCommonMessage(model, user.getLoginName());
         Comment comment = new Comment();

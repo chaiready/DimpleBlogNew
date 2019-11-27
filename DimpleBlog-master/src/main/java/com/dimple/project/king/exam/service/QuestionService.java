@@ -1,7 +1,6 @@
-package com.dimple.project.king.exam;
+package com.dimple.project.king.exam.service;
 
 import java.util.List;
-
 import com.dimple.project.king.exam.domain.Question;
 
 /**
@@ -13,7 +12,9 @@ import com.dimple.project.king.exam.domain.Question;
  */
 public interface QuestionService {
 
-	int insertObj(Question question);
-	
-	List<Question> selectQuestion();
+  int insertObj(Question question);
+
+  List<Question> selectQuestion();
+
+  List<Question> selectQuestionFavorites(Long userId);//收藏的问题
 }

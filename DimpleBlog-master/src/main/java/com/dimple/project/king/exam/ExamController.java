@@ -2,7 +2,6 @@ package com.dimple.project.king.exam;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.alibaba.fastjson.JSON;
+import com.dimple.common.utils.security.ShiroUtils;
 import com.dimple.framework.aspectj.lang.annotation.Log;
 import com.dimple.framework.aspectj.lang.enums.BusinessType;
 import com.dimple.framework.web.controller.BaseController;
@@ -22,10 +20,15 @@ import com.dimple.framework.web.domain.AjaxResult;
 import com.dimple.framework.web.domain.Ztree;
 import com.dimple.project.front.service.HomeService;
 import com.dimple.project.king.exam.domain.Question;
+import com.dimple.project.king.exam.domain.QuestionFavorites;
 import com.dimple.project.king.exam.domain.QuestionOption;
+import com.dimple.project.king.exam.service.QuestionFavoritesService;
+import com.dimple.project.king.exam.service.QuestionOptionService;
+import com.dimple.project.king.exam.service.QuestionService;
 import com.dimple.project.king.func.domain.Func;
 import com.dimple.project.king.func.service.IFuncService;
 import com.dimple.project.system.role.domain.Role;
+import com.dimple.project.system.user.domain.User;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
@@ -51,21 +54,40 @@ public class ExamController extends BaseController {
     QuestionService questionService;
     @Autowired
     QuestionOptionService questionOptionService;
+    @Autowired
+    private QuestionFavoritesService questionFavoritesService;
+    
+    private void setFunc(Model model,Long funcId) {
+      List<Func> funcList = new ArrayList<Func>();
+      model.addAttribute("funcList", funcList);
+
+      String funcName = "";
+      if(CollectionUtils.isNotEmpty(funcList)){
+          funcId = funcId==null?funcList.get(0).getFuncId():funcId;
+          for(Func func:funcList){
+              if(func.getFuncId().longValue()==funcId.longValue()){
+                  funcName = func.getFuncName();
+                  break;
+              }
+          }
+      }
+      model.addAttribute("funcId", funcId);
+      model.addAttribute("funcName", funcName);
+    }
     
     @GetMapping()
     public String func(Model model,@PathVariable(required = false) Long funcId,Integer pageNum) {
-    	
-//    	questionService.insertObj(null);
-    	
+        User user = ShiroUtils.getSysUser();
     	PageHelper.startPage(pageNum == null ? 1 : pageNum, 10, "id asc");
-    	
     	List<Question>  questionList = questionService.selectQuestion();
     	if(CollectionUtils.isNotEmpty(questionList)){
     		Long[] questionIds = new Long [questionList.size()];
     		for(int i=0;i<questionList.size();i++){
     			questionIds[i] = questionList.get(i).getId();
     		}
+    		Long userId = user==null?0l:user.getUserId();
     		List<QuestionOption> optionList = questionOptionService.selectByQuestionIds(questionIds);
+            List<QuestionFavorites> qfList = questionFavoritesService.selectByQuestionIds(userId, questionIds);
     		for(Question question:questionList){
     			List<QuestionOption>  oList = new ArrayList<>();
     			for(QuestionOption qo:optionList){
@@ -74,33 +96,100 @@ public class ExamController extends BaseController {
     				}
     			}
     			question.setOptionList(oList);
+    			for(QuestionFavorites qf:qfList){
+    			  if(qf.getQuestionId().longValue()==question.getId().longValue()){
+    			    question.setHasFavorites(1);
+    			    break;
+                  }
+                }
     		}
     	}
         model.addAttribute("questionList", new PageInfo<>(questionList));
-//    	
-    	
-        List<Func> funcList = new ArrayList<Func>();
-        model.addAttribute("funcList", funcList);
-
-        String funcName = "";
-        if(CollectionUtils.isNotEmpty(funcList)){
-            if(funcId==null){
-                funcId = funcList.get(0).getFuncId();
-
+        model.addAttribute("curUser", ShiroUtils.getSysUser());
+        setFunc(model, funcId);
+        return prefix + "/exam";
+    }
+    
+    @GetMapping("/listFavorites")
+    public String listFavorites(Model model,@PathVariable(required = false) Long funcId,Integer pageNum) {
+        User user = ShiroUtils.getSysUser();
+        Long userId = user==null?0l:user.getUserId();
+        PageHelper.startPage(pageNum == null ? 1 : pageNum, 10, "id asc");
+        List<Question>  questionList = questionService.selectQuestionFavorites(userId);
+        if(CollectionUtils.isNotEmpty(questionList)){
+            Long[] questionIds = new Long [questionList.size()];
+            for(int i=0;i<questionList.size();i++){
+                questionIds[i] = questionList.get(i).getId();
             }
-            for(Func func:funcList){
-                if(func.getFuncId().longValue()==funcId.longValue()){
-                    funcName = func.getFuncName();
+            List<QuestionOption> optionList = questionOptionService.selectByQuestionIds(questionIds);
+            List<QuestionFavorites> qfList = questionFavoritesService.selectByQuestionIds(userId, questionIds);
+            for(Question question:questionList){
+                List<QuestionOption>  oList = new ArrayList<>();
+                for(QuestionOption qo:optionList){
+                    if(qo.getQuestionId().longValue()==question.getId().longValue()){
+                        oList.add(qo);
+                    }
+                }
+                question.setOptionList(oList);
+                for(QuestionFavorites qf:qfList){
+                  if(qf.getQuestionId().longValue()==question.getId().longValue()){
+                    question.setHasFavorites(1);
+                    break;
+                  }
                 }
             }
         }
-        PageHelper.startPage(pageNum == null ? 1 : pageNum, 10, "create_time desc");
-        model.addAttribute("blogs", new PageInfo<>(new ArrayList<>()));
-        model.addAttribute("funcId", funcId);
-        model.addAttribute("funcName", funcName);
-        return prefix + "/exam";
+        model.addAttribute("questionList", new PageInfo<>(questionList));
+        model.addAttribute("curUser", ShiroUtils.getSysUser());
+        setFunc(model, funcId);
+        return prefix + "/exam_favorites";
     }
 
+    
+
+    @Log(title = "添加收藏", businessType = BusinessType.INSERT)
+    @PostMapping("/addFavorites")
+    @ResponseBody
+    public AjaxResult addFavorites(Long questionId) {
+      QuestionFavorites obj = new QuestionFavorites();
+      User user = ShiroUtils.getSysUser();
+      if(user==null){
+        return error(0, "还没登录");
+      }
+      obj.setUserId(user.getUserId());
+      obj.setQuestionId(questionId);
+      List<QuestionFavorites>  qfList = questionFavoritesService.selectByUidAndQid(user.getUserId(), questionId);
+      AjaxResult result = null;
+      if(CollectionUtils.isNotEmpty(qfList)){
+        result = AjaxResult.error("已添加收藏");
+        result.put("hasFavorites", 1);//是否收藏
+        return result;
+      }
+      if(questionFavoritesService.insertObj(obj)>0){
+        result = AjaxResult.success("已添加收藏");
+        result.put("hasFavorites", 1);
+      }else{
+        result = AjaxResult.error();
+        result.put("hasFavorites", 0);
+      }
+      return result;
+    }
+    
+    
+    @Log(title = "删除收藏", businessType = BusinessType.INSERT)
+    @PostMapping("/delFavorites")
+    @ResponseBody
+    public AjaxResult delFavorites(Long questionId) {
+      User user = ShiroUtils.getSysUser();
+      if(user==null){
+        return error(0, "还没登录");
+      }
+      questionFavoritesService.delObj(user.getUserId(), questionId);
+      AjaxResult result = AjaxResult.success("已取消收藏");
+      result.put("hasFavorites", 0);//是否收藏
+      return result;
+    }
+    
 
     @RequiresPermissions("king:func:list")
     @GetMapping("/list")
@@ -141,16 +230,6 @@ public class ExamController extends BaseController {
         return prefix + "/add";
     }
 
-    /**
-     * 新增保存菜单
-     */
-    @Log(title = "系统菜单", businessType = BusinessType.INSERT)
-    @RequiresPermissions("king:func:add")
-    @PostMapping("/add")
-    @ResponseBody
-    public AjaxResult addSave(Func func) {
-        return toAjax(funcService.insertFunc(func));
-    }
 
     /**
      * 修改菜单

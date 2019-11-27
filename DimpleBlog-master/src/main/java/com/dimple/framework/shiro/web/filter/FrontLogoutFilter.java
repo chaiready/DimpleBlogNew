@@ -52,13 +52,19 @@ public class FrontLogoutFilter extends org.apache.shiro.web.filter.authc.LogoutF
             Subject subject = getSubject(request, response);
             String redirectUrl = "";//getRedirectUrl(request, response, subject);
             try {
+                String toPage = request.getParameter("toPage");
                 User user = ShiroUtils.getSysUser();
+                String loginName = "";
                 if (StringUtils.isNotNull(user)) {
-                    String loginName = user.getLoginName();
-                    redirectUrl = "/bbs/"+user.getLoginName()+".html";
-                    // 记录用户退出日志
-                    AsyncManager.me().execute(AsyncFactory.recordLogininfor(loginName, Constants.LOGOUT, MessageUtils.message("user.logout.success")));
+                  loginName = user.getLoginName();
                 }
+                if(StringUtils.isEmpty(toPage)){
+                  redirectUrl = "/bbs/"+loginName+".html";
+                }else{
+                    redirectUrl = "/"+toPage;
+                }
+                // 记录用户退出日志
+                AsyncManager.me().execute(AsyncFactory.recordLogininfor(loginName, Constants.LOGOUT, MessageUtils.message("user.logout.success")));
                 // 退出登录
                 subject.logout();
             } catch (SessionException ise) {
