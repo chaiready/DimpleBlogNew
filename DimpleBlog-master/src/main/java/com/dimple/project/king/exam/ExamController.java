@@ -20,6 +20,7 @@ import com.dimple.framework.web.domain.AjaxResult;
 import com.dimple.framework.web.domain.Ztree;
 import com.dimple.project.front.service.HomeService;
 import com.dimple.project.king.exam.domain.Question;
+import com.dimple.project.king.exam.domain.QuestionAnswer;
 import com.dimple.project.king.exam.domain.QuestionFavorites;
 import com.dimple.project.king.exam.domain.QuestionOption;
 import com.dimple.project.king.exam.service.QuestionAnswerService;
@@ -91,10 +92,26 @@ public class ExamController extends BaseController {
     		Long userId = user==null?0l:user.getUserId();
     		List<QuestionOption> optionList = questionOptionService.selectByQuestionIds(questionIds);
             List<QuestionFavorites> qfList = questionFavoritesService.selectByQuestionIds(userId, questionIds);
+            List<QuestionAnswer> answerList = questionAnswerService.selectByQuestionIds(userId, questionIds);
     		for(Question question:questionList){
+    		    long yourOptionId = 0;
+    		    int optionCorrect = 0 ;
+    		    //回答
+      		    for(QuestionAnswer qa:answerList){
+                  if(qa.getQuestionId().longValue()==question.getId().longValue()){
+                    question.setHasAnswer(qa.getCorrect());
+                    question.setYouAnswer(qa.getOptionOrder());
+                    yourOptionId = qa.getOptionId();
+                    optionCorrect = qa.getCorrect();
+                    break;
+                  }
+                }
     			List<QuestionOption>  oList = new ArrayList<>();
     			for(QuestionOption qo:optionList){
     				if(qo.getQuestionId().longValue()==question.getId().longValue()){
+    				    if(yourOptionId == qo.getId().longValue()){
+    				      qo.setCorrect(optionCorrect);
+    				    }
     					oList.add(qo);
     				}
     			}

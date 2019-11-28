@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.dimple.framework.web.domain.AjaxResult;
+import com.dimple.project.enums.QuestionAnswerEnum;
 import com.dimple.project.king.exam.domain.Question;
 import com.dimple.project.king.exam.domain.QuestionAnswer;
 import com.dimple.project.king.exam.domain.QuestionOption;
@@ -66,10 +67,10 @@ public class QuestionAnswerServiceImpl implements QuestionAnswerService {
 		if(option.getQuestionId().longValue()!= questionId.longValue()){
 			return AjaxResult.error("选项与题目不匹配");
 		}
-		int correct = 0;
+		int correct = QuestionAnswerEnum.wrong.getKey();
 		Question question = questionService.selectOne(questionId);
 		if(question.getAnswer().trim().equals(option.getOptionOrder().trim())){
-			correct = 1;
+			correct = QuestionAnswerEnum.right.getKey();
 		}
 	    Map<String, Object> columnMap = new HashMap<>(2);
 	    columnMap.put("user_id", userId);
@@ -82,7 +83,10 @@ public class QuestionAnswerServiceImpl implements QuestionAnswerService {
 		answer.setCorrect(correct);
 		answer.setUserId(userId);
 		mapper.insert(answer);
-		return AjaxResult.success("保存成功");
+		result = AjaxResult.success("保存成功");
+		result.put("correct", correct);
+		result.put("youAnswer", option.getOptionOrder());
+		return result;
 	}
 
 

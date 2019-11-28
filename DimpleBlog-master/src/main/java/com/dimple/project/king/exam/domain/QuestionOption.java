@@ -1,16 +1,16 @@
 package com.dimple.project.king.exam.domain;
 
 import org.springframework.data.annotation.Id;
-
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.dimple.framework.web.domain.BaseEntity;
+import com.dimple.framework.web.domain.BaseEntity2;
 import lombok.ToString;
 
 @ToString
 @TableName(value = "bg_question_option")
-public class QuestionOption  extends BaseEntity{
+public class QuestionOption  extends BaseEntity2{
 
 	/**
 	 * 
@@ -26,6 +26,9 @@ public class QuestionOption  extends BaseEntity{
 	private String optionOrder;
 
 	private String optionVal;
+	
+	@TableField(exist = false)
+	private int correct = -1;//是否正確 QuestionAnswerEnum
 
 	public Long getId() {
 		return id;
@@ -58,5 +61,13 @@ public class QuestionOption  extends BaseEntity{
 	public void setOptionVal(String optionVal) {
 		this.optionVal = optionVal;
 	}
+
+    public int getCorrect() {
+      return correct;
+    }
+  
+    public void setCorrect(int correct) {
+      this.correct = correct;
+    }
 
 }

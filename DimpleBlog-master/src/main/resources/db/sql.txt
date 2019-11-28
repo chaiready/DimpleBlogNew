@@ -59,7 +59,7 @@ CREATE TABLE `bg_question_answer` (
   `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT 'id',
   `question_id` BIGINT DEFAULT NULL COMMENT '问题id',
   `user_id` BIGINT DEFAULT NULL COMMENT '用户id',
-`option_d` BIGINT DEFAULT NULL COMMENT '选项id',
+`option_id` BIGINT DEFAULT NULL COMMENT '选项id',
 `option_order` varchar(10) DEFAULT NULL COMMENT '选项排序号',
 `correct` int(2) DEFAULT NULL COMMENT '是否正确',
   `create_by` varchar(64) DEFAULT NULL COMMENT '创建者',
