@@ -121,7 +121,7 @@
         </h4>
         <hr/>
         <!--分页开始-->
-        <div th:replace="navigation :: navigation-index(${questionList})"></div>
+        <div th:replace="navigation :: navigation-direct(${questionList})"></div>
         <!--分页结束-->
         <div class="arclist">
             <!--列表开始-->
@@ -132,8 +132,8 @@
                         	 [[${question.questionOrder}]]
                             <a th:text="${question.content}"></a>
                         </h4>
-                        	<div  th:each="qo:${question.optionList}" >
-                        		<label>
+                        	<div  th:each="qo:${question.optionList}" style="margin-bottom: 15px;">
+                        		<label style="">
 	                        		<input type="radio" class="optionRationCls" th:name="${'optionQuestion'+question.id}" th:value="${question.id+'_'+qo.id}">
 		                        	<span th:style="@{(${qo.correct} eq 0 ? 'color: red;' : (${qo.correct} eq 1 ? 'color: #67c23a;':''))}" 
 		                        		th:text="${qo.optionOrder+'、'+qo.optionVal}"></span>
@@ -166,7 +166,7 @@
             <!--列表结束-->
         </div>
         <!--分页开始-->
-        <div th:replace="navigation :: navigation-index(${questionList})"></div>
+        <div th:replace="navigation :: navigation-direct(${questionList})"></div>
         <!--分页结束-->
     </section>
     <!--左侧结束-->

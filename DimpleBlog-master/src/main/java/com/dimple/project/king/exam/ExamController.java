@@ -7,6 +7,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -80,7 +81,14 @@ public class ExamController extends BaseController {
     }
     
     @GetMapping()
-    public String list(Model model,@PathVariable(required = false) Long funcId,Integer pageNum) {
+    public String list(Model model,@PathVariable(required = false) Long funcId,Integer pageNum,String directPage) {
+    	if(!StringUtils.isEmpty(directPage)){
+    		try {
+    			pageNum = Integer.parseInt(directPage);
+			} catch (Exception e) {
+				pageNum =1;
+			}
+    	}
         User user = ShiroUtils.getSysUser();
     	PageHelper.startPage(pageNum == null ? 1 : pageNum, 10, "id asc");
     	List<Question>  questionList = questionService.selectQuestion();
