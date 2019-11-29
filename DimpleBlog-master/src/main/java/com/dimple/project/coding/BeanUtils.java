@@ -118,6 +118,8 @@ public class BeanUtils {
     createMapper(info);
     createMapperXml(info, list);
     createService(info);
+    createServiceImpl(info);
+
     // createController(info);
     //
     // createJspList(info,list);
@@ -344,17 +346,21 @@ public class BeanUtils {
       serviceName += "Service";
     }
 
-    String fileName = savePath + serviceName + ".java";
+    String fileName = savePath + serviceName + "Impl.java";
     File file = createFile(fileName);
     FileWriter fw = new FileWriter(file);
 
     StringBuilder sb = new StringBuilder();
-    sb.append("package " + info.getPackagePath() + ";" + RT_2);
-
-
+    sb.append("package " + info.getPackagePath() + ";").append(RT_2);
+    sb.append("import org.springframework.beans.factory.annotation.Autowired;").append(RT_1);
+    
     appendFileAnno(info, sb);// 类备注
-    sb.append("public interface " + serviceName + "");
+    sb.append("public class ").append(serviceName).append("Impl implements ").append(serviceName);
     sb.append("{").append(RT_2);
+    sb.append(TAB_1).append("@Autowired").append(RT_1);
+    sb.append(TAB_1).append("private ").append(daoName).append(" ").append("mapper;").append(RT_1);
+    sb.append("");
+    sb.append("");
     sb.append("}");
 
     fw.write(sb.toString());
