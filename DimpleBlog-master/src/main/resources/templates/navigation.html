@@ -104,7 +104,7 @@ id：
             </li>
             <li>
             	<input name="directPage" type="text" class="text" id="directPage" value="" maxlength="3" 
-            	placeholder="" style="float: left;width: 46px;padding: 0 14px;margin: 10px 5px;">
+            	placeholder="" style="float: left;width: 46px;margin: 10px 5px;">
             	<a class="num" onclick="directToPage();" style="float: left;padding: 0 0px;margin: 0 0px;">跳转到</a>
             </li>
         </ul>
@@ -113,5 +113,10 @@ id：
     	function directToPage(){
     		window.location.href="?directPage="+$("#directPage").val();
     	}
+    	$('#directPage').bind('keypress',function(event){
+			if(event.keyCode == "13"){
+				directToPage();             
+			}
+		});
     </script>
 </div>

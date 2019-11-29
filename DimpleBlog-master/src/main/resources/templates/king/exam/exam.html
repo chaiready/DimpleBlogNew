@@ -126,7 +126,8 @@
         
         <h4 class="index-title">
             <a th:if="${curUser==null}" class="orange-text"  href="/bbs/front/toLogin?toPage=kaoshi">登录可进行收藏题目</a>
-            <a th:if="${curUser!=null}" class="orange-text"  href="/kaoshi/listFavorites?toPage=kaoshi">已登录：查看收藏</a>
+            <a th:if="${curUser!=null}" class="orange-text"  href="/kaoshi/listFavorites?toPage=kaoshi">已登录：【查看收藏】</a>
+            <a th:if="${curUser!=null}" class="orange-text"  href="/kaoshi/listWrong?toPage=kaoshi">【查看错题】</a>
         </h4>
         <hr/>
         <!--分页开始-->
@@ -190,13 +191,9 @@
 <script>
 	$(function(){
 		$('#banner_next').bind('click',function(){
-			console.info("next>>2222>>");
-			//$('#banner_prev').show();
 			$('.paginationNext')[0].click();
-			//$('.paginationNext:first').trigger('click') ;
 		});
 		$('#banner_prev').click(function(){
-			//$('#banner_next').show();
 			$('.paginationPrev')[0].click();
 		});
 		

@@ -30,6 +30,7 @@ import com.dimple.project.king.exam.service.QuestionOptionService;
 import com.dimple.project.king.exam.service.QuestionService;
 import com.dimple.project.king.func.domain.Func;
 import com.dimple.project.king.func.service.IFuncService;
+import com.dimple.project.system.notice.domain.Notice;
 import com.dimple.project.system.role.domain.Role;
 import com.dimple.project.system.user.domain.User;
 import com.github.pagehelper.PageHelper;
@@ -134,6 +135,11 @@ public class ExamController extends BaseController {
     	}
         model.addAttribute("questionList", new PageInfo<>(questionList));
         model.addAttribute("curUser", ShiroUtils.getSysUser());
+        List<Notice> noticeList = new ArrayList<>();
+        Notice notice = new Notice();
+        notice.setNoticeTitle("欢迎进入htt://5180it.com:8080");
+        noticeList.add(notice);
+        model.addAttribute("notices", noticeList);
         setFunc(model, funcId);
         return prefix + "/exam";
     }
@@ -171,6 +177,41 @@ public class ExamController extends BaseController {
         model.addAttribute("curUser", ShiroUtils.getSysUser());
         setFunc(model, funcId);
         return prefix + "/exam_favorites";
+    }
+    
+    @GetMapping("/listWrong")
+    public String listWrong(Model model,@PathVariable(required = false) Long funcId,Integer pageNum) {
+        User user = ShiroUtils.getSysUser();
+        Long userId = user==null?0l:user.getUserId();
+        PageHelper.startPage(pageNum == null ? 1 : pageNum, 10, "id asc");
+        List<Question>  questionList = questionService.selectQuestionWrong(userId);
+        if(CollectionUtils.isNotEmpty(questionList)){
+            Long[] questionIds = new Long [questionList.size()];
+            for(int i=0;i<questionList.size();i++){
+                questionIds[i] = questionList.get(i).getId();
+            }
+            List<QuestionOption> optionList = questionOptionService.selectByQuestionIds(questionIds);
+            List<QuestionFavorites> qfList = questionFavoritesService.selectByQuestionIds(userId, questionIds);
+            for(Question question:questionList){
+                List<QuestionOption>  oList = new ArrayList<>();
+                for(QuestionOption qo:optionList){
+                    if(qo.getQuestionId().longValue()==question.getId().longValue()){
+                        oList.add(qo);
+                    }
+                }
+                question.setOptionList(oList);
+                for(QuestionFavorites qf:qfList){
+                  if(qf.getQuestionId().longValue()==question.getId().longValue()){
+                    question.setHasFavorites(1);
+                    break;
+                  }
+                }
+            }
+        }
+        model.addAttribute("questionList", new PageInfo<>(questionList));
+        model.addAttribute("curUser", ShiroUtils.getSysUser());
+        setFunc(model, funcId);
+        return prefix + "/exam_wrong";
     }
 
     

@@ -68,5 +68,10 @@
 		INNER JOIN bg_question_favorites qf on q.id = qf.question_id and qf.user_id=#{userId}
 		order by q.id
     </select>
-
+    
+    <select id="selectQuestionByAnwserCorrect" resultType="com.dimple.project.king.exam.domain.Question">
+        select q.* from bg_question q 
+		INNER JOIN bg_question_answer qa on q.id = qa.question_id and qa.user_id=#{userId} and qa.correct=#{correct}
+		order by q.id
+    </select>
 </mapper>

@@ -18,4 +18,6 @@ public interface QuestionMapper extends BaseMapper<Question> {
   List<Question> selectQuestion();
 
   List<Question> selectQuestionFavorites(Long userId);
+
+  List<Question> selectQuestionByAnwserCorrect(Long userId,int correct);
 }

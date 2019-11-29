@@ -1,10 +1,9 @@
 package com.dimple.project.king.exam.service;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import com.dimple.project.enums.QuestionAnswerEnum;
 import com.dimple.project.king.exam.domain.Question;
 import com.dimple.project.king.exam.mapper.QuestionMapper;
 
@@ -62,6 +61,11 @@ public class QuestionServiceImpl implements QuestionService {
 	public Question selectOne(Long id) {
 		return questionMapper.selectById(id);
 	}
+
+  @Override
+  public List<Question> selectQuestionWrong(Long userId) {
+    return questionMapper.selectQuestionByAnwserCorrect(userId,QuestionAnswerEnum.wrong.getKey());
+  }
 
 
 }
