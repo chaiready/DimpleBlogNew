@@ -5,20 +5,20 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.dimple.framework.web.domain.BaseEntity2;
+import com.dimple.framework.web.domain.SuperEntity;
 import lombok.ToString;
 
 @ToString
 @TableName(value = "bg_question_option")
-public class QuestionOption  extends BaseEntity2{
+public class QuestionOption  extends SuperEntity{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -7803458451105024714L;
 
-	@TableId(value = "id", type = IdType.AUTO)
 	@Id
+	@TableId(value = "id", type = IdType.AUTO)
 	private Long id;
 
 	private Long questionId;

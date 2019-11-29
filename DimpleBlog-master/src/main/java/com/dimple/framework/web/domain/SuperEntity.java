@@ -11,10 +11,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
  * @Date: 2019/3/13
  * @Version: 1.1
  */
-public class BaseEntity2 implements Serializable {
+public class SuperEntity implements Serializable {
   
     private static final long serialVersionUID = 1L;
-
 
     /**
      * 创建者

@@ -4,12 +4,12 @@ import org.springframework.data.annotation.Id;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.dimple.framework.web.domain.BaseEntity2;
+import com.dimple.framework.web.domain.SuperEntity;
 import lombok.ToString;
 
 @ToString
 @TableName(value = "bg_question_favorites")
-public class QuestionFavorites extends BaseEntity2 {
+public class QuestionFavorites extends SuperEntity {
 
   /**
   * 

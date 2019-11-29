@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.dimple.framework.web.domain.BaseEntity2;
+import com.dimple.framework.web.domain.SuperEntity;
 import lombok.ToString;
 
 /**
@@ -18,7 +18,7 @@ import lombok.ToString;
  */
 @ToString
 @TableName(value = "bg_question")
-public class Question extends BaseEntity2 {
+public class Question extends SuperEntity {
 
   /**
    * 
