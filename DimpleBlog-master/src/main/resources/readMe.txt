@@ -33,3 +33,9 @@ www.u311.com
 
 
 <a class="btn btn-success btn-xs " href="javascript:void(0)" th:onclick="openModal('/blog/blog/edit/[[${blog.blogId}]]');"><i class="fa fa-edit"></i> 编辑</a>
+
+
+
+
+左右翻页
+zzsc.css

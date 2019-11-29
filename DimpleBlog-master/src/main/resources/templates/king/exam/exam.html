@@ -3,6 +3,15 @@
 <head>
     <th:block th:include="include-front-custom :: head('5180it.com','欢迎进入')"/>
 
+	<style type="text/css">
+		.paBanner{ position:fixed;}
+		.prevBanner,.nextBanner{ cursor:pointer; width:8%; height:100%; _height:100%; top:0;}
+		.prevBanner{ left:0; background:url(/img/arrow_l.png) no-repeat center 44%;}
+		.prevBanner:hover{background:#efefef url(/img/arrow_l.png) no-repeat center 44%;}
+		.nextBanner{ right:0;background:url(/img/arrow_r.png) no-repeat center 44%;}
+		.nextBanner:hover{background:#efefef url(/img/arrow_r.png) no-repeat center 44%;}
+	</style>
+	
     <!-- 遮罩层 -->
     <script th:src="@{/ajax/libs/blockUI/jquery.blockUI.js}"></script>
 
@@ -169,6 +178,10 @@
         <div th:replace="navigation :: navigation-direct(${questionList})"></div>
         <!--分页结束-->
     </section>
+    
+    <a href="javascript:void(0);" class="prevBanner paBanner none" id="banner_prev"></a>
+    <a href="javascript:void(0);" class="nextBanner paBanner" id="banner_next"></a>
+        
     <!--左侧结束-->
     <!--<th:block th:replace="include-front-custom :: side"/>-->
 </div>
@@ -176,6 +189,17 @@
 
 <script>
 	$(function(){
+		$('#banner_next').bind('click',function(){
+			console.info("next>>2222>>");
+			//$('#banner_prev').show();
+			$('.paginationNext')[0].click();
+			//$('.paginationNext:first').trigger('click') ;
+		});
+		$('#banner_prev').click(function(){
+			//$('#banner_next').show();
+			$('.paginationPrev')[0].click();
+		});
+		
 		/* $(".optionRationCls").click(function(){
 			var checkValue = $(this).val(); 
 			console.info("click"+checkValue);
