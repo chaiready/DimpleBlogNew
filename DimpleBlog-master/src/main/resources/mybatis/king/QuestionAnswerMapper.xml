@@ -23,7 +23,7 @@
     </sql>
     
     <select id="selectByQuestionIds" resultType="com.dimple.project.king.exam.domain.QuestionAnswer">
-        select b.* from bg_question_answer b where user_id=#{userId} and question_id in
+        select b.* from bg_question_answer b where user_id=#{userId} and exam_id=#{examId} and question_id in
          <foreach collection="questionIds" item="questionId" open="(" separator="," close=")">
             #{questionId}
         </foreach>
