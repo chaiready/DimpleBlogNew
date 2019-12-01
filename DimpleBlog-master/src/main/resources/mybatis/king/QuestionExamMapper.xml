@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dimple.project.king.exam.mapper.QuestionExamMapper">
+	<resultMap id="BaseResultMap" type="com.dimple.project.king.exam.domain.QuestionExamEntity">
+		<id column="id" property="id" jdbcType="BIGINT"/>
+		<result column="exam_name" property="examName" jdbcType="VARCHAR"/>
+		<result column="user_id" property="userId" jdbcType="BIGINT"/>
+		<result column="create_by" property="optionOrder" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_by" property="updateBy" jdbcType="VARCHAR"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	
+	
+	<select id="pageList" resultType="com.dimple.project.king.exam.domain.QuestionExamEntity">
+        select b.* from bg_question_exam b where user_id = #{userId} order by create_time desc
+    </select>
+</mapper>

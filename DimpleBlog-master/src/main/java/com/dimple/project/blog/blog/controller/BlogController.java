@@ -133,7 +133,7 @@ public class BlogController extends BaseController {
     @ResponseBody
     public AjaxResult remove(Integer[] ids) {
 
-        return toAjax(1);//blogService.deleteBlogById(ids)
+        return toAjax(blogService.deleteBlogById(ids));//
     }
 
 

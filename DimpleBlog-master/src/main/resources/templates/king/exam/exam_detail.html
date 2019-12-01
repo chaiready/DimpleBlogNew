@@ -11,7 +11,7 @@
 		.nextBanner{ right:0;background:url(/img/arrow_r.png) no-repeat center 44%;}
 		.nextBanner:hover{background:#efefef url(/img/arrow_r.png) no-repeat center 44%;}
 	</style>
-
+	
     <!-- 遮罩层 -->
     <script th:src="@{/ajax/libs/blockUI/jquery.blockUI.js}"></script>
 
@@ -113,49 +113,53 @@
 <div class="container">
     <!--最新文章-->
     <section class="mysection" style="width: 95%;">
-        <!-- <h4 class="index-title">
-            <a href="/"><i class="fa fa-home"></i>当前页: &nbsp;> </a>
-            <span class="orange-text" th:text="${funcName}"></span>
-            <span style="float:right;margin-right:10px;">共有文章:<font class="orange-text"
-                th:text="${blogs.total}"> 11 </font>篇</span>
-        </h4> -->
-        <!--<div>
-            <p class="smallText" th:text="${'分类描述：'+funcName}"></p>
-            <p class="smallText" th:text="${'创建时间：'+funcName}"></p>
-        </div>-->
-        
         <h4 class="index-title">
-        	<a href="javascript:void(0);"><i class="fa fa-home"></i>当前页: &nbsp;错题集 </a>
-            <a th:if="${curUser!=null}" class="orange-text"  href="/kaoshi">&lt;&lt;【返回】</a>
+        	<a href="javascript:void(0);"><i class="fa fa-home"></i>当前页: &nbsp;答卷明细 </a>
+            <a th:if="${curUser==null}" class="orange-text"  href="/bbs/front/toLogin?toPage=kaoshi">登录可进行收藏题目</a>
+            <a th:if="${curUser!=null}" class="orange-text"  href="/kaoshi/listExam?toPage=kaoshi">【返回】</a>
         </h4>
-        <hr/>
         <!--分页开始-->
         <div th:replace="navigation :: navigation-direct(${questionList})"></div>
         <!--分页结束-->
         <div class="arclist">
             <!--列表开始-->
+            <form>
                 <div th:each="question:${questionList.list}">
                     <div class="arc-left">
                         <h4 class="blue-text">
                         	 [[${question.questionOrder}]]
                             <a th:text="${question.content}"></a>
                         </h4>
-                            <span style="display: block;" th:each="qo:${question.optionList}" 
-                            	th:text="${qo.optionOrder+'、'+qo.optionVal}"></span>
+                        	<div  th:each="qo:${question.optionList}" style="margin-bottom: 15px;">
+                        		<label style="">
+		                        	<span th:style="@{(${qo.correct} eq 0 ? 'color: red;' : (${qo.correct} eq 1 ? 'color: #67c23a;':''))}" 
+		                        		th:text="${qo.optionOrder+'、'+qo.optionVal}"></span>
+	                        	</label>
+                        	</div>
                             	
                         <p style="margin-top: 10px;">
-                       		<span style="color: #67c23a;" th:text="${'正確答案： '+question.answer}"></span>
+                        	<span th:if="${curUser==null}">
+                        		<span style="color: #67c23a;" th:text="${'正確答案： 登录后才能查看答案'}"></span>
+                        	</span>
+            				<span class="questionAnswerSpanCls" th:if="${curUser!=null}">
+            					<span style="color: #67c23a;" th:text="${'正確答案： '+question.answer}"></span>
+            					<span th:id = "yourAnswer+(${question.id})">
+            						<span th:if="${question.hasAnswer == 1}" style='color: #67c23a;'>&nbsp;&nbsp;&nbsp;&nbsp;您的答案：[[${question.youAnswer}]]</span>
+					        	   	<span th:if="${question.hasAnswer == 0}" style='color: red;'>&nbsp;&nbsp;&nbsp;您的答案：[[${question.youAnswer}]]</span>
+            					</span>
                        		
-                       	 <span th:if="${curUser!=null}" class="orange-text">
-                       	 	<a th:style="'display:' + @{(${question.hasFavorites} eq 0 ? 'none' : 'inline-block')} + ';float: right;'" 
-                       	 		th:onclick="delFavorites([[${question.id}]]);"  th:id = "delQues+(${question.id})"><i class="fa fa-star"></i>已收藏</a>
-                       	 		
-                        	<a th:style="'display:' + @{(${question.hasFavorites ne 0} ? 'none' : 'inline-block')} + ';float: right;'"
-                        		 th:onclick="addFavorites([[${question.id}]]);"  th:id = "addQues+(${question.id})"><i class="fa fa-star-o"></i>未收藏</a>
-                       	 </span>	
+		                       	 <span th:if="${curUser!=null}" class="orange-text">
+		                       	 	<a th:style="'display:' + @{(${question.hasFavorites} eq 0 ? 'none' : 'inline-block')} + ';float: right;'" 
+		                       	 		th:onclick="delFavorites([[${question.id}]]);"  th:id = "delQues+(${question.id})"><i class="fa fa-star"></i>已收藏</a>
+		                       	 		
+		                        	<a th:style="'display:' + @{(${question.hasFavorites ne 0} ? 'none' : 'inline-block')} + ';float: right;'"
+		                        		 th:onclick="addFavorites([[${question.id}]]);"  th:id = "addQues+(${question.id})"><i class="fa fa-star-o"></i>未收藏</a>
+		                       	 </span>	
+            				</span>
                         </p>
                     </div>
                 </div>
+               </form>
             <!--列表结束-->
         </div>
         <!--分页开始-->
@@ -165,7 +169,7 @@
     
     <a href="javascript:void(0);" class="prevBanner paBanner none" id="banner_prev"></a>
     <a href="javascript:void(0);" class="nextBanner paBanner" id="banner_next"></a>
-    
+        
     <!--左侧结束-->
     <!--<th:block th:replace="include-front-custom :: side"/>-->
 </div>
@@ -178,6 +182,9 @@
 		});
 		$('#banner_prev').click(function(){
 			$('.paginationPrev')[0].click();
+		});
+		$("#searchQuestionBtn").click(function(){
+			console.info($("#questionSearch").val());
 		});
 		
 		/* $(".optionRationCls").click(function(){
@@ -212,6 +219,7 @@
 	       });
 		});
 	});
+
 	//收藏
    function addFavorites(questionId){
 	   $.ajax({
@@ -229,7 +237,6 @@
         		   $("#delQues"+questionId).hide();
         	   }
         	   if (data.code == 200) {
-                   //刷新当前评论框
                    layer.msg(data.msg, {icon: 1});
                } else {
                    layer.msg(data.msg, {icon: 2});
@@ -257,7 +264,6 @@
         		   $("#delQues"+questionId).hide();
         	   }
         	   if (data.code == 200) {
-                   //刷新当前评论框
                    layer.msg(data.msg, {icon: 1});
                } else {
                    layer.msg(data.msg, {icon: 2});
@@ -268,6 +274,7 @@
            },
        });
    }
+   
 </script>
 </body>
 </html>

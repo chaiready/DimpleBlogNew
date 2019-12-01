@@ -1,6 +1,9 @@
 package com.dimple.project.king.exam.mapper;
 
 import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.dimple.project.king.exam.domain.Question;
 
@@ -19,5 +22,5 @@ public interface QuestionMapper extends BaseMapper<Question> {
 
   List<Question> selectQuestionFavorites(Long userId);
 
-  List<Question> selectQuestionByAnwserCorrect(Long userId,int correct);
+  List<Question> selectQuestionByAnwserCorrect(@Param("userId")Long userId,@Param("correct")int correct);
 }

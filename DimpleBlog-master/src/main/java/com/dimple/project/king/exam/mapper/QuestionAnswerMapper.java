@@ -16,5 +16,5 @@ import com.dimple.project.king.exam.domain.QuestionAnswer;
  */
 public interface QuestionAnswerMapper  extends BaseMapper<QuestionAnswer> {
 	
-    List<QuestionAnswer> selectByQuestionIds(@Param("userId")Long userId,@Param("questionIds") Long[] questionIds);
+    List<QuestionAnswer> selectByQuestionIds(@Param("userId")Long userId,@Param("examId")Long examId,@Param("questionIds") Long[] questionIds);
 }

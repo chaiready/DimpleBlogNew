@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.ibatis.type.JdbcType;
+import org.springframework.stereotype.Service;
+
 import com.dimple.common.utils.StringUtils;
 
 
@@ -34,10 +36,10 @@ public class BeanUtils {
 
   public static void main(String[] args) throws Exception {
     EntityInfo info = new EntityInfo();
-    info.setEntityName("AdddddSubEntity");
+    info.setEntityName("QuestionExamEntity");
     info.setExtendEntityName("BaseEntity");
-    info.setPackagePath("com.yy.modules.ver.auditCols");
-    info.setTitle("对比项表");
+    info.setPackagePath("com.dimple.project.king.exam.domain");
+    info.setTitle("考试");
     info.setAuthor("ls2008");
     info.setReqMappingPath("/ver/auditCols");
     info.setJspPath("modules/ver/auditcols");// jsp路径
@@ -45,48 +47,18 @@ public class BeanUtils {
     // 生成实体==================================================================================
     List<ColInfo> list = new ArrayList<ColInfo>();
     ColInfo col = new ColInfo();
-    col.setColName("columnAnno");
+    col.setColName("examName");
     col.setColType("String");
     col.setColLenth(50);
-    col.setColAnno("列名");
+    col.setColAnno("考试名称");
     col.setEleType(ColInfo.EleType.TEXT);
     list.add(col);
     col = new ColInfo();
-    col.setColName("colaaaaaa");
-    col.setColType("String");
+    col.setColName("userId");
+    col.setColType("Long");
     col.setColLenth(50);
-    col.setColAnno("栏位aaaaaaa");
+    col.setColAnno("用户id");
     col.setEleType(ColInfo.EleType.DATE);
-    list.add(col);
-    col = new ColInfo();
-    col.setColName("columnName");
-    col.setColType("String");
-    col.setColLenth(50);
-    col.setColAnno("栏位");
-    col.setEleType(ColInfo.EleType.DATETIME);
-    list.add(col);
-    col = new ColInfo();
-    col.setColName("isDisplay");
-    col.setColType("String");
-    col.setColLenth(1);
-    col.setColAnno("是否显示");
-    col.setEleType(ColInfo.EleType.REF);
-    col.setColCount(2);
-    list.add(col);
-    col = new ColInfo();
-    col.setColName("type");
-    col.setColType("String");
-    col.setColLenth(36);
-    col.setColAnno("类别");
-    col.setEleType(ColInfo.EleType.SELECT);
-    list.add(col);
-    col = new ColInfo();
-    col.setColName("type111");
-    col.setColType("String");
-    col.setColLenth(36);
-    col.setColAnno("类别1111");
-    col.setEleType(ColInfo.EleType.TEXTAREA);
-    col.setColCount(3);
     list.add(col);
     // 生成实体==================================================================================
 
@@ -287,6 +259,11 @@ public class BeanUtils {
         sb.append("\"/>").append(RT_1);
       }
     }  
+    sb.append("<result column=\"create_by\" property=\"optionOrder\" jdbcType=\"VARCHAR\"/>");
+    sb.append("<result column=\"create_time\" property=\"createTime\" jdbcType=\"TIMESTAMP\"/>");
+    sb.append("<result column=\"update_by\" property=\"updateBy\" jdbcType=\"VARCHAR\"/>");
+    sb.append("<result column=\"update_time\" property=\"updateTime\" jdbcType=\"TIMESTAMP\"/>");
+    
     sb.append(TAB_1).append("</resultMap>").append(RT_1);
     
     sb.append("</mapper>");
@@ -353,8 +330,10 @@ public class BeanUtils {
     StringBuilder sb = new StringBuilder();
     sb.append("package " + info.getPackagePath() + ";").append(RT_2);
     sb.append("import org.springframework.beans.factory.annotation.Autowired;").append(RT_1);
+    sb.append("import org.springframework.stereotype.Service;").append(RT_1);
     
     appendFileAnno(info, sb);// 类备注
+    sb.append("@Service");
     sb.append("public class ").append(serviceName).append("Impl implements ").append(serviceName);
     sb.append("{").append(RT_2);
     sb.append(TAB_1).append("@Autowired").append(RT_1);

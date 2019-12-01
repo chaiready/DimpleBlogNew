@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.dimple.common.utils.DateUtils;
 import com.dimple.common.utils.security.ShiroUtils;
 import com.dimple.framework.aspectj.lang.annotation.Log;
 import com.dimple.framework.aspectj.lang.enums.BusinessType;
@@ -22,9 +24,11 @@ import com.dimple.framework.web.domain.Ztree;
 import com.dimple.project.front.service.HomeService;
 import com.dimple.project.king.exam.domain.Question;
 import com.dimple.project.king.exam.domain.QuestionAnswer;
+import com.dimple.project.king.exam.domain.QuestionExamEntity;
 import com.dimple.project.king.exam.domain.QuestionFavorites;
 import com.dimple.project.king.exam.domain.QuestionOption;
 import com.dimple.project.king.exam.service.QuestionAnswerService;
+import com.dimple.project.king.exam.service.QuestionExamService;
 import com.dimple.project.king.exam.service.QuestionFavoritesService;
 import com.dimple.project.king.exam.service.QuestionOptionService;
 import com.dimple.project.king.exam.service.QuestionService;
@@ -62,11 +66,12 @@ public class ExamController extends BaseController {
     private QuestionFavoritesService questionFavoritesService;
     @Autowired
     private QuestionAnswerService questionAnswerService;
+    @Autowired
+    private QuestionExamService questionExamService;
     
     private void setFunc(Model model,Long funcId) {
       List<Func> funcList = new ArrayList<Func>();
       model.addAttribute("funcList", funcList);
-
       String funcName = "";
       if(CollectionUtils.isNotEmpty(funcList)){
           funcId = funcId==null?funcList.get(0).getFuncId():funcId;
@@ -80,9 +85,8 @@ public class ExamController extends BaseController {
       model.addAttribute("funcId", funcId);
       model.addAttribute("funcName", funcName);
     }
-    
-    @GetMapping()
-    public String list(Model model,@PathVariable(required = false) Long funcId,Integer pageNum,String directPage) {
+
+    private Integer getDirectPageNum(Integer pageNum,String directPage){
     	if(!StringUtils.isEmpty(directPage)){
     		try {
     			pageNum = Integer.parseInt(directPage);
@@ -90,8 +94,14 @@ public class ExamController extends BaseController {
 				pageNum =1;
 			}
     	}
+    	pageNum = pageNum == null ? 1 : pageNum;
+    	return pageNum;
+    }
+    
+    @GetMapping()
+    public String list(Model model,@PathVariable(required = false) Long funcId,Integer pageNum,String directPage) {
         User user = ShiroUtils.getSysUser();
-    	PageHelper.startPage(pageNum == null ? 1 : pageNum, 10, "id asc");
+    	PageHelper.startPage(getDirectPageNum(pageNum, directPage) , 10, "id asc");
     	List<Question>  questionList = questionService.selectQuestion();
     	if(CollectionUtils.isNotEmpty(questionList)){
     		Long[] questionIds = new Long [questionList.size()];
@@ -101,7 +111,7 @@ public class ExamController extends BaseController {
     		Long userId = user==null?0l:user.getUserId();
     		List<QuestionOption> optionList = questionOptionService.selectByQuestionIds(questionIds);
             List<QuestionFavorites> qfList = questionFavoritesService.selectByQuestionIds(userId, questionIds);
-            List<QuestionAnswer> answerList = questionAnswerService.selectByQuestionIds(userId, questionIds);
+            List<QuestionAnswer> answerList = questionAnswerService.selectByQuestionIds(userId, 0l, questionIds);
     		for(Question question:questionList){
     		    long yourOptionId = 0;
     		    int optionCorrect = 0 ;
@@ -145,10 +155,10 @@ public class ExamController extends BaseController {
     }
     
     @GetMapping("/listFavorites")
-    public String listFavorites(Model model,@PathVariable(required = false) Long funcId,Integer pageNum) {
+    public String listFavorites(Model model,@PathVariable(required = false) Long funcId,Integer pageNum,String directPage) {
         User user = ShiroUtils.getSysUser();
         Long userId = user==null?0l:user.getUserId();
-        PageHelper.startPage(pageNum == null ? 1 : pageNum, 10, "id asc");
+        PageHelper.startPage(getDirectPageNum(pageNum, directPage), 10, "id asc");
         List<Question>  questionList = questionService.selectQuestionFavorites(userId);
         if(CollectionUtils.isNotEmpty(questionList)){
             Long[] questionIds = new Long [questionList.size()];
@@ -180,10 +190,10 @@ public class ExamController extends BaseController {
     }
     
     @GetMapping("/listWrong")
-    public String listWrong(Model model,@PathVariable(required = false) Long funcId,Integer pageNum) {
+    public String listWrong(Model model,@PathVariable(required = false) Long funcId,Integer pageNum , String directPage) {
         User user = ShiroUtils.getSysUser();
         Long userId = user==null?0l:user.getUserId();
-        PageHelper.startPage(pageNum == null ? 1 : pageNum, 10, "id asc");
+        PageHelper.startPage(getDirectPageNum(pageNum, directPage), 10, "id asc");
         List<Question>  questionList = questionService.selectQuestionWrong(userId);
         if(CollectionUtils.isNotEmpty(questionList)){
             Long[] questionIds = new Long [questionList.size()];
@@ -213,7 +223,141 @@ public class ExamController extends BaseController {
         setFunc(model, funcId);
         return prefix + "/exam_wrong";
     }
+    
+    @GetMapping("/listExam")
+    public String listExam(Model model,@PathVariable(required = false) Long funcId,Integer pageNum) {
+        User user = ShiroUtils.getSysUser();
+        Long userId = user==null?0l:user.getUserId();
+        PageHelper.startPage(pageNum == null ? 1 : pageNum, 10, "id asc");
+        List<QuestionExamEntity>  examList = questionExamService.pageList(userId);
+        model.addAttribute("examList", new PageInfo<>(examList));
+        model.addAttribute("curUser", ShiroUtils.getSysUser());
+        setFunc(model, funcId);
+        return prefix + "/exam_list";
+    }
+    
+    
+    @GetMapping("/examDetail")
+    public String examDetail(Model model,@PathVariable(required = false) Long funcId,Integer pageNum,String directPage,Long examId) {
+        User user = ShiroUtils.getSysUser();
+    	PageHelper.startPage(getDirectPageNum(pageNum, directPage), 10, "id asc");
+    	List<Question>  questionList = questionService.selectQuestion();
+    	if(CollectionUtils.isNotEmpty(questionList)){
+    		Long[] questionIds = new Long [questionList.size()];
+    		for(int i=0;i<questionList.size();i++){
+    			questionIds[i] = questionList.get(i).getId();
+    		}
+    		Long userId = user==null?0l:user.getUserId();
+    		List<QuestionOption> optionList = questionOptionService.selectByQuestionIds(questionIds);
+            List<QuestionFavorites> qfList = questionFavoritesService.selectByQuestionIds(userId, questionIds);
+            List<QuestionAnswer> answerList = questionAnswerService.selectByQuestionIds(userId,examId, questionIds);
+    		for(Question question:questionList){
+    		    long yourOptionId = 0;
+    		    int optionCorrect = 0 ;
+    		    //回答
+      		    for(QuestionAnswer qa:answerList){
+                  if(qa.getQuestionId().longValue()==question.getId().longValue()){
+                    question.setHasAnswer(qa.getCorrect());
+                    question.setYouAnswer(qa.getOptionOrder());
+                    yourOptionId = qa.getOptionId();
+                    optionCorrect = qa.getCorrect();
+                    break;
+                  }
+                }
+    			List<QuestionOption>  oList = new ArrayList<>();
+    			for(QuestionOption qo:optionList){
+    				if(qo.getQuestionId().longValue()==question.getId().longValue()){
+    				    if(yourOptionId == qo.getId().longValue()){
+    				      qo.setCorrect(optionCorrect);
+    				    }
+    					oList.add(qo);
+    				}
+    			}
+    			question.setOptionList(oList);
+    			for(QuestionFavorites qf:qfList){
+    			  if(qf.getQuestionId().longValue()==question.getId().longValue()){
+    			    question.setHasFavorites(1);
+    			    break;
+                  }
+                }
+    		}
+    	}
+        model.addAttribute("questionList", new PageInfo<>(questionList));
+        model.addAttribute("curUser", ShiroUtils.getSysUser());
+        List<Notice> noticeList = new ArrayList<>();
+        Notice notice = new Notice();
+        notice.setNoticeTitle("欢迎进入htt://5180it.com:8080");
+        noticeList.add(notice);
+        model.addAttribute("notices", noticeList);
+        setFunc(model, funcId);
+        return prefix + "/exam_detail";
+    }
 
+    
+    @GetMapping("/createExam")
+    public String createExam(Model model,@PathVariable(required = false) Long funcId,Integer pageNum,String directPage) {
+        User user = ShiroUtils.getSysUser();
+        
+        QuestionExamEntity questionExam = new QuestionExamEntity();
+        questionExam.setUserId(user.getUserId());
+        questionExam.setCreateBy(user.getLoginName());
+        questionExam.setExamName(DateUtils.getTime());
+        Long examId = questionExamService.add(questionExam);
+        
+        
+    	PageHelper.startPage(getDirectPageNum(pageNum, directPage), 10, "id asc");
+    	List<Question>  questionList = questionService.selectQuestion();
+    	if(CollectionUtils.isNotEmpty(questionList)){
+    		Long[] questionIds = new Long [questionList.size()];
+    		for(int i=0;i<questionList.size();i++){
+    			questionIds[i] = questionList.get(i).getId();
+    		}
+    		Long userId = user==null?0l:user.getUserId();
+    		List<QuestionOption> optionList = questionOptionService.selectByQuestionIds(questionIds);
+            List<QuestionFavorites> qfList = questionFavoritesService.selectByQuestionIds(userId, questionIds);
+            List<QuestionAnswer> answerList = questionAnswerService.selectByQuestionIds(userId,examId,questionIds);
+    		for(Question question:questionList){
+    		    long yourOptionId = 0;
+    		    int optionCorrect = 0 ;
+    		    //回答
+      		    for(QuestionAnswer qa:answerList){
+                  if(qa.getQuestionId().longValue()==question.getId().longValue()){
+                    question.setHasAnswer(qa.getCorrect());
+                    question.setYouAnswer(qa.getOptionOrder());
+                    yourOptionId = qa.getOptionId();
+                    optionCorrect = qa.getCorrect();
+                    break;
+                  }
+                }
+    			List<QuestionOption>  oList = new ArrayList<>();
+    			for(QuestionOption qo:optionList){
+    				if(qo.getQuestionId().longValue()==question.getId().longValue()){
+    				    if(yourOptionId == qo.getId().longValue()){
+    				      qo.setCorrect(optionCorrect);
+    				    }
+    					oList.add(qo);
+    				}
+    			}
+    			question.setOptionList(oList);
+    			for(QuestionFavorites qf:qfList){
+    			  if(qf.getQuestionId().longValue()==question.getId().longValue()){
+    			    question.setHasFavorites(1);
+    			    break;
+                  }
+                }
+    		}
+    	}
+        model.addAttribute("questionList", new PageInfo<>(questionList));
+        model.addAttribute("curUser", ShiroUtils.getSysUser());
+        List<Notice> noticeList = new ArrayList<>();
+        Notice notice = new Notice();
+        notice.setNoticeTitle("欢迎进入htt://5180it.com:8080");
+        noticeList.add(notice);
+        model.addAttribute("notices", noticeList);
+        setFunc(model, funcId);
+        return prefix + "/exam";
+    }
+    
     
 
     @Log(title = "添加收藏", businessType = BusinessType.INSERT)
@@ -261,12 +405,12 @@ public class ExamController extends BaseController {
     
     @PostMapping("/addAnswer")
     @ResponseBody
-    public AjaxResult addAnswer(String questionOptionId) {
+    public AjaxResult addAnswer(String questionOptionId,Long examId) {
       User user = ShiroUtils.getSysUser();
       if(user==null){
         return error(0, "还没登录");
       }
-      return questionAnswerService.addAnswer(ShiroUtils.getUserId(),questionOptionId);
+      return questionAnswerService.addAnswer(ShiroUtils.getUserId(),examId ,questionOptionId);
     }
     
 

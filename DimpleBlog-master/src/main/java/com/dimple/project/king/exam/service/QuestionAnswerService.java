@@ -18,7 +18,7 @@ public interface QuestionAnswerService {
 	
 	List<QuestionAnswer> selectByUidAndQid(Long userId,Long questionId);
 
-    List<QuestionAnswer> selectByQuestionIds(Long userId, Long[] questionIds);
+    List<QuestionAnswer> selectByQuestionIds(Long userId, Long examId, Long[] questionIds);
 
-	AjaxResult addAnswer(Long userId,String questionOptionId);
+	AjaxResult addAnswer(Long userId,Long examId,String questionOptionId);
 }
