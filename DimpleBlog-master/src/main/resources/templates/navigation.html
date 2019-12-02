@@ -103,19 +103,19 @@ id：
                 <a class="end" th:href="${'?pageNum='+pageInfo.pages}">尾页</a>
             </li>
             <li>
-            	<input name="directPage" type="text" class="text" id="directPage" value="" maxlength="3" 
+            	<input name="directPage" type="text" class="text directPageCls" id="directPage" value="" maxlength="3" 
             	placeholder="" style="float: left;width: 46px;margin: 10px 5px;">
-            	<a class="num" onclick="directToPage();" style="float: left;padding: 0 0px;margin: 0 0px;">跳转到</a>
+            	<a class="num" onclick="directToPage(this);" style="float: left;padding: 0 0px;margin: 0 0px;">跳转到</a>
             </li>
         </ul>
     </div>
     <script type="text/javascript">
-    	function directToPage(){
-    		window.location.href="?directPage="+$("#directPage").val();
+    	function directToPage(t){
+    		window.location.href="?directPage="+$(t).parent().find("input[name=directPage]").val();
     	}
-    	$('#directPage').bind('keypress',function(event){
+    	$('.directPageCls').bind('keypress',function(event){
 			if(event.keyCode == "13"){
-				directToPage();             
+				directToPage(this);             
 			}
 		});
     </script>

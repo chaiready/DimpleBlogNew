@@ -1,6 +1,7 @@
 package com.dimple.project.king.exam;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -111,20 +112,20 @@ public class ExamController extends BaseController {
     		Long userId = user==null?0l:user.getUserId();
     		List<QuestionOption> optionList = questionOptionService.selectByQuestionIds(questionIds);
             List<QuestionFavorites> qfList = questionFavoritesService.selectByQuestionIds(userId, questionIds);
-            List<QuestionAnswer> answerList = questionAnswerService.selectByQuestionIds(userId, 0l, questionIds);
+//            List<QuestionAnswer> answerList = questionAnswerService.selectByQuestionIds(userId, 0l, questionIds);
     		for(Question question:questionList){
     		    long yourOptionId = 0;
     		    int optionCorrect = 0 ;
     		    //回答
-      		    for(QuestionAnswer qa:answerList){
-                  if(qa.getQuestionId().longValue()==question.getId().longValue()){
-                    question.setHasAnswer(qa.getCorrect());
-                    question.setYouAnswer(qa.getOptionOrder());
-                    yourOptionId = qa.getOptionId();
-                    optionCorrect = qa.getCorrect();
-                    break;
-                  }
-                }
+//      		    for(QuestionAnswer qa:answerList){
+//                  if(qa.getQuestionId().longValue()==question.getId().longValue()){
+//                    question.setHasAnswer(qa.getCorrect());
+//                    question.setYouAnswer(qa.getOptionOrder());
+//                    yourOptionId = qa.getOptionId();
+//                    optionCorrect = qa.getCorrect();
+//                    break;
+//                  }
+//                }
     			List<QuestionOption>  oList = new ArrayList<>();
     			for(QuestionOption qo:optionList){
     				if(qo.getQuestionId().longValue()==question.getId().longValue()){
@@ -228,7 +229,7 @@ public class ExamController extends BaseController {
     public String listExam(Model model,@PathVariable(required = false) Long funcId,Integer pageNum) {
         User user = ShiroUtils.getSysUser();
         Long userId = user==null?0l:user.getUserId();
-        PageHelper.startPage(pageNum == null ? 1 : pageNum, 10, "id asc");
+        PageHelper.startPage(pageNum == null ? 1 : pageNum, 10, "create_time desc");
         List<QuestionExamEntity>  examList = questionExamService.pageList(userId);
         model.addAttribute("examList", new PageInfo<>(examList));
         model.addAttribute("curUser", ShiroUtils.getSysUser());
@@ -283,6 +284,7 @@ public class ExamController extends BaseController {
     		}
     	}
         model.addAttribute("questionList", new PageInfo<>(questionList));
+        model.addAttribute("examId",  examId);
         model.addAttribute("curUser", ShiroUtils.getSysUser());
         List<Notice> noticeList = new ArrayList<>();
         Notice notice = new Notice();
@@ -290,72 +292,27 @@ public class ExamController extends BaseController {
         noticeList.add(notice);
         model.addAttribute("notices", noticeList);
         setFunc(model, funcId);
-        return prefix + "/exam_detail";
+        return prefix + "/exam_edit";
     }
 
     
+    @ResponseBody
     @GetMapping("/createExam")
-    public String createExam(Model model,@PathVariable(required = false) Long funcId,Integer pageNum,String directPage) {
+    public AjaxResult createExam(Model model,@PathVariable(required = false) Long funcId,Integer pageNum,String directPage) {
         User user = ShiroUtils.getSysUser();
-        
+        if(user==null){
+          return AjaxResult.error("未登录");
+        }
         QuestionExamEntity questionExam = new QuestionExamEntity();
         questionExam.setUserId(user.getUserId());
         questionExam.setCreateBy(user.getLoginName());
-        questionExam.setExamName(DateUtils.getTime());
+        questionExam.setExamName("试卷"+DateUtils.getTime());
+        questionExam.setCreateTime(new Date());
         Long examId = questionExamService.add(questionExam);
         
-        
-    	PageHelper.startPage(getDirectPageNum(pageNum, directPage), 10, "id asc");
-    	List<Question>  questionList = questionService.selectQuestion();
-    	if(CollectionUtils.isNotEmpty(questionList)){
-    		Long[] questionIds = new Long [questionList.size()];
-    		for(int i=0;i<questionList.size();i++){
-    			questionIds[i] = questionList.get(i).getId();
-    		}
-    		Long userId = user==null?0l:user.getUserId();
-    		List<QuestionOption> optionList = questionOptionService.selectByQuestionIds(questionIds);
-            List<QuestionFavorites> qfList = questionFavoritesService.selectByQuestionIds(userId, questionIds);
-            List<QuestionAnswer> answerList = questionAnswerService.selectByQuestionIds(userId,examId,questionIds);
-    		for(Question question:questionList){
-    		    long yourOptionId = 0;
-    		    int optionCorrect = 0 ;
-    		    //回答
-      		    for(QuestionAnswer qa:answerList){
-                  if(qa.getQuestionId().longValue()==question.getId().longValue()){
-                    question.setHasAnswer(qa.getCorrect());
-                    question.setYouAnswer(qa.getOptionOrder());
-                    yourOptionId = qa.getOptionId();
-                    optionCorrect = qa.getCorrect();
-                    break;
-                  }
-                }
-    			List<QuestionOption>  oList = new ArrayList<>();
-    			for(QuestionOption qo:optionList){
-    				if(qo.getQuestionId().longValue()==question.getId().longValue()){
-    				    if(yourOptionId == qo.getId().longValue()){
-    				      qo.setCorrect(optionCorrect);
-    				    }
-    					oList.add(qo);
-    				}
-    			}
-    			question.setOptionList(oList);
-    			for(QuestionFavorites qf:qfList){
-    			  if(qf.getQuestionId().longValue()==question.getId().longValue()){
-    			    question.setHasFavorites(1);
-    			    break;
-                  }
-                }
-    		}
-    	}
-        model.addAttribute("questionList", new PageInfo<>(questionList));
-        model.addAttribute("curUser", ShiroUtils.getSysUser());
-        List<Notice> noticeList = new ArrayList<>();
-        Notice notice = new Notice();
-        notice.setNoticeTitle("欢迎进入htt://5180it.com:8080");
-        noticeList.add(notice);
-        model.addAttribute("notices", noticeList);
-        setFunc(model, funcId);
-        return prefix + "/exam";
+        AjaxResult result = AjaxResult.success("创建成功");
+        result.put("examId", examId);//是否收藏
+        return result;
     }
     
     
@@ -414,109 +371,4 @@ public class ExamController extends BaseController {
     }
     
 
-    @RequiresPermissions("king:func:list")
-    @GetMapping("/list")
-    @ResponseBody
-    public List<Func> list(Func func) {
-        List<Func> funcList = funcService.selectFuncList(func);
-        return funcList;
-    }
-
-    /**
-     * 删除菜单
-     */
-    @Log(title = "系统菜单", businessType = BusinessType.DELETE)
-    @RequiresPermissions("king:func:remove")
-    @GetMapping("/remove/{funcId}")
-    @ResponseBody
-    public AjaxResult remove(@PathVariable("funcId") Long funcId) {
-        if (funcService.selectCountFuncByParentId(funcId) > 0) {
-            return error(1, "存在子菜单,不允许删除");
-        }
-        return toAjax(funcService.deleteFuncById(funcId));
-    }
-
-    /**
-     * 新增
-     */
-    @GetMapping("/add/{parentId}")
-    public String add(@PathVariable("parentId") Long parentId, Model model) {
-        Func func = null;
-        if (0L != parentId) {
-            func = funcService.selectFuncById(parentId);
-        } else {
-            func = new Func();
-            func.setFuncId(0L);
-            func.setFuncName("主目录");
-        }
-        model.addAttribute("func", func);
-        return prefix + "/add";
-    }
-
-
-    /**
-     * 修改菜单
-     */
-    @GetMapping("/edit/{funcId}")
-    public String edit(@PathVariable("funcId") Long funcId, Model model) {
-        model.addAttribute("func", funcService.selectFuncById(funcId));
-        return prefix + "/edit";
-    }
-
-    /**
-     * 修改保存菜单
-     */
-    @Log(title = "系统菜单", businessType = BusinessType.UPDATE)
-    @RequiresPermissions("king:func:edit")
-    @PostMapping("/edit")
-    @ResponseBody
-    public AjaxResult editSave(Func func) {
-        return toAjax(funcService.updateFunc(func));
-    }
-
-    /**
-     * 选择菜单图标
-     */
-    @GetMapping("/icon")
-    public String icon() {
-        return prefix + "/icon";
-    }
-
-    /**
-     * 校验菜单名称
-     */
-    @PostMapping("/checkFuncNameUnique")
-    @ResponseBody
-    public String checkFuncNameUnique(Func func) {
-        return funcService.checkFuncNameUnique(func);
-    }
-
-    /**
-     * 加载角色菜单列表树
-     */
-    @GetMapping("/roleFuncTreeData")
-    @ResponseBody
-    public List<Ztree> roleFuncTreeData(Role role) {
-        List<Ztree> ztrees = funcService.roleFuncTreeData(role);
-        return ztrees;
-    }
-
-    /**
-     * 加载所有菜单列表树
-     */
-    @GetMapping("/funcTreeData")
-    @ResponseBody
-    public List<Ztree> funcTreeData(Role role) {
-        List<Ztree> ztrees = funcService.funcTreeData();
-        return ztrees;
-    }
-
-    /**
-     * 选择菜单树
-     */
-    @GetMapping("/selectFuncTree/{funcId}")
-    public String selectFuncTree(@PathVariable("funcId") Long funcId, Model model) {
-        model.addAttribute("func", funcService.selectFuncById(funcId));
-        return prefix + "/tree";
-    }
 }

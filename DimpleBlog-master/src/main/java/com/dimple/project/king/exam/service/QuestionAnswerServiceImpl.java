@@ -86,7 +86,7 @@ public class QuestionAnswerServiceImpl implements QuestionAnswerService {
 		queryWrapper.eq("question_id", questionId);
 		queryWrapper.orderByDesc("create_time");
 
-		List<QuestionAnswer> answerList = mapper.selectList(new QueryWrapper<QuestionAnswer>().select("age").eq("user_id", userId).eq("exam_id", examId)
+		List<QuestionAnswer> answerList = mapper.selectList(new QueryWrapper<QuestionAnswer>().select("*").eq("user_id", userId).eq("exam_id", examId)
 				.eq("question_id", questionId).orderByDesc("create_time"));
 
 //		List<QuestionAnswer> answerList = mapper.selectByMap(columnMap);
