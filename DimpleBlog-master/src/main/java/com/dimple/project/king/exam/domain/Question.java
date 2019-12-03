@@ -32,6 +32,8 @@ public class Question extends SuperEntity {
   private String type;
 
   private String questionOrder;
+  
+  private String questionType;//QuestionTypeEnum
 
   private String content;
 
@@ -120,6 +122,14 @@ public class Question extends SuperEntity {
 
   public void setYouAnswer(String youAnswer) {
     this.youAnswer = youAnswer;
+  }
+
+  public String getQuestionType() {
+    return questionType;
+  }
+
+  public void setQuestionType(String questionType) {
+    this.questionType = questionType;
   }
 
 }

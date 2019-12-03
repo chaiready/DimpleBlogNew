@@ -10,8 +10,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.ibatis.type.JdbcType;
-import org.springframework.stereotype.Service;
-
 import com.dimple.common.utils.StringUtils;
 
 
@@ -24,6 +22,8 @@ public class BeanUtils {
   // 公共部分
   public static final String RT_1 = "\r\n";
   public static final String RT_2 = RT_1 + RT_1;
+  public static final String RT_1_SEMICOLON = ";\r\n";
+  public static final String RT_2_SEMICOLON = ";"+RT_1 + RT_1;
   public static final String TAB_1 = "\t";
   public static final String TAB_2 = "\t\t";
   public static final String BLANK_1 = " ";
@@ -32,14 +32,20 @@ public class BeanUtils {
 
   // 文件 地址
   private static final String savePath = "D:\\codes\\";
+  
+  private static String domainFolder = "domain";
+  private static String mapperFolder = "mapper";
+  private static String serviceFolder = "service";
+  
+  private static String javaFile = ".java";
 
 
   public static void main(String[] args) throws Exception {
     EntityInfo info = new EntityInfo();
-    info.setEntityName("QuestionExamEntity");
+    info.setEntityName("QuestionItemEntity");
     info.setExtendEntityName("BaseEntity");
-    info.setPackagePath("com.dimple.project.king.exam.domain");
-    info.setTitle("考试");
+    info.setPackagePath("com.dimple.project.king.exam");
+    info.setTitle("问题集");
     info.setAuthor("ls2008");
     info.setReqMappingPath("/ver/auditCols");
     info.setJspPath("modules/ver/auditcols");// jsp路径
@@ -47,24 +53,25 @@ public class BeanUtils {
     // 生成实体==================================================================================
     List<ColInfo> list = new ArrayList<ColInfo>();
     ColInfo col = new ColInfo();
-    col.setColName("examName");
-    col.setColType("String");
+    col.setColName("folderId");
+    col.setColType("Long");
     col.setColLenth(50);
-    col.setColAnno("考试名称");
+    col.setColAnno("问题夹id");
     col.setEleType(ColInfo.EleType.TEXT);
     list.add(col);
     col = new ColInfo();
-    col.setColName("userId");
+    col.setColName("questionId");
     col.setColType("Long");
-    col.setColLenth(50);
+    col.setColLenth(11);
     col.setColAnno("用户id");
-    col.setEleType(ColInfo.EleType.DATE);
+    col.setEleType(ColInfo.EleType.TEXT);
     list.add(col);
     // 生成实体==================================================================================
 
     String entityName = getUppercaseChar(info.getEntityName());
     entityName = entityName.contains("Entity") ? entityName : (entityName += "Entity");
     info.setEntityName(entityName);
+    info.setEntityShortName(info.getEntityName().replace("Entity", ""));
     
     boolean hasId = false;
     for (ColInfo c : list) {
@@ -101,14 +108,13 @@ public class BeanUtils {
 
 
   public static void createEntity(EntityInfo info, List<ColInfo> list) throws IOException {
-    String entityName = getUppercaseChar(info.getEntityName());
-    String preName = entityName.toLowerCase().replace("entity", "");
-
-    String fileName = savePath + entityName + ".java";
+    String fileName = savePath + info.getEntityName() + javaFile;
     File file = createFile(fileName);
     FileWriter fw = new FileWriter(file);
     StringBuilder sb = new StringBuilder();
-    sb.append("package " + info.getPackagePath() + ";" + RT_2);
+    String entityPath = info.getPackagePath()+"."+domainFolder;
+    info.setEntityPath(entityPath);
+    sb.append("package ").append(entityPath).append(RT_2_SEMICOLON);
 
     // 判断需要import的类 start
     boolean hasDate = false;
@@ -136,8 +142,8 @@ public class BeanUtils {
     appendFileAnno(info, sb);// 类备注
 
     sb.append("@ToString").append(RT_1);
-    sb.append("@TableName(value = \"yy_" + preName + "\")").append(RT_1);
-    sb.append("public class " + entityName + " extends SuperEntity {" + RT_2);
+    sb.append("@TableName(value = \"bg_" + underline(new StringBuffer(info.getEntityShortName())).toString()).append("\")").append(RT_1);
+    sb.append("public class " + info.getEntityName() + " extends SuperEntity {" + RT_2);
     sb.append("	private static final long serialVersionUID = 1L;" + RT_2);
 
     // 生成变量
@@ -151,16 +157,6 @@ public class BeanUtils {
         sb.append(TAB_1).append("@Id").append(RT_1);
         sb.append(TAB_1).append("@TableId(value = \"id\", type = IdType.AUTO)").append(RT_1);
       }
-      // sb.append(" @MetaData(value = \"").append(col.getColAnno()).append("\")").append(RT_1);
-      // if(col.getColType().equals("String")){
-      // if(!StringUtils.isEmpty(col.getColLenth())){
-      // sb.append(" @Column(length = ").append(col.getColLenth()).append(")").append(RT_1);
-      // }else{
-      // sb.append(" @Column(length = ").append(250).append(")").append(RT_1);
-      // }
-      // }else{
-      // sb.append(" @Column()").append(RT_1);
-      // }
       sb.append(TAB_1).append("private ").append(col.getColType()).append(BLANK_1)
           .append(col.getColName()).append(";//").append(col.getColAnno()).append(RT_2);
     }
@@ -192,25 +188,25 @@ public class BeanUtils {
    * @throws Exception
    */
   public static void createMapper(EntityInfo info) throws Exception {
-    String entityName = getUppercaseChar(info.getEntityName());
-    String daoName = getUppercaseChar(info.getEntityName());
-    daoName = daoName.replace("Entity", "");
-    if (!daoName.contains("Mapper")) {
-      daoName += "Mapper";
-    }
+    String daoName = info.getEntityShortName()+"Mapper";
 
-    String fileName = savePath + daoName + ".java";
+    String fileName = savePath + daoName + javaFile;
     File file = createFile(fileName);
     FileWriter fw = new FileWriter(file);
 
     StringBuilder sb = new StringBuilder();
-    sb.append("package " + info.getPackagePath() + ";" + RT_2);
+    String mapperPath = info.getPackagePath()+"."+ mapperFolder;
+    info.setMapperName(daoName);
+    info.setMapperPath(mapperPath);
+    
+    sb.append("package " + mapperPath + ";" + RT_2);
 
     sb.append("import com.baomidou.mybatisplus.core.mapper.BaseMapper;").append(RT_1);
+    sb.append("import ").append(info.getPackagePath()).append(".").append(info.getEntityName()).append(RT_1_SEMICOLON);
 
     appendFileAnno(info, sb);// 类备注
-    sb.append(
-        "public interface " + daoName + " extends BaseMapper<" + entityName + "> {" + RT_2 + "}");
+    sb.append("public interface ").append(daoName).append(" extends BaseMapper<").append(info.getEntityName()).append("> {").append(RT_2);
+    sb.append( "}");
     fw.write(sb.toString());
     fw.flush();
     fw.close();
@@ -219,27 +215,18 @@ public class BeanUtils {
 
 
   public static void createMapperXml(EntityInfo info, List<ColInfo> list) throws Exception {
-    String entityName = getUppercaseChar(info.getEntityName());
-    String daoName = getUppercaseChar(info.getEntityName());
-    daoName = daoName.replace("Entity", "");
-    if (!daoName.contains("Mapper")) {
-      daoName += "Mapper";
-    }
-
-    String fileName = savePath + daoName + ".xml";
+    String fileName = savePath + info.getMapperName() + ".xml";
     File file = createFile(fileName);
     FileWriter fw = new FileWriter(file);
 
     StringBuilder sb = new StringBuilder();
     
     
-    
-    
     sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>").append(RT_1);
     sb.append("<!DOCTYPE mapper PUBLIC \"-//mybatis.org//DTD Mapper 3.0//EN\" \"http://mybatis.org/dtd/mybatis-3-mapper.dtd\" >").append(RT_1);
-    sb.append("<mapper namespace=\"").append(info.getPackagePath()).append(".").append(entityName).append("Mapper\">").append(RT_1);
+    sb.append("<mapper namespace=\"").append(info.getMapperPath()).append(".").append(info.getMapperName()).append("\">").append(RT_1);
     
-    sb.append(TAB_1).append("<resultMap id=\"BaseResultMap\" type=\"").append(info.getPackagePath()).append(".").append(entityName).append("\">").append(RT_1);
+    sb.append(TAB_1).append("<resultMap id=\"BaseResultMap\" type=\"").append(info.getEntityPath()).append(".").append(info.getEntityName()).append("\">").append(RT_1);
     
     for (ColInfo col : list) {
       if(col.getColName().equals("id")){
@@ -259,13 +246,12 @@ public class BeanUtils {
         sb.append("\"/>").append(RT_1);
       }
     }  
-    sb.append("<result column=\"create_by\" property=\"optionOrder\" jdbcType=\"VARCHAR\"/>");
-    sb.append("<result column=\"create_time\" property=\"createTime\" jdbcType=\"TIMESTAMP\"/>");
-    sb.append("<result column=\"update_by\" property=\"updateBy\" jdbcType=\"VARCHAR\"/>");
-    sb.append("<result column=\"update_time\" property=\"updateTime\" jdbcType=\"TIMESTAMP\"/>");
+    sb.append(TAB_2).append("<result column=\"create_by\" property=\"optionOrder\" jdbcType=\"VARCHAR\"/>").append(RT_1);
+    sb.append(TAB_2).append("<result column=\"create_time\" property=\"createTime\" jdbcType=\"TIMESTAMP\"/>").append(RT_1);
+    sb.append(TAB_2).append("<result column=\"update_by\" property=\"updateBy\" jdbcType=\"VARCHAR\"/>").append(RT_1);
+    sb.append(TAB_2).append("<result column=\"update_time\" property=\"updateTime\" jdbcType=\"TIMESTAMP\"/>").append(RT_1);
     
     sb.append(TAB_1).append("</resultMap>").append(RT_1);
-    
     sb.append("</mapper>");
     fw.write(sb.toString());
     fw.flush();
@@ -281,27 +267,20 @@ public class BeanUtils {
    * @throws Exception
    */
   public static void createService(EntityInfo info) throws Exception {
-    String daoName = getUppercaseChar(info.getEntityName());
-    daoName = daoName.replace("Entity", "");
-    if (!daoName.contains("Mapper")) {
-      daoName += "Mapper";
-    }
-    String serviceName = getUppercaseChar(info.getEntityName());
-    serviceName = serviceName.replace("Entity", "");
-    if (!serviceName.contains("Service")) {
-      serviceName += "Service";
-    }
-
-    String fileName = savePath + serviceName + ".java";
+    String serviceName = info.getEntityShortName()+"Service";
+    info.setServiceName(serviceName);
+    String fileName = savePath + serviceName + javaFile;
     File file = createFile(fileName);
     FileWriter fw = new FileWriter(file);
 
     StringBuilder sb = new StringBuilder();
-    sb.append("package " + info.getPackagePath() + ";" + RT_2);
+    String servicePath = info.getPackagePath()+"."+serviceFolder;
+    info.setServicePath(servicePath);
+    sb.append("package ").append(servicePath).append(RT_2_SEMICOLON);
 
 
     appendFileAnno(info, sb);// 类备注
-    sb.append("public interface " + serviceName + "");
+    sb.append("public interface ").append(serviceName).append(serviceName);
     sb.append("{").append(RT_2);
     sb.append("}");
 
@@ -312,34 +291,27 @@ public class BeanUtils {
   }
   
   public static void createServiceImpl(EntityInfo info) throws Exception {
-    String daoName = getUppercaseChar(info.getEntityName());
-    daoName = daoName.replace("Entity", "");
-    if (!daoName.contains("Mapper")) {
-      daoName += "Mapper";
-    }
-    String serviceName = getUppercaseChar(info.getEntityName());
-    serviceName = serviceName.replace("Entity", "");
-    if (!serviceName.contains("Service")) {
-      serviceName += "Service";
-    }
+    String serviceImplName = info.getServiceName()+"Impl";
 
-    String fileName = savePath + serviceName + "Impl.java";
+    info.setServiceImplName(serviceImplName);
+    String fileName = savePath + serviceImplName + javaFile;
     File file = createFile(fileName);
     FileWriter fw = new FileWriter(file);
 
     StringBuilder sb = new StringBuilder();
-    sb.append("package " + info.getPackagePath() + ";").append(RT_2);
+    String serviceImplPath = info.getServicePath()+".impl" ;
+    info.setServiceImplPath(serviceImplPath);
+    sb.append("package ").append(serviceImplPath).append(RT_2_SEMICOLON);
     sb.append("import org.springframework.beans.factory.annotation.Autowired;").append(RT_1);
     sb.append("import org.springframework.stereotype.Service;").append(RT_1);
+    sb.append("import ").append(info.getMapperPath()).append(".").append(info.getMapperName()).append(RT_2_SEMICOLON);
     
     appendFileAnno(info, sb);// 类备注
-    sb.append("@Service");
-    sb.append("public class ").append(serviceName).append("Impl implements ").append(serviceName);
+    sb.append("@Service").append(RT_1);
+    sb.append("public class ").append(serviceImplName).append(" implements ").append(info.getServiceName());
     sb.append("{").append(RT_2);
     sb.append(TAB_1).append("@Autowired").append(RT_1);
-    sb.append(TAB_1).append("private ").append(daoName).append(" ").append("mapper;").append(RT_1);
-    sb.append("");
-    sb.append("");
+    sb.append(TAB_1).append("private ").append(info.getMapperName()).append(" ").append("mapper").append(RT_1_SEMICOLON);
     sb.append("}");
 
     fw.write(sb.toString());
@@ -367,7 +339,7 @@ public class BeanUtils {
       serviceName += "Service";
     }
 
-    String fileName = savePath + controllerName + ".java";
+    String fileName = savePath + controllerName + javaFile;
     File file = createFile(fileName);
     FileWriter fw = new FileWriter(file);
 

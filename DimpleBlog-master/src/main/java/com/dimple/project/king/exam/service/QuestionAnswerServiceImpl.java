@@ -4,14 +4,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.dimple.framework.web.domain.AjaxResult;
 import com.dimple.project.enums.QuestionAnswerEnum;
 import com.dimple.project.king.exam.domain.Question;
@@ -75,21 +71,10 @@ public class QuestionAnswerServiceImpl implements QuestionAnswerService {
 		if (question.getAnswer().trim().equals(option.getOptionOrder().trim())) {
 			correct = QuestionAnswerEnum.right.getKey();
 		}
-		Map<String, Object> columnMap = new HashMap<>(2);
-		columnMap.put("user_id", userId);
-		columnMap.put("question_id", questionId);
-		// mapper.deleteByMap(columnMap);
-
-		QueryWrapper<CollectionUtils> queryWrapper = new QueryWrapper<>();
-		queryWrapper.eq("user_id", userId);
-		queryWrapper.eq("exam_id", examId);
-		queryWrapper.eq("question_id", questionId);
-		queryWrapper.orderByDesc("create_time");
 
 		List<QuestionAnswer> answerList = mapper.selectList(new QueryWrapper<QuestionAnswer>().select("*").eq("user_id", userId).eq("exam_id", examId)
 				.eq("question_id", questionId).orderByDesc("create_time"));
 
-//		List<QuestionAnswer> answerList = mapper.selectByMap(columnMap);
 		if (CollectionUtils.isEmpty(answerList)) {
 			QuestionAnswer answer = new QuestionAnswer();
 			answer.setQuestionId(questionId);
@@ -113,13 +98,6 @@ public class QuestionAnswerServiceImpl implements QuestionAnswerService {
 				}
 			}
 		}
-
-//		UpdateWrapper<QuestionAnswer> updateWrapper = new UpdateWrapper<>();
-//		updateWrapper.eq("user_id", userId);
-//		updateWrapper.eq("exam_id", examId);
-//		updateWrapper.eq("question_id", questionId);
-//		mapper.update(answer, updateWrapper);
-
 		result = AjaxResult.success("保存成功");
 		result.put("correct", correct);
 		result.put("youAnswer", option.getOptionOrder());

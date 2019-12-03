@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dimple.project.king.exam.mapper.QuestionFolderMapper">
+	<resultMap id="BaseResultMap" type="com.dimple.project.king.exam.domain.QuestionFolderEntity">
+		<id column="id" property="id" jdbcType="BIGINT"/>
+		<result column="folder_name" property="folderName" jdbcType="VARCHAR"/>
+		<result column="folder_key" property="folderKey" jdbcType="VARCHAR"/>
+		<result column="question_id" property="questionId" jdbcType="BIGINT"/>
+		<result column="create_by" property="optionOrder" jdbcType="VARCHAR"/>
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+		<result column="update_by" property="updateBy" jdbcType="VARCHAR"/>
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+	</resultMap>
+</mapper>

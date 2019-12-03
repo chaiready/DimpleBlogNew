@@ -23,6 +23,20 @@ public class EntityInfo {
 	private String jspPath;//jsp页面的路径
 	
 
+	
+	
+	private String mapperName;
+	private String mapperPath;
+	
+	private String entityPath;
+	private String entityShortName;
+	
+	private String serviceName;
+	private String servicePath;
+	
+	private String serviceImplName;
+	private String serviceImplPath;
+	
 	public String getEntityName() {
 		return entityName;
 	}
@@ -78,5 +92,70 @@ public class EntityInfo {
 	public void setJspPath(String jspPath) {
 		this.jspPath = jspPath;
 	}
+
+  public String getMapperName() {
+    return mapperName;
+  }
+
+  public void setMapperName(String mapperName) {
+    this.mapperName = mapperName;
+  }
+
+  public String getMapperPath() {
+    return mapperPath;
+  }
+
+  public void setMapperPath(String mapperPath) {
+    this.mapperPath = mapperPath;
+  }
+
+  public String getEntityPath() {
+    return entityPath;
+  }
+
+  public void setEntityPath(String entityPath) {
+    this.entityPath = entityPath;
+  }
+
+  public String getServiceName() {
+    return serviceName;
+  }
+
+  public void setServiceName(String serviceName) {
+    this.serviceName = serviceName;
+  }
+
+  public String getServicePath() {
+    return servicePath;
+  }
+
+  public void setServicePath(String servicePath) {
+    this.servicePath = servicePath;
+  }
+
+  public String getServiceImplName() {
+    return serviceImplName;
+  }
+
+  public void setServiceImplName(String serviceImplName) {
+    this.serviceImplName = serviceImplName;
+  }
+
+  public String getServiceImplPath() {
+    return serviceImplPath;
+  }
+
+  public void setServiceImplPath(String serviceImplPath) {
+    this.serviceImplPath = serviceImplPath;
+  }
+
+  public String getEntityShortName() {
+    return entityShortName;
+  }
+
+  public void setEntityShortName(String entityShortName) {
+    this.entityShortName = entityShortName;
+  }
+  
 
 }
