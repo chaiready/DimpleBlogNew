@@ -18,9 +18,9 @@ public interface QuestionMapper extends BaseMapper<Question> {
 
   int insertObj(Question question);
 
-  List<Question> selectQuestion();
+  List<Question> selectQuestionByFolderId(@Param("folderId")Long folderId);
 
-  List<Question> selectQuestionFavorites(Long userId);
+  List<Question> selectQuestionFavorites(Long userId,Long folderId);
 
-  List<Question> selectQuestionByAnwserCorrect(@Param("userId")Long userId,@Param("correct")int correct);
+  List<Question> selectQuestionByAnwserCorrect(@Param("userId")Long userId,Long folderId,@Param("correct")int correct);
 }

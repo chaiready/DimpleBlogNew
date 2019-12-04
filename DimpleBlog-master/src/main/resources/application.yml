@@ -93,6 +93,9 @@ spring:
       min-idle: 0
       max-active: 8
       max-wait: -1
+  resources:
+    cache:
+      period: 604800
 # MyBatis
 #mybatis:
   # 搜索指定包别名

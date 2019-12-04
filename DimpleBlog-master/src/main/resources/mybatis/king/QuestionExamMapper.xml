@@ -13,6 +13,6 @@
 	
 	
 	<select id="pageList" resultType="com.dimple.project.king.exam.domain.QuestionExamEntity">
-        select b.* from bg_question_exam b where user_id = #{userId} order by create_time desc
+        select b.* from bg_question_exam b where user_id = #{userId} and folder_id = #{folderId} order by create_time desc
     </select>
 </mapper>

@@ -59,19 +59,25 @@
         where blog_id = #{blogId}
     </update>
     
-    <select id="selectQuestion" resultType="com.dimple.project.king.exam.domain.Question">
-        select b.* from bg_question b order by id
+    <select id="selectQuestionByFolderId" resultType="com.dimple.project.king.exam.domain.Question">
+       select qi.question_order,q.* from bg_question_item qi
+		left join bg_question q on qi.question_id = q.id
+		where qi.folder_id = #{folderId}
     </select>
 
     <select id="selectQuestionFavorites" resultType="com.dimple.project.king.exam.domain.Question">
         select q.* from bg_question q 
+        INNER JOIN bg_question_item qi on q.id = qi.question_id
 		INNER JOIN bg_question_favorites qf on q.id = qf.question_id and qf.user_id=#{userId}
-		order by q.id
+		where qi.folder_id = #{folderId} 
+		order by qf.create_time desc
     </select>
     
     <select id="selectQuestionByAnwserCorrect" resultType="com.dimple.project.king.exam.domain.Question">
         select q.* from bg_question q 
+        INNER JOIN bg_question_item qi on q.id = qi.question_id
 		INNER JOIN bg_question_answer qa on q.id = qa.question_id and qa.user_id=#{userId} and qa.correct=#{correct}
-		order by q.id
+		where qi.folder_id = #{folderId}
+		order by qa.create_time desc
     </select>
 </mapper>

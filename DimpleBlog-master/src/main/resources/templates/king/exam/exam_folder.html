@@ -11,7 +11,7 @@
 		.nextBanner{ right:0;background:url(/img/arrow_r.png) no-repeat center 44%;}
 		.nextBanner:hover{background:#efefef url(/img/arrow_r.png) no-repeat center 44%;}
 	</style>
-
+	
     <!-- 遮罩层 -->
     <script th:src="@{/ajax/libs/blockUI/jquery.blockUI.js}"></script>
 
@@ -125,37 +125,59 @@
         </div>-->
         
         <h4 class="index-title">
-        	<a href="javascript:void(0);"><i class="fa fa-home"></i>当前页: &nbsp;错题集 </a>
-            <a th:if="${curUser!=null}" class="orange-text" th:href="${'/kaoshi/questionFolder/'+folderId+'.html'}">&lt;&lt;【返回】</a>
+            <a th:if="${curUser==null}" class="orange-text"  href="/bbs/front/toLogin?toPage=kaoshi">登录可进行更多操作</a>
+            <span  class="orange-text"  th:if="${curUser!=null}">
+            	已登录：
+            </span>
         </h4>
-        <hr/>
+       <!--  <div style="text-align: center;">
+        	<input name="questionSearch" type="text" class="text" id="questionSearch" value="" maxlength="100" 
+            	placeholder="请输入要查询的问题" style="width:60%;">
+            <input type="button" id="searchQuestionBtn" class="btn btn-inverse" value="查询  "/>
+        </div> -->
+        
         <!--分页开始-->
         <div th:replace="navigation :: navigation-direct(${questionList})"></div>
         <!--分页结束-->
-        <div class="arclist">
+        <div class="arclist" style="margin-left: 20px;margin-right: 20px;padding-right: 20px;">
             <!--列表开始-->
+            <form>
                 <div th:each="question:${questionList.list}">
                     <div class="arc-left">
                         <h4 class="blue-text">
                         	 [[${question.questionOrder}]]
                             <a th:text="${question.content}"></a>
                         </h4>
-                            <span style="display: block;" th:each="qo:${question.optionList}" 
-                            	th:text="${qo.optionOrder+'、'+qo.optionVal}"></span>
+                        	<div  th:each="qo:${question.optionList}" style="margin-bottom: 15px;">
+                        		<label style="">
+		                        	<span th:style="@{(${qo.correct} eq 0 ? 'color: red;' : (${qo.correct} eq 1 ? 'color: #67c23a;':''))}" 
+		                        		th:text="${qo.optionOrder+'、'+qo.optionVal}"></span>
+	                        	</label>
+                        	</div>
                             	
                         <p style="margin-top: 10px;">
-                       		<span style="color: #67c23a;" th:text="${'正確答案： '+question.answer}"></span>
+                        	<span th:if="${curUser==null}">
+                        		<span style="color: #67c23a;" th:text="${'正確答案： 登录后才能查看答案'}"></span>
+                        	</span>
+            				<span class="questionAnswerSpanCls" th:if="${curUser!=null}">
+            					<span style="color: #67c23a;" th:text="${'正確答案： '+question.answer}"></span>
+            					<span th:id = "yourAnswer+(${question.id})">
+            						<span th:if="${question.hasAnswer == 1}" style='color: #67c23a;'>&nbsp;&nbsp;&nbsp;&nbsp;您的答案：[[${question.youAnswer}]]</span>
+					        	   	<span th:if="${question.hasAnswer == 0}" style='color: red;'>&nbsp;&nbsp;&nbsp;您的答案：[[${question.youAnswer}]]</span>
+            					</span>
                        		
-                       	 <span th:if="${curUser!=null}" class="orange-text">
-                       	 	<a th:style="'display:' + @{(${question.hasFavorites} eq 0 ? 'none' : 'inline-block')} + ';float: right;'" 
-                       	 		th:onclick="delFavorites([[${question.id}]]);"  th:id = "delQues+(${question.id})"><i class="fa fa-star"></i>已收藏</a>
-                       	 		
-                        	<a th:style="'display:' + @{(${question.hasFavorites ne 0} ? 'none' : 'inline-block')} + ';float: right;'"
-                        		 th:onclick="addFavorites([[${question.id}]]);"  th:id = "addQues+(${question.id})"><i class="fa fa-star-o"></i>未收藏</a>
-                       	 </span>	
+		                       	 <span th:if="${curUser!=null}" class="orange-text">
+		                       	 	<a th:style="'display:' + @{(${question.hasFavorites} eq 0 ? 'none' : 'inline-block')} + ';float: right;'" 
+		                       	 		th:onclick="delFavorites([[${question.id}]]);"  th:id = "delQues+(${question.id})"><i class="fa fa-star"></i>已收藏</a>
+		                       	 		
+		                        	<a th:style="'display:' + @{(${question.hasFavorites ne 0} ? 'none' : 'inline-block')} + ';float: right;'"
+		                        		 th:onclick="addFavorites([[${question.id}]]);"  th:id = "addQues+(${question.id})"><i class="fa fa-star-o"></i>未收藏</a>
+		                       	 </span>	
+            				</span>
                         </p>
                     </div>
                 </div>
+               </form>
             <!--列表结束-->
         </div>
         <!--分页开始-->
@@ -165,7 +187,7 @@
     
     <a href="javascript:void(0);" class="prevBanner paBanner none" id="banner_prev"></a>
     <a href="javascript:void(0);" class="nextBanner paBanner" id="banner_next"></a>
-    
+        
     <!--左侧结束-->
     <!--<th:block th:replace="include-front-custom :: side"/>-->
 </div>
@@ -179,39 +201,12 @@
 		$('#banner_prev').click(function(){
 			$('.paginationPrev')[0].click();
 		});
-		
-		/* $(".optionRationCls").click(function(){
-			var checkValue = $(this).val(); 
-			console.info("click"+checkValue);
-		}); */
-		$(".optionRationCls").change(function(){
-			var checkValue = $(this).val(); 
-			$.ajax({
-	           type: "POST",
-	           url: "/kaoshi/addAnswer",
-	           data: {"questionOptionId": checkValue},
-	           dataType: "json",
-	           success: function (data) {
-	        	   console.info(data);
-	        	   $("#yourAnswer"+checkValue.split("_")[0]).closest(".questionAnswerSpanCls").show();
-	        	   if(data.correct==1){//正确
-	        		   $("#yourAnswer"+checkValue.split("_")[0]).html("<span style='color: #67c23a;'>&nbsp;&nbsp;&nbsp;&nbsp;您的答案："+ data.youAnswer +"</span>");
-	        	   }else{
-	        		   $("#yourAnswer"+checkValue.split("_")[0]).html("<span style='color: red;'>&nbsp;&nbsp;&nbsp;您的答案："+ data.youAnswer +"</span>");
-	        	   }
-	        	   if (data.code == 200) {
-	                   //刷新当前评论框 不做弹框提示
-	                   //layer.msg(data.msg, {icon: 1});
-	               } else {
-	                   layer.msg(data.msg, {icon: 2});
-	               }
-	           },
-	           error: function (jqXHR) {
-	        	   layer.msg('发送错误：' + jqXHR.status);
-	           },
-	       });
+		$("#searchQuestionBtn").click(function(){
+			console.info($("#questionSearch").val());
 		});
+		
 	});
+
 	//收藏
    function addFavorites(questionId){
 	   $.ajax({
@@ -229,7 +224,6 @@
         		   $("#delQues"+questionId).hide();
         	   }
         	   if (data.code == 200) {
-                   //刷新当前评论框
                    layer.msg(data.msg, {icon: 1});
                } else {
                    layer.msg(data.msg, {icon: 2});
@@ -257,7 +251,6 @@
         		   $("#delQues"+questionId).hide();
         	   }
         	   if (data.code == 200) {
-                   //刷新当前评论框
                    layer.msg(data.msg, {icon: 1});
                } else {
                    layer.msg(data.msg, {icon: 2});
@@ -268,6 +261,7 @@
            },
        });
    }
+   
 </script>
 </body>
 </html>

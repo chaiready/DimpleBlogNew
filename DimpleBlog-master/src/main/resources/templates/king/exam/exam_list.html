@@ -114,13 +114,14 @@
     <!--最新文章-->
     <section class="mysection" style="width: 95%;">
         <h4 class="index-title">
-        	<a href="javascript:void(0);"><i class="fa fa-home"></i>当前页: &nbsp;答卷 </a>
-            <a class="orange-text"  href="/kaoshi">&lt;&lt;【返回】</a>
+        	<a href="javascript:void(0);"><i class="fa fa-home"></i>当前页: &nbsp;答卷记录 </a>
+            <a class="orange-text" th:href="${'/kaoshi/questionFolder/'+folderId+'.html'}">&lt;&lt;【返回】</a>
         </h4>
         <hr/>
         	<div style="text-align: center;">
         		<input type="button" id="createExamBtn" class="btn btn-inverse" value="开 始 答 题" 
         		style="width: 80%;height: 50px;font-style: italic;color: #67c23a;font-size: 32px;"/>
+        		<input type="hidden" name="folderId" id="folderId" th:value="${folderId}">
         	</div>
         <hr/>
         <div class="arclist">
@@ -128,7 +129,7 @@
                 <div th:each="exam:${examList.list}">
                     <div class="arc-left">
                         <h4 class="blue-text">
-                            <a th:text="${exam.examName}" th:href="${'/kaoshi/examDetail?examId='+exam.id}"></a>
+                            <a th:text="${exam.examName}" th:href="${'/kaoshi/examDetail/'+folderId+'/'+exam.id+'.html'}"></a>
                         </h4>
                     </div>
                 </div>
@@ -162,12 +163,12 @@
 			$.ajax({
 		           type: "GET",
 		           url: "/kaoshi/createExam",
-		           data: {},
+		           data: {"folderId":$("#folderId").val()},
 		           dataType: "json",
 		           success: function (data) {
 		        	   if (data.code == 200) {
 		        		  layer.msg(data.msg, {icon: 1});
-		        	      window.location.href="/kaoshi/examDetail?examId="+data.examId;
+		        	      window.location.href="/kaoshi/examDetail/"+data.folderId+"/"+data.examId+".html";
 		               } else {
 		                   layer.msg(data.msg, {icon: 2});
 		               }

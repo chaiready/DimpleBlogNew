@@ -14,6 +14,6 @@ import com.dimple.project.king.exam.domain.QuestionExamEntity;
  */
 public interface QuestionExamMapper extends BaseMapper<QuestionExamEntity> {
 
-	List<QuestionExamEntity> pageList(@Param("userId")Long userId);
+	List<QuestionExamEntity> pageList(@Param("userId")Long userId,@Param("folderId")Long folderId);
 
 }

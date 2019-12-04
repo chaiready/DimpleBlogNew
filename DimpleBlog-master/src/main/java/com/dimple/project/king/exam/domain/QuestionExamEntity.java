@@ -24,6 +24,8 @@ public class QuestionExamEntity extends SuperEntity {
 
 	private String examName;//考试名称
 
+	private Long folderId;
+	
 	private Long userId;//用户id
 
 	public Long getId() {
@@ -49,5 +51,13 @@ public class QuestionExamEntity extends SuperEntity {
 	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
+
+  public Long getFolderId() {
+    return folderId;
+  }
+
+  public void setFolderId(Long folderId) {
+    this.folderId = folderId;
+  }
 
 }

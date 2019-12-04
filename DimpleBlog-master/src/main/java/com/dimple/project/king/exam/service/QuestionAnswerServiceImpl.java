@@ -67,7 +67,7 @@ public class QuestionAnswerServiceImpl implements QuestionAnswerService {
 			return AjaxResult.error("选项与题目不匹配");
 		}
 		int correct = QuestionAnswerEnum.wrong.getKey();
-		Question question = questionService.selectOne(questionId);
+		Question question = questionService.getById(questionId);
 		if (question.getAnswer().trim().equals(option.getOptionOrder().trim())) {
 			correct = QuestionAnswerEnum.right.getKey();
 		}

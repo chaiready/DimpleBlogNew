@@ -3,6 +3,7 @@ package com.dimple.project.king.exam.service;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dimple.project.enums.QuestionAnswerEnum;
 import com.dimple.project.king.exam.domain.Question;
 import com.dimple.project.king.exam.mapper.QuestionMapper;
@@ -15,56 +16,28 @@ import com.dimple.project.king.exam.mapper.QuestionMapper;
  * @version: 1.0
  */
 @Service
-public class QuestionServiceImpl implements QuestionService {
+public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
+    implements QuestionService {
 
-    @Autowired
-    QuestionMapper questionMapper;
-    @Autowired
-    private QuestionOptionService questionOptionService;
+  @Autowired
+  QuestionMapper questionMapper;
 
-    @Override
-	public int insertObj(Question question22) {
-//    	List<Question> questionList = JSON.parseArray(str, Question.class);
-//    	int i=1;
-//    	int j = 1;
-//    	for(Question question:questionList){
-//    		question.setId(Long.valueOf(i));
-//    		question.setQuestionOrder(i+"");
-//    		question.setType("0");
-//    		System.out.println(i+" 、"+question.getContent());
-//    		List<QuestionOption> optionList = question.getOptionList();
-//    		int questionId = questionMapper.insertObj(question);
-//    		for(QuestionOption qo:optionList){
-//    			System.out.println("  "+qo.getOptionOrder()+" "+qo.getOptionVal());
-//    			qo.setId(Long.valueOf(j));
-//    			qo.setQuestionId(Long.valueOf(question.getId()));
-//    			questionOptionService.insertObj(qo);
-//    			
-//    			j++;
-//    		}
-//    		i++;
-//    	}
-		return 1;
-	}
-    
-	@Override
-	public List<Question> selectQuestion() {
-		return questionMapper.selectQuestion();
-	}
 
   @Override
-  public List<Question> selectQuestionFavorites(Long userId) {
-    return questionMapper.selectQuestionFavorites(userId);
+  public List<Question> selectQuestionByFolderId(Long folderId) {
+    return questionMapper.selectQuestionByFolderId(folderId);
   }
 
-	@Override
-	public Question selectOne(Long id) {
-		return questionMapper.selectById(id);
-	}
+  @Override
+  public List<Question> selectQuestionFavorites(Long userId, Long folderId) {
+    return questionMapper.selectQuestionFavorites(userId, folderId);
+  }
+
 
   @Override
-  public List<Question> selectQuestionWrong(Long userId) {
-    return questionMapper.selectQuestionByAnwserCorrect(userId,QuestionAnswerEnum.wrong.getKey());
+  public List<Question> selectQuestionWrong(Long userId, Long folderId) {
+    return questionMapper.selectQuestionByAnwserCorrect(userId, folderId,
+        QuestionAnswerEnum.wrong.getKey());
   }
 
 

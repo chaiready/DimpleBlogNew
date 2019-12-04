@@ -10,10 +10,10 @@ import com.baomidou.mybatisplus.annotation.TableName;
 /**
  * 问题集
  * @author ls2008
- * @date 2019-12-03 16:47:17
+ * @date 2019-12-04 09:25:29
  */
 @ToString
-@TableName(value = "bg__question_item")
+@TableName(value = "bg_question_item")
 public class QuestionItemEntity extends SuperEntity {
 
 	private static final long serialVersionUID = 1L;
@@ -25,6 +25,8 @@ public class QuestionItemEntity extends SuperEntity {
 	private Long folderId;//问题夹id
 
 	private Long questionId;//用户id
+	
+	private String questionOrder;
 
 	public Long getId() {
 		return id;
@@ -49,5 +51,13 @@ public class QuestionItemEntity extends SuperEntity {
 	public void setQuestionId(Long questionId) {
 		this.questionId = questionId;
 	}
+
+  public String getQuestionOrder() {
+    return questionOrder;
+  }
+
+  public void setQuestionOrder(String questionOrder) {
+    this.questionOrder = questionOrder;
+  }
 
 }

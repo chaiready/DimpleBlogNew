@@ -1,6 +1,7 @@
 package com.dimple.project.king.exam.service;
 
 import java.util.List;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.dimple.project.king.exam.domain.Question;
 
 /**
@@ -10,15 +11,11 @@ import com.dimple.project.king.exam.domain.Question;
  * @date: 03/27/19
  * @version: 1.0
  */
-public interface QuestionService {
+public interface QuestionService extends IService<Question>{
 
-  int insertObj(Question question);
+  List<Question> selectQuestionByFolderId(Long folderId);
 
-  List<Question> selectQuestion();
+  List<Question> selectQuestionFavorites(Long userId,Long folderId);// 收藏的问题
 
-  List<Question> selectQuestionFavorites(Long userId);// 收藏的问题
-
-  Question selectOne(Long valueOf);
-
-  List<Question> selectQuestionWrong(Long userId);
+  List<Question> selectQuestionWrong(Long userId,Long folderId);
 }

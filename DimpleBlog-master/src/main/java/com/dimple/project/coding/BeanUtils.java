@@ -142,7 +142,7 @@ public class BeanUtils {
     appendFileAnno(info, sb);// 类备注
 
     sb.append("@ToString").append(RT_1);
-    sb.append("@TableName(value = \"bg_" + underline(new StringBuffer(info.getEntityShortName())).toString()).append("\")").append(RT_1);
+    sb.append("@TableName(value = \"bg" + underline(new StringBuffer(info.getEntityShortName())).toString()).append("\")").append(RT_1);
     sb.append("public class " + info.getEntityName() + " extends SuperEntity {" + RT_2);
     sb.append("	private static final long serialVersionUID = 1L;" + RT_2);
 
@@ -202,7 +202,7 @@ public class BeanUtils {
     sb.append("package " + mapperPath + ";" + RT_2);
 
     sb.append("import com.baomidou.mybatisplus.core.mapper.BaseMapper;").append(RT_1);
-    sb.append("import ").append(info.getPackagePath()).append(".").append(info.getEntityName()).append(RT_1_SEMICOLON);
+    sb.append("import ").append(info.getEntityPath()).append(".").append(info.getEntityName()).append(RT_1_SEMICOLON);
 
     appendFileAnno(info, sb);// 类备注
     sb.append("public interface ").append(daoName).append(" extends BaseMapper<").append(info.getEntityName()).append("> {").append(RT_2);
@@ -277,10 +277,11 @@ public class BeanUtils {
     String servicePath = info.getPackagePath()+"."+serviceFolder;
     info.setServicePath(servicePath);
     sb.append("package ").append(servicePath).append(RT_2_SEMICOLON);
-
+    sb.append("import com.baomidou.mybatisplus.extension.service.IService").append(RT_1_SEMICOLON);
+    sb.append("import ").append(info.getEntityPath()).append(".").append(info.getEntityName()).append(RT_1_SEMICOLON);
 
     appendFileAnno(info, sb);// 类备注
-    sb.append("public interface ").append(serviceName).append(serviceName);
+    sb.append("public interface ").append(serviceName).append(" extends IService<").append(info.getEntityName()).append(">");
     sb.append("{").append(RT_2);
     sb.append("}");
 
@@ -304,11 +305,15 @@ public class BeanUtils {
     sb.append("package ").append(serviceImplPath).append(RT_2_SEMICOLON);
     sb.append("import org.springframework.beans.factory.annotation.Autowired;").append(RT_1);
     sb.append("import org.springframework.stereotype.Service;").append(RT_1);
+    sb.append("import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl").append(RT_1_SEMICOLON);
+    sb.append("import ").append(info.getEntityPath()).append(".").append(info.getEntityName()).append(RT_1_SEMICOLON);
+    sb.append("import ").append(info.getServicePath()).append(".").append(info.getServiceName()).append(RT_1_SEMICOLON);
     sb.append("import ").append(info.getMapperPath()).append(".").append(info.getMapperName()).append(RT_2_SEMICOLON);
     
     appendFileAnno(info, sb);// 类备注
     sb.append("@Service").append(RT_1);
-    sb.append("public class ").append(serviceImplName).append(" implements ").append(info.getServiceName());
+    sb.append("public class ").append(serviceImplName).append(" extends ServiceImpl<").append(info.getMapperName());
+    sb.append(", ").append(info.getEntityName()).append("> implements ").append(info.getServiceName());
     sb.append("{").append(RT_2);
     sb.append(TAB_1).append("@Autowired").append(RT_1);
     sb.append(TAB_1).append("private ").append(info.getMapperName()).append(" ").append("mapper").append(RT_1_SEMICOLON);
