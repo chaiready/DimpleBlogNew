@@ -10,11 +10,22 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.additional.query.impl.LambdaQueryChainWrapper;
 import com.dimple.DimpleBlogApplication;
 import com.dimple.project.king.userinfo.UserInfo;
 import com.dimple.project.king.userinfo.mapper.UserInfoMapper;
 
+/**
+ * https://blog.csdn.net/qq_37128049/article/details/91651715
+ * 
+ * @author liusheng
+ *
+ */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = DimpleBlogApplication.class)
 public class RetrieveTest {
@@ -216,31 +227,134 @@ public class RetrieveTest {
     userList.forEach(System.out::println);
   }
 
-  
+
   @Test
-  public void selectByWrapperAllEq(){
-      QueryWrapper<UserInfo> queryWrapper=new QueryWrapper<UserInfo>();
-      Map<String,Object> params=new HashMap<String,Object>();
-      params.put("name","王天风");
-      params.put("age",25);
-      //queryWrapper.allEq(params);
-      //过滤查询
-      queryWrapper.allEq((k,v)->!k.equals("name"),params);
-      List<UserInfo> userList=userMapper.selectList(queryWrapper);
-      userList.forEach(System.out::println);
+  public void selectByWrapperAllEq() {
+    QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<UserInfo>();
+    Map<String, Object> params = new HashMap<String, Object>();
+    params.put("name", "王天风");
+    params.put("age", 25);
+    // queryWrapper.allEq(params);
+    // 过滤查询
+    queryWrapper.allEq((k, v) -> !k.equals("name"), params);
+    List<UserInfo> userList = userMapper.selectList(queryWrapper);
+    userList.forEach(System.out::println);
   }
 
   /**
    * 其他使用条件构造器的方法
    */
   @Test
-  public void selectOthereConstruct(){
-    QueryWrapper<UserInfo> queryWrapper=new QueryWrapper<UserInfo>();
-    queryWrapper.select("id","name").like("name","雨").lt("age",40);
-    //使用selectMaps，返回的结果是键值对，即Key为字段名，value为值名；
-    //使用了select指定了id,name,则返回的只有这两个数据；如果非selectMaps方式，则返回的结果，非id,name的字段会为null，而现在的没有此字段，更好看一点；
-    List<Map<String,Object>> userList=userMapper.selectMaps(queryWrapper);
+  public void selectOthereConstruct() {
+    QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<UserInfo>();
+    queryWrapper.select("id", "name").like("name", "雨").lt("age", 40);
+    // 使用selectMaps，返回的结果是键值对，即Key为字段名，value为值名；
+    // 使用了select指定了id,name,则返回的只有这两个数据；如果非selectMaps方式，则返回的结果，非id,name的字段会为null，而现在的没有此字段，更好看一点；
+    List<Map<String, Object>> userList = userMapper.selectMaps(queryWrapper);
+    userList.forEach(System.out::println);
+  }
+
+  @Test
+  public void selectByWrapperMaps2() {
+    QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<UserInfo>();
+    queryWrapper.select("avg(age) avg_age", "min(age) min_age", "max(age) max_age")
+        .groupBy("manager_id").having("sum(age)<{0}", 500);
+    List<Map<String, Object>> userList = userMapper.selectMaps(queryWrapper);
+    userList.forEach(System.out::println);
+  }
+
+  /**
+   * selectObjs :只返回所有的第一列数据(第一个字段的值)
+   */
+  @Test
+  public void selectByWrapperObjs() {
+    QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<UserInfo>();
+    queryWrapper.select("id", "name").like("name", "雨").lt("age", 40);
+    List<Object> userList = userMapper.selectObjs(queryWrapper);
+    userList.forEach(System.out::println);
+  }
+
+  /**
+   * electCount : 查询总记录数 这里的就是count(1)
+   */
+  @Test
+  public void selectByWrapperCount() {
+    QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<UserInfo>();
+    queryWrapper.like("name", "雨").lt("age", 40);
+    Integer count = userMapper.selectCount(queryWrapper);
+    System.out.println("总记录数：" + count);
+  }
+
+  /**
+   * Lambda条件过滤器
+   */
+
+  // 使用Lambda来写，会编译时检查User中的字段名是否正确
+  @Test
+  public void selectLambda() {
+    // lambda的创建方式有三种，如下所示：
+    // LambdaQueryWrapper<User> lambda =new QueryWrapper<User>().lambda;
+    // LambdaQueryWrapper<User> lambdaQueryWrapper=new LambdaQueryWrapper<User>();
+    // 第三种：
+    LambdaQueryWrapper<UserInfo> lambdaQuery = Wrappers.<UserInfo>lambdaQuery();
+    lambdaQuery.like(UserInfo::getName, "雨").lt(UserInfo::getAge, 40);
+    // where name like '%雨%'
+    List<UserInfo> userList = userMapper.selectList(lambdaQuery);
+    userList.forEach(System.out::println);
+
+  }
+  
+  @Test
+  public void selectLambda2() {
+    LambdaQueryWrapper<UserInfo> lambdaQuery = Wrappers.<UserInfo>lambdaQuery();
+    lambdaQuery.likeRight(UserInfo::getName, "雨").and(lqw->lqw.lt(UserInfo::getAge,40).or().isNotNull(UserInfo::getEmail));
+    List<UserInfo> userList = userMapper.selectList(lambdaQuery);
     userList.forEach(System.out::println);
   }
   
+  @Test
+  public void selectLambda3(){
+      List<UserInfo> userList=new LambdaQueryChainWrapper<UserInfo>(userMapper)
+      .like(UserInfo::getName,"雨").ge(UserInfo::getAge,20).list();
+      userList.forEach(System.out::println);
+  }
+  
+  @Test
+  public void selectMy(){
+      LambdaQueryWrapper<UserInfo> lambdaQuery = Wrappers.<UserInfo> lambdaQuery();
+      lambdaQuery.likeRight(UserInfo::getName,"王")
+      .and(lqw->lqw.lt(UserInfo::getAge,40).or().isNotNull(UserInfo::getEmail));
+      List<UserInfo> userList=userMapper.selectAll(lambdaQuery);
+      userList.forEach(System.out::println);
+  }
+  
+  /**
+   * 基础分页
+   */
+  @Test
+  public void selectPage(){
+      QueryWrapper<UserInfo> queryWrapper=new QueryWrapper<UserInfo>();
+      queryWrapper.ge("age",26);
+      Page<UserInfo> page=new Page<UserInfo>(1,2);
+      IPage<UserInfo> iPage= userMapper.selectPage(page,queryWrapper);
+      System.out.println("总页数"+iPage.getPages());
+      System.out.println("总记录数"+iPage.getTotal());
+      List<UserInfo> userList=iPage.getRecords();
+      userList.forEach(System.out::println);
+  }
+  
+  /**
+   * 上面的返回是直接是数据，还有一种方法是返回Map类型的，返回的key为字段名，value为字段值，图示如下：
+   */
+  @Test
+  public void selectPage2(){
+      QueryWrapper<UserInfo> queryWrapper=new QueryWrapper<UserInfo>();
+      queryWrapper.ge("age",26);
+      Page<UserInfo> page=new Page<UserInfo>(1,2);
+      IPage<Map<String,Object>> iPage=userMapper.selectMapsPage(page,queryWrapper);
+      System.out.println("总页数"+iPage.getPages());
+      System.out.println("总记录数"+iPage.getTotal());
+      List<Map<String,Object>> userList=iPage.getRecords();
+      userList.forEach(System.out::println);
+  }
 }

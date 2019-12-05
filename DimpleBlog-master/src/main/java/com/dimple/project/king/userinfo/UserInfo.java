@@ -1,7 +1,6 @@
 package com.dimple.project.king.userinfo;
 
 import java.time.LocalDateTime;
-import com.baomidou.mybatisplus.annotation.SqlCondition;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -25,7 +24,7 @@ public class UserInfo {
   @TableId
   private Long id;
   // 姓名
-  @TableField(value="name",condition=SqlCondition.LIKE)
+  @TableField(value="name")//,condition=SqlCondition.LIKE
   private String name;
   // 年龄
   private Integer age;

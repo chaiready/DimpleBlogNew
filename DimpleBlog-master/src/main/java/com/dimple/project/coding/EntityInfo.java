@@ -37,6 +37,9 @@ public class EntityInfo {
 	private String serviceImplName;
 	private String serviceImplPath;
 	
+	private String controllerName;
+	private String controllerPath;
+	
 	public String getEntityName() {
 		return entityName;
 	}
@@ -156,6 +159,22 @@ public class EntityInfo {
   public void setEntityShortName(String entityShortName) {
     this.entityShortName = entityShortName;
   }
-  
 
+  public String getControllerName() {
+    return controllerName;
+  }
+
+  public void setControllerName(String controllerName) {
+    this.controllerName = controllerName;
+  }
+
+  public String getControllerPath() {
+    return controllerPath;
+  }
+
+  public void setControllerPath(String controllerPath) {
+    this.controllerPath = controllerPath;
+  }
+
+  
 }

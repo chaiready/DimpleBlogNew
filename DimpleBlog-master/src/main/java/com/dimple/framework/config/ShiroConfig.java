@@ -352,7 +352,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/js/**", "anon");
         filterChainDefinitionMap.put("/dimple/**", "anon");
         filterChainDefinitionMap.put("/druid/**", "anon");
-        filterChainDefinitionMap.put(FileUploadUtils.uploadFilePath+"/**", "anon");
+        filterChainDefinitionMap.put(SystemConfig.getRelativeProfile()+"/**", "anon");
         filterChainDefinitionMap.put("/public/**", "anon");
         
         filterChainDefinitionMap.put("/**.html", "anon");

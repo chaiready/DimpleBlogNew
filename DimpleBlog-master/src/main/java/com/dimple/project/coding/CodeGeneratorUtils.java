@@ -14,10 +14,11 @@ import com.dimple.common.utils.StringUtils;
 
 
 /**
- * @author hongten(hongtenzone@foxmail.com)
- * @date 2013-2-24
+ * 
+ * @author liusheng
+ *
  */
-public class BeanUtils {
+public class CodeGeneratorUtils {
 
   // 公共部分
   public static final String RT_1 = "\r\n";
@@ -36,6 +37,7 @@ public class BeanUtils {
   private static String domainFolder = "domain";
   private static String mapperFolder = "mapper";
   private static String serviceFolder = "service";
+  private static String controllerFolder = "controller";
   
   private static String javaFile = ".java";
 
@@ -98,9 +100,9 @@ public class BeanUtils {
     createMapperXml(info, list);
     createService(info);
     createServiceImpl(info);
-
-    // createController(info);
-    //
+    createController(info);
+     
+    
     // createJspList(info,list);
     // createJspEdit(info,list);
     // createJspDetail(info,list);
@@ -328,46 +330,34 @@ public class BeanUtils {
 
 
   public static void createController(EntityInfo info) throws IOException {
-    String entityName = getUppercaseChar(info.getEntityName());
-    String jspPreName = entityName.toLowerCase().replace("entity", "");
-    if (!entityName.contains("Entity")) {
-      entityName += "Entity";
-    }
-    String controllerName = getUppercaseChar(info.getEntityName());
-    controllerName = controllerName.replace("Entity", "");
-    if (!controllerName.contains("Controller")) {
-      controllerName += "Controller";
-    }
-    String serviceName = getUppercaseChar(info.getEntityName());
-    serviceName = serviceName.replace("Entity", "");
-    if (!serviceName.contains("Service")) {
-      serviceName += "Service";
-    }
-
+    String controllerName = info.getEntityShortName()+"Controller";
+    info.setControllerName(controllerName);
     String fileName = savePath + controllerName + javaFile;
     File file = createFile(fileName);
     FileWriter fw = new FileWriter(file);
 
     StringBuilder sb = new StringBuilder();
-    sb.append("package " + info.getPackagePath() + ";" + RT_2);
+    String controllerPath = info.getPackagePath()+"."+controllerFolder;
+    info.setControllerPath(controllerPath);
+    sb.append("package ").append(controllerPath).append(RT_2_SEMICOLON);
 
     sb.append("import org.springframework.ui.Model;").append(RT_1);
     sb.append("import javax.servlet.ServletRequest;").append(RT_1);
-    sb.append("import com.yy.frame.controller.BaseController;").append(RT_1);
+    sb.append("import com.dimple.framework.web.controller.BaseController;").append(RT_1);
     sb.append("import org.springframework.stereotype.Controller;").append(RT_1);;
     sb.append("import org.springframework.web.bind.annotation.RequestMapping;").append(RT_1);
     sb.append("import org.springframework.beans.factory.annotation.Autowired;").append(RT_1);
-
+    sb.append("import ").append(info.getEntityPath()).append(".").append(info.getEntityName()).append(RT_1_SEMICOLON);
+    sb.append("import ").append(info.getServicePath()).append(".").append(info.getServiceName()).append(RT_1_SEMICOLON);
 
 
     appendFileAnno(info, sb);// 类备注
     sb.append("@Controller").append(RT_1).append("@RequestMapping(value = \"")
         .append(info.getReqMappingPath()).append("\")").append(RT_1);
-    sb.append(
-        "public class " + controllerName + " extends BaseController<" + entityName + "> {" + RT_2);
+    sb.append("public class ").append(controllerName).append(" extends BaseController").append("{").append(RT_2);
 
     sb.append("	@Autowired").append(RT_1);
-    sb.append("	private ").append(serviceName).append(" service;").append(RT_2);
+    sb.append("	private ").append(info.getServiceName()).append(" service;").append(RT_2);
 
 
     sb.append("	/**").append(RT_1);
@@ -380,28 +370,25 @@ public class BeanUtils {
     sb.append("	 * @return String 返回类型 ").append(RT_1);
     sb.append("	 * @throws").append(RT_1);
     sb.append("	 */").append(RT_1);
-    sb.append("	@RequestMapping(\"/list\")").append(RT_1);
-    sb.append("	public String listView(Model model) {").append(RT_1);
-    sb.append("		return \"" + info.getJspPath() + "/" + jspPreName + "_list\";").append(RT_1);
+    sb.append(TAB_1).append("@RequestMapping(\"/list\")").append(RT_1);
+    sb.append(TAB_1).append("public String listView(Model model) {").append(RT_1);
+    sb.append(TAB_2).append("return \"").append(info.getJspPath()).append("/").append(info.getEntityShortName()).append("_list\";").append(RT_1);
     sb.append("	}").append(RT_2);
 
-    sb.append("	@Override").append(RT_1);
-    sb.append("	public String addView(Model model, ServletRequest request) {").append(RT_1);
-    sb.append("		return \"" + info.getJspPath() + "/" + jspPreName + "_edit\";").append(RT_1);
+    sb.append(TAB_1).append("@RequestMapping(\"/add\")").append(RT_1);
+    sb.append(TAB_1).append("public String addView(Model model, ServletRequest request) {").append(RT_1);
+    sb.append(TAB_2).append("return \"").append(info.getJspPath()).append("/").append(info.getEntityShortName()).append("_edit\";").append(RT_1);
     sb.append("	}").append(RT_2);
 
-    sb.append("	@Override").append(RT_1);
-    sb.append("	public String editView(Model model, ServletRequest request, " + entityName
-        + " entity) {").append(RT_1);
-    sb.append("		return \"" + info.getJspPath() + "/" + jspPreName + "_edit\";").append(RT_1);
+    sb.append(TAB_1).append("@RequestMapping(\"/edit\")").append(RT_1);
+    sb.append(TAB_1).append("public String editView(Model model, ServletRequest request, ").append(info.getEntityName()).append(" entity) {").append(RT_1);
+    sb.append(TAB_2).append("return \"").append(info.getJspPath()).append("/").append(info.getEntityShortName()).append("_edit\";").append(RT_1);
     sb.append("	}").append(RT_2);
 
-    sb.append("	@Override").append(RT_1);
-    sb.append("	public String detailView(Model model, ServletRequest request, " + entityName
-        + " entity) {").append(RT_1);
-    sb.append("		return \"" + info.getJspPath() + "/" + jspPreName + "_detail\";").append(RT_1);
+    sb.append(TAB_1).append("@RequestMapping(\"/detail\")").append(RT_1);
+    sb.append(TAB_1).append("public String detailView(Model model, ServletRequest request, ").append(info.getEntityName()).append(" entity) {").append(RT_1);
+    sb.append(TAB_2).append("return \"").append(info.getJspPath()).append("/").append(info.getEntityShortName()).append("_detail\";").append(RT_1);
     sb.append("	}").append(RT_2);
-
 
     sb.append("}");
 
