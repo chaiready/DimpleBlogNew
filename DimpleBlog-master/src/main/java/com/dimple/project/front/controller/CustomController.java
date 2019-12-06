@@ -114,7 +114,7 @@ public class CustomController extends BaseController {
         List<Func> funcList = funcService.findByCreator(loginName);
         Long funcId = 0L;
         if (CollectionUtils.isNotEmpty(funcList)) {
-            funcId = funcList.get(0).getFuncId();
+            funcId = funcList.get(0).getId();
         }
         model.addAttribute("blogs", new PageInfo<>(homeService.selectBlogListByFuncId(funcId)));
 

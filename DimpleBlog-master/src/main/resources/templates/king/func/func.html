@@ -38,9 +38,12 @@
         <nav class="mynav">
             <ul class="orange-text">
                 <li th:each="func:${funcList}">
-                    <a th:href="${'/king/func/'+func.funcId+'.html'}"
+                    <a th:href="${'/king/func/'+func.id+'.html'}"
                        th:text="${func.funcName}"></a>
                 </li>
+                 <li>
+                    <a onclick="openAddDiolog();">+添加菜单</a>
+                 </li>
             </ul>
 
             <!--移动的滑动-->
@@ -56,6 +59,9 @@
                     <a th:href="${func.url}"
                        th:text="${func.funcName}"></a>
                 </li>
+                <li>
+                    <a onclick="openAddDiolog();">+添加菜单</a>
+                 </li>
             </ul>
         </div>
     </div>
@@ -70,7 +76,7 @@
             <a href="/"><i class="fa fa-home"></i>当前页: &nbsp;> </a>
             <span class="orange-text" th:text="${funcName}"></span>
             <span style="float:right;margin-right:10px;">共有文章:<font class="orange-text"
-                th:text="${blogs.total}"> 11 </font>篇</span>
+                th:text="${blogs.total}"></font>篇</span>
         </h4>
         <!--<div>
             <p class="smallText" th:text="${'分类描述：'+funcName}"></p>
@@ -142,6 +148,30 @@
                window.location.href="/king/func?funcId=[[${funcId}]]";
             });
         });
+    }
+    
+    //添加菜单
+    function openAddDiolog(){
+    	 layer.open({
+             type: 2,
+             area: ['80%', '200px'],
+             fix: false,
+             //不固定
+             maxmin: true,
+             shade: 0.3,
+             title: "添加菜单",
+             content: '/king/func/onBlogAdd',
+             btn: ['确定', '关闭'],
+             // 弹层外区域关闭
+             shadeClose: true,
+             yes: function (index, layero) {
+                 var iframeWin = layero.find('iframe')[0];
+                 iframeWin.contentWindow.submitHandler(index, layero);
+             },
+             cancel: function (index) {
+                 return true;
+             }
+         });
     }
 </script>
 </body>

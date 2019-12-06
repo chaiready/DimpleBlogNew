@@ -1,10 +1,10 @@
 package com.dimple.project.king.func.domain;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.dimple.framework.web.domain.BaseEntity;
-import com.dimple.project.king.util.TreeModel;
+import org.springframework.data.annotation.Id;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.dimple.framework.web.domain.SuperEntity;
 
 /**
  * @className: Menu
@@ -13,194 +13,158 @@ import com.dimple.project.king.util.TreeModel;
  * @Date: 2019/3/13
  * @Version: 1.1
  */
-public class Func extends BaseEntity implements TreeModel{
-	
-    private static final long serialVersionUID = 1L;
+@TableName("bg_func")
+public class Func extends SuperEntity {
 
-    /**
-     * 菜单ID
-     */
-    private Long funcId;
+  private static final long serialVersionUID = 1L;
 
-    /**
-     * 菜单名称
-     */
-    private String funcName;
+  /**
+   * 菜单ID
+   */
+  @TableId(value = "id", type = IdType.AUTO)
+  @Id
+  private Long id;
 
-    /**
-     * 父菜单名称
-     */
-    private String parentName;
+  /**
+   * 菜单名称
+   */
+  private String funcName;
 
-    /**
-     * 父菜单ID
-     */
-    private Long parentId;
+  /**
+   * 父菜单名称
+   */
+  private String parentName;
 
-    /**
-     * 显示顺序
-     */
-    private String orderNum;
+  /**
+   * 父菜单ID
+   */
+  private Long parentId;
 
-    /**
-     * 菜单URL
-     */
-    private String url;
+  /**
+   * 显示顺序
+   */
+  private String orderNum;
 
-    /**
-     * 类型:0目录,1菜单,2按钮
-     */
-    private String funcType;
+  /**
+   * 菜单URL
+   */
+  private String url;
 
-    /**
-     * 菜单状态:0显示,1隐藏
-     */
-    private String visible;
+  /**
+   * 类型:0目录,1菜单,2按钮
+   */
+  private String funcType;
 
-    /**
-     * 权限字符串
-     */
-    private String perms;
+  /**
+   * 菜单状态:0显示,1隐藏
+   */
+  private String visible;
 
-    /**
-     * 菜单图标
-     */
-    private String icon;
+  /**
+   * 权限字符串
+   */
+  private String perms;
 
-    /**
-     * 子菜单
-     */
-    private List<Func> children = new ArrayList<Func>();
+  /**
+   * 菜单图标
+   */
+  private String icon;
 
-    private Long creator;
 
-    public Func() {
-	}
-	public Func(String funcName, String url) {
-		this.funcName = funcName;
-		this.url = url;
-	}
+  private Long creator;
 
-	public Long getFuncId() {
-		return funcId;
-	}
+  public Func() {}
 
-	public void setFuncId(Long funcId) {
-		this.funcId = funcId;
-	}
+  public Func(String funcName, String url) {
+    this.funcName = funcName;
+    this.url = url;
+  }
 
-	public String getFuncName() {
-		return funcName;
-	}
+  public Long getId() {
+    return id;
+  }
 
-	public void setFuncName(String funcName) {
-		this.funcName = funcName;
-	}
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-	public String getParentName() {
-		return parentName;
-	}
+  public String getFuncName() {
+    return funcName;
+  }
 
-	public void setParentName(String parentName) {
-		this.parentName = parentName;
-	}
+  public void setFuncName(String funcName) {
+    this.funcName = funcName;
+  }
 
-	public Long getParentId() {
-		return parentId;
-	}
+  public String getParentName() {
+    return parentName;
+  }
 
-	public void setParentId(Long parentId) {
-		this.parentId = parentId;
-	}
+  public void setParentName(String parentName) {
+    this.parentName = parentName;
+  }
 
-	public String getOrderNum() {
-		return orderNum;
-	}
+  public Long getParentId() {
+    return parentId;
+  }
 
-	public void setOrderNum(String orderNum) {
-		this.orderNum = orderNum;
-	}
+  public void setParentId(Long parentId) {
+    this.parentId = parentId;
+  }
 
-	public String getUrl() {
-		return url;
-	}
+  public String getOrderNum() {
+    return orderNum;
+  }
 
-	public void setUrl(String url) {
-		this.url = url;
-	}
+  public void setOrderNum(String orderNum) {
+    this.orderNum = orderNum;
+  }
 
-	public String getFuncType() {
-		return funcType;
-	}
+  public String getUrl() {
+    return url;
+  }
 
-	public void setFuncType(String funcType) {
-		this.funcType = funcType;
-	}
+  public void setUrl(String url) {
+    this.url = url;
+  }
 
-	public String getVisible() {
-		return visible;
-	}
+  public String getFuncType() {
+    return funcType;
+  }
 
-	public void setVisible(String visible) {
-		this.visible = visible;
-	}
+  public void setFuncType(String funcType) {
+    this.funcType = funcType;
+  }
 
-	public String getPerms() {
-		return perms;
-	}
+  public String getVisible() {
+    return visible;
+  }
 
-	public void setPerms(String perms) {
-		this.perms = perms;
-	}
+  public void setVisible(String visible) {
+    this.visible = visible;
+  }
 
-	public String getIcon() {
-		return icon;
-	}
+  public String getPerms() {
+    return perms;
+  }
 
-	public void setIcon(String icon) {
-		this.icon = icon;
-	}
+  public void setPerms(String perms) {
+    this.perms = perms;
+  }
 
-	public List<Func> getChildren() {
-		return children;
-	}
+  public String getIcon() {
+    return icon;
+  }
 
-	public void setChildren(List<Func> children) {
-		this.children = children;
-	}
+  public void setIcon(String icon) {
+    this.icon = icon;
+  }
 
-	@Override
-	public String toString() {
-		return "Func [funcId=" + funcId + ", funcName=" + funcName + ", parentName=" + parentName + ", parentId="
-				+ parentId + ", orderNum=" + orderNum + ", url=" + url + ", funcType=" + funcType + ", visible="
-				+ visible + ", perms=" + perms + ", icon=" + icon + ", children=" + children + "]";
-	}
+  public Long getCreator() {
+    return creator;
+  }
 
-	@Override
-	public Long getId() {
-		return funcId;
-	}
-
-	@Override
-	public void setChildList(List children) {
-		setChildren(children);
-	}
-
-	@Override
-	public String getName() {
-		return getFuncName();
-	}
-
-	@Override
-	public void setName(String name) {
-		setFuncName(name);
-	}
-
-	public Long getCreator() {
-		return creator;
-	}
-
-	public void setCreator(Long creator) {
-		this.creator = creator;
-	}
+  public void setCreator(Long creator) {
+    this.creator = creator;
+  }
 }

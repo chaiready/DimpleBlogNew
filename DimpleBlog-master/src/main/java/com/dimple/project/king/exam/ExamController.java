@@ -83,12 +83,12 @@ public class ExamController extends BaseController {
     Func funcVo = new Func();
     funcVo.setUrl("/kaoshi/questionFolder/1.html");
     funcVo.setFuncName("医药学");
-    funcVo.setFuncId(1l);
+    funcVo.setId(1l);
     funcList.add(funcVo);
     if (CollectionUtils.isNotEmpty(funcList)) {
-      funcId = funcId == null ? funcList.get(0).getFuncId() : funcId;
+      funcId = funcId == null ? funcList.get(0).getId() : funcId;
       for (Func func : funcList) {
-        if (func.getFuncId().longValue() == funcId.longValue()) {
+        if (func.getId().longValue() == funcId.longValue()) {
           funcName = func.getFuncName();
           break;
         }
