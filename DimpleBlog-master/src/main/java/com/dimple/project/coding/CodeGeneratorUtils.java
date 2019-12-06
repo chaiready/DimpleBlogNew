@@ -44,8 +44,8 @@ public class CodeGeneratorUtils {
 
   public static void main(String[] args) throws Exception {
     EntityInfo info = new EntityInfo();
-    info.setEntityName("QuestionItemEntity");
-    info.setExtendEntityName("BaseEntity");
+    info.setEntityName("FuncBlogEntity");
+    info.setExtendEntityName("SuperEntity");
     info.setPackagePath("com.dimple.project.king.exam");
     info.setTitle("问题集");
     info.setAuthor("ls2008");
@@ -55,14 +55,14 @@ public class CodeGeneratorUtils {
     // 生成实体==================================================================================
     List<ColInfo> list = new ArrayList<ColInfo>();
     ColInfo col = new ColInfo();
-    col.setColName("folderId");
+    col.setColName("funcId");
     col.setColType("Long");
     col.setColLenth(50);
-    col.setColAnno("问题夹id");
+    col.setColAnno("菜单id");
     col.setEleType(ColInfo.EleType.TEXT);
     list.add(col);
     col = new ColInfo();
-    col.setColName("questionId");
+    col.setColName("blogId");
     col.setColType("Long");
     col.setColLenth(11);
     col.setColAnno("用户id");
