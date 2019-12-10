@@ -135,6 +135,18 @@ CREATE TABLE `bg_func` (
 PRIMARY KEY (`func_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8
 
+#20191210
+CREATE TABLE `bg_suggest` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `content` varchar(256) DEFAULT NULL COMMENT '内容',
+  `create_by` varchar(64) DEFAULT NULL COMMENT '创建者',
+  `create_time` datetime DEFAULT NULL,
+  `update_by` varchar(64) DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='建议与帮助'
+
+
 
 
 

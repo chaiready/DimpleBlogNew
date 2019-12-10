@@ -34,6 +34,12 @@ public class CodeGeneratorUtils {
   // 文件 地址
   private static final String savePath = "D:\\codes\\";
   
+  private static String domainPath = "domain\\";
+  private static String mapperPath = "mapper\\";
+  private static String servicePath = "service\\";
+  private static String serviceImplPath = "service\\impl\\";
+  private static String controllerPath = "controller\\";
+  
   private static String domainFolder = "domain";
   private static String mapperFolder = "mapper";
   private static String serviceFolder = "service";
@@ -44,10 +50,10 @@ public class CodeGeneratorUtils {
 
   public static void main(String[] args) throws Exception {
     EntityInfo info = new EntityInfo();
-    info.setEntityName("FuncBlogEntity");
+    info.setEntityName("SuggestEntity");
     info.setExtendEntityName("SuperEntity");
-    info.setPackagePath("com.dimple.project.king.exam");
-    info.setTitle("问题集");
+    info.setPackagePath("com.dimple.project.king.suggest");
+    info.setTitle("建议");
     info.setAuthor("ls2008");
     info.setReqMappingPath("/ver/auditCols");
     info.setJspPath("modules/ver/auditcols");// jsp路径
@@ -55,17 +61,10 @@ public class CodeGeneratorUtils {
     // 生成实体==================================================================================
     List<ColInfo> list = new ArrayList<ColInfo>();
     ColInfo col = new ColInfo();
-    col.setColName("funcId");
-    col.setColType("Long");
-    col.setColLenth(50);
-    col.setColAnno("菜单id");
-    col.setEleType(ColInfo.EleType.TEXT);
-    list.add(col);
-    col = new ColInfo();
-    col.setColName("blogId");
-    col.setColType("Long");
-    col.setColLenth(11);
-    col.setColAnno("用户id");
+    col.setColName("content");
+    col.setColType("String");
+    col.setColLenth(250);
+    col.setColAnno("内容");
     col.setEleType(ColInfo.EleType.TEXT);
     list.add(col);
     // 生成实体==================================================================================
@@ -110,7 +109,7 @@ public class CodeGeneratorUtils {
 
 
   public static void createEntity(EntityInfo info, List<ColInfo> list) throws IOException {
-    String fileName = savePath + info.getEntityName() + javaFile;
+    String fileName = savePath + domainPath + info.getEntityName() + javaFile;
     File file = createFile(fileName);
     FileWriter fw = new FileWriter(file);
     StringBuilder sb = new StringBuilder();
@@ -192,7 +191,7 @@ public class CodeGeneratorUtils {
   public static void createMapper(EntityInfo info) throws Exception {
     String daoName = info.getEntityShortName()+"Mapper";
 
-    String fileName = savePath + daoName + javaFile;
+    String fileName = savePath + mapperPath + daoName + javaFile;
     File file = createFile(fileName);
     FileWriter fw = new FileWriter(file);
 
@@ -271,7 +270,7 @@ public class CodeGeneratorUtils {
   public static void createService(EntityInfo info) throws Exception {
     String serviceName = info.getEntityShortName()+"Service";
     info.setServiceName(serviceName);
-    String fileName = savePath + serviceName + javaFile;
+    String fileName = savePath +servicePath+ serviceName + javaFile;
     File file = createFile(fileName);
     FileWriter fw = new FileWriter(file);
 
@@ -297,7 +296,7 @@ public class CodeGeneratorUtils {
     String serviceImplName = info.getServiceName()+"Impl";
 
     info.setServiceImplName(serviceImplName);
-    String fileName = savePath + serviceImplName + javaFile;
+    String fileName = savePath +serviceImplPath+ serviceImplName + javaFile;
     File file = createFile(fileName);
     FileWriter fw = new FileWriter(file);
 
@@ -332,7 +331,7 @@ public class CodeGeneratorUtils {
   public static void createController(EntityInfo info) throws IOException {
     String controllerName = info.getEntityShortName()+"Controller";
     info.setControllerName(controllerName);
-    String fileName = savePath + controllerName + javaFile;
+    String fileName = savePath + controllerPath + controllerName + javaFile;
     File file = createFile(fileName);
     FileWriter fw = new FileWriter(file);
 

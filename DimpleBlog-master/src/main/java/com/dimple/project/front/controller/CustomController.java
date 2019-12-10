@@ -2,6 +2,7 @@ package com.dimple.project.front.controller;
 
 import java.util.Date;
 import java.util.List;
+import javax.validation.Valid;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -237,6 +238,17 @@ public class CustomController extends BaseController {
         }
     }
 
+    /**
+     * 忘记密码
+     * @param toPage
+     * @param model
+     * @return
+     */
+    @GetMapping("/front/toForgetPwd")
+    public String toForgetPwd(String toPage, Model model) {
+        model.addAttribute("toPage", toPage);
+        return "front/login/forget_pwd";
+    }
 
     @VLog(title = "分类")
     @GetMapping({"/{loginName}/func/{funcId}.html"})

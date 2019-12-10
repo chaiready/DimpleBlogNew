@@ -426,11 +426,124 @@
     </div>
 </aside>
 
+<!---底部开始-->
+<sidebar th:fragment="sidebar">
+    <div class="jdc-side" style="display: block;">
+	  <!-- <div class="mod_hang_qrcode jdc_feedback_qrcode">
+	    <div class="mod_hang_qrcode_btn"><i class="jdcfont"></i><span>扫码反馈</span></div>
+	    <div class="mod_hang_qrcode_show">
+	      <div class="mod-qr-tips"></div>
+	      <div class="mod_hang_qrcode_show_bg">
+	        <div id="canvas" style="height: 123px; width: 123px;"><img src="../../img/qr_img.png"></div>
+	      </div>
+	      <p>扫一扫，反馈当前页面</p>
+	    </div>
+	  </div> -->
+	  <div class="mod_hang_qrcode jdc_hang_qrcode">
+	  	<a class="mod_hang_qrcode_btn"><i class="jdcfont"></i><span>扫码支持</span></a>
+	    <div class="mod_hang_qrcode_show">
+	      <div class="mod_hang_qrcode_show_bg">
+	      	<img src="../../img/qrcode.jpg" style="width: 124px; height: 124px;">
+	      </div>
+	      <p>支付宝</p>
+	      <div class="mod_hang_qrcode_show_bg">
+	      	<img src="../../img/qrcode.jpg" style="width: 124px; height: 124px;">
+	      </div>
+	      <p>微信</p>
+	    </div>
+	  </div>
+	  <div class="mod_hang_appeal">
+	    <div class="mod_hang_appeal_btn"><i class="jdcfont"></i> <span>咨询反馈</span></div>
+	    	<div class="mod_hang_appeal_show">
+	    		<ul>
+			        <li>
+			        	<div class="text_box" style="width: 100%;">
+			        		<p style="margin-top: 0px;">建议和帮助</p>
+			        		<textarea rows="2" id="sidebarSuggestText" cols="" style="width: 98%;margin-right: 5px;"></textarea>
+				            <p style="text-align: right;margin-top: 0px;margin-right: 5px;">
+				            	<input type="button" value="提交   " id="sidebarSuggestBtn"/>
+				            </p>
+				        </div>
+			        </li>
+			        <!-- <li><a href="#" target="_blank">
+			          <div class="icon_box" style="width: 250px;">
+			          	<textarea rows="2" cols="" style="width: 100%;"></textarea>
+			          </div>
+			          <div class="text_box" style="text-align: right;width: 50px;">
+			            <input type="button" value="提交   " style="height: 45px;"/>
+			          </div>
+			          </a></li> -->
+		        </ul>
+	    	</div>
+	    
+	    <!-- <div class="mod_hang_appeal_show">
+	      <ul>
+	        <li><a href="#" target="_blank">
+	          <div class="icon_box"><i class="jdcfont"></i></div>
+	          <div class="text_box">
+	            <h5>人工客服</h5>
+	            <p>7*12 专业客服，服务咨询</p>
+	          </div>
+	          </a></li>
+	        <li id="entry"><a href="#" target="_blank" class="f-cb">
+	          <div class="icon_box"><i class="jdcfont"></i></div>
+	          <div class="text_box">
+	            <h5>工单服务</h5>
+	            <p>7*24全时处理，技术支持</p>
+	          </div>
+	          </a></li>
+	        <li><a href="#" target="_blank" class="f-cb">
+	          <div class="icon_box"><i class="jdcfont"></i></div>
+	          <div class="text_box">
+	            <h5>投诉建议</h5>
+	            <p>倾耳聆听，一个工作日内及时处理</p>
+	          </div>
+	          </a></li>
+	      </ul>
+	    </div> -->
+	  </div>
+	  <div class="mod_hang_qrcode mod_hang_top"><a href="#" class="mod_hang_qrcode_btn"><i class="jdcfont"></i><span>返回顶部</span></a></div>
+	  <div class="el-dialog__wrapper" style="display: none;">
+	    <div class="el-dialog el-dialog--small" style="top: 15%;">
+	      <div class="el-dialog__header"><span class="el-dialog__title"></span>
+	        <div type="button" class="el-dialog__headerbtn"><i class="el-dialog__close el-icon el-icon-close"></i></div>
+	      </div>
+	      </div>
+	  </div>
+	</div>
+	 <script>
+         $("#sidebarSuggestBtn").click(function () {
+             console.info($("#sidebarSuggestText").val()+">>>>>>>");
+             $.ajax({
+                 type: "POST",
+                 url: "/king/suggest/add",
+                 data: {"content": $("#sidebarSuggestText").val()},
+                 dataType: "json",
+                 success: function (data) {
+              	   console.info(data);
+              	   if (data.code == 200) {
+                         layer.msg(data.msg, {icon: 1});
+                     } else {
+                         layer.msg(data.msg, {icon: 2});
+                     }
+                 },
+                 error: function (jqXHR) {
+              	   layer.msg('发送错误：' + jqXHR.status);
+                 },
+             });
+         });
+     </script>
+</sidebar>
+
 <div th:fragment="highlight-css">
     <link rel="stylesheet" th:href="@{/front/plugin/hightlight/xcode.css}"/>
 </div>
 <div th:fragment="highlight-js">
     <script th:src="@{/front/plugin/hightlight/highlight.pack.js}"></script>
     <script>hljs.initHighlightingOnLoad();</script>
+</div>
+
+<div th:fragment="sidebar-css">
+    <link rel="stylesheet" th:href="@{/css/king/sidebar/common.css?v=11}"/>
 </div>
 </html>
