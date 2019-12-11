@@ -146,7 +146,17 @@ CREATE TABLE `bg_suggest` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='建议与帮助'
 
-
+CREATE TABLE `bg_user_log` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `user_id` bigint(20) DEFAULT NULL COMMENT '用户id',
+  `content` varchar(250) DEFAULT NULL COMMENT '内容',
+  `logtype` varchar(10) DEFAULT NULL,
+  `create_by` varchar(64) DEFAULT NULL COMMENT '创建者',
+  `create_time` datetime DEFAULT NULL,
+  `update_by` varchar(64) DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+   PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='用户日志'
 
 
 

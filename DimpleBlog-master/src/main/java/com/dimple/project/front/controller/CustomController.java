@@ -2,7 +2,6 @@ package com.dimple.project.front.controller;
 
 import java.util.Date;
 import java.util.List;
-import javax.validation.Valid;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -17,6 +16,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.thymeleaf.context.Context;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.dimple.common.utils.RandomUtil;
 import com.dimple.common.utils.StringUtils;
 import com.dimple.common.utils.security.ShiroUtils;
 import com.dimple.framework.aspectj.lang.annotation.VLog;
@@ -30,9 +34,12 @@ import com.dimple.project.blog.comment.domain.Comment;
 import com.dimple.project.blog.comment.service.CommentService;
 import com.dimple.project.blog.tag.domain.Tag;
 import com.dimple.project.blog.tag.service.TagService;
+import com.dimple.project.common.service.MailService;
 import com.dimple.project.front.service.HomeService;
 import com.dimple.project.king.func.domain.Func;
 import com.dimple.project.king.func.service.IFuncService;
+import com.dimple.project.king.userlog.domain.UserLogEntity;
+import com.dimple.project.king.userlog.service.UserLogService;
 import com.dimple.project.link.service.LinkService;
 import com.dimple.project.system.carouselMap.service.CarouselMapService;
 import com.dimple.project.system.notice.service.INoticeService;
@@ -71,6 +78,11 @@ public class CustomController extends BaseController {
     private IFuncService funcService;
     @Autowired
     CommentService commentService;
+    @Autowired
+    private MailService mailService;
+    @Autowired
+    private UserLogService userLogService;
+
 
     /**
      * 设置前台页面公用的部分代码 均设置Redis缓存
@@ -244,12 +256,65 @@ public class CustomController extends BaseController {
      * @param model
      * @return
      */
-    @GetMapping("/front/toForgetPwd")
-    public String toForgetPwd(String toPage, Model model) {
-        model.addAttribute("toPage", toPage);
-        return "front/login/forget_pwd";
+    @ResponseBody
+    @RequestMapping("/front/toForgetPwd")
+    public AjaxResult toForgetPwd(String loginName, Model model) {
+      User user = userService.selectUserByLoginName(loginName);
+      if(user == null){
+        return AjaxResult.error("用户名不存在");
+      }
+      if(StringUtils.isEmpty(user.getEmail())){
+        return AjaxResult.error("邮箱为空，不能找回密码");
+      }
+      Context context = new Context();
+      String vericode = RandomUtil.randomNum(6);
+      context.setVariable("vericode", vericode);
+      mailService.sendTemplateMail(user.getEmail(), "【5180it】忘记密码", "forgetPwdEmailTemplate", context);
+      UserLogEntity userLog = new UserLogEntity();
+      userLog.setLogtype(UserLogEntity.FORGET_PWD);
+      userLog.setContent(vericode);
+      userLog.setCreateBy(loginName);
+      userLog.setCreateTime(new Date());
+      userLogService.save(userLog);
+      return AjaxResult.success("已发送验证码到【"+user.getEmail()+"】");
     }
 
+    
+    @GetMapping("/front/toResetPwd")
+    public String toResetPwd(String loginName , String toPage, Model model) {
+        model.addAttribute("loginName", loginName);
+        model.addAttribute("toPage", toPage);
+        return "front/login/reset_pwd";
+    }
+    
+    @ResponseBody
+    @RequestMapping("/front/resetPwd")
+    public AjaxResult resetPwd(String loginName ,String password , String vericode , String toPage, Model model) {
+        User entity = userService.selectUserByLoginName(loginName);
+        if(entity == null){
+          return AjaxResult.error("用户名不存在");
+        }
+        model.addAttribute("loginName", loginName);
+        model.addAttribute("toPage", toPage);
+        QueryWrapper<UserLogEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("create_by", loginName).eq("logtype", UserLogEntity.FORGET_PWD).orderByDesc("create_time");
+        Page<UserLogEntity> page=new Page<UserLogEntity>(1,1);
+        IPage<UserLogEntity> iPage = userLogService.page(page, queryWrapper);
+        List<UserLogEntity> logList = iPage.getRecords();
+        if(CollectionUtils.isNotEmpty(logList)){
+          UserLogEntity log = logList.get(0);
+          if(vericode!=null&&vericode.equals(log.getContent())){
+            User user = new User();
+            user.setUserId(entity.getUserId());
+//            user.setLoginName(loginName);
+            user.setPassword(password);
+            userService.resetUserPwd(user);
+            return AjaxResult.success("修改密码成功");
+          }
+        }
+        return AjaxResult.error("验证码不一致");
+    }
+    
     @VLog(title = "分类")
     @GetMapping({"/{loginName}/func/{funcId}.html"})
     public String funcBlog(@PathVariable String loginName, @PathVariable Long funcId,

@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	
-	<title>注册页面</title>
+	<title>重置密码页面</title>
 	<meta name="keywords" content="" />
 	<meta name="description" content="" /> 
 	
@@ -23,57 +23,37 @@
 	<div class="limiter">
 		<div class="container-login100" style="background-image: url('/public/front-login/images/bg-01.jpg');">
 			<div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
-				<form id="regForm" class="login100-form validate-form">
-					<span class="login100-form-title p-b-49" style="padding-bottom: 29px;">注册</span>
+				<form id="resetPwdForm" class="login100-form validate-form">
+					<span class="login100-form-title p-b-49" style="padding-bottom: 29px;">重置密码</span>
 					<span id="operTip" style="text-align:center;display: block;color: #f5222d;"></span>
 					<input type="hidden" id="toPage" name="toPage" th:value="${toPage}">
 					<div class="wrap-input100 validate-input m-b-23" data-validate="请输入用户名">
 						<span class="label-input100">用户名</span>
-						<input class="input100" type="text" id="loginName" name="loginName" placeholder="请输入用户名" autocomplete="off" value="">
+						<input class="input100" type="text" id="loginName" name="loginName" placeholder="请输入用户名" autocomplete="off"  th:value="${loginName}">
 						<span class="focus-input100" data-symbol="&#xf206;"></span>
 					</div>
-
 					<div class="wrap-input100 validate-input" data-validate="请输入密码">
 						<span class="label-input100">密码</span>
 						<input class="input100" type="password" id="password" name="password" placeholder="请输入密码" value="">
 						<span class="focus-input100" data-symbol="&#xf190;"></span>
 					</div>
-					<div class="wrap-input100 validate-input" data-validate="请输入邮箱">
-						<span class="label-input100">邮箱</span>
-						<input class="input100" type="text" id="email" name="email" placeholder="请输入邮箱" value="">
-						<span class="focus-input100" data-symbol="&#xf23e;"></span>
+					<div class="wrap-input100 validate-input" data-validate="请输入密码">
+						<span class="label-input100">确认密码</span>
+						<input class="input100" type="password" id="password2" name="password2" placeholder="请输入密码" value="">
+						<span class="focus-input100" data-symbol="&#xf190;"></span>
 					</div>
-					<div class="wrap-input100 validate-input" data-validate="请输入手机号码">
-						<span class="label-input100">手机号码</span>
-						<input class="input100" type="text" id="phonenumber" name="phonenumber" placeholder="请输入手机号码" value="">
-						<span class="focus-input100" data-symbol="&#xf1f9;"></span>
+					<div class="wrap-input100 validate-input" data-validate="请输入验证码">
+						<span class="label-input100">验证码</span>
+						<input class="input100" type="text" id="vericode" name="vericode" placeholder="请输入验证码" value="">
+						<span class="focus-input100" data-symbol="&#xf190;"></span>
 					</div>
 					<div class="text-right p-t-8 p-b-31"></div>
 					<div class="container-login100-form-btn">
 						<div class="wrap-login100-form-btn">
 							<div class="login100-form-bgbtn"></div>
-							<button class="login100-form-btn" type="button">注册</button>
+							<button class="login100-form-btn" type="button">提交</button>
 						</div>
 					</div>
-
-					<!-- <div class="txt1 text-center p-t-54 p-b-20">
-						<span>第三方登录</span>
-					</div>
-
-					<div class="flex-c-m">
-						<a href="#" class="login100-social-item bg1">
-							<i class="fa fa-wechat"></i>
-						</a>
-
-						<a href="#" class="login100-social-item bg2">
-							<i class="fa fa-qq"></i>
-						</a>
-
-						<a href="#" class="login100-social-item bg3">
-							<i class="fa fa-weibo"></i>
-						</a>
-					</div> -->
-
 					<div class="flex-col-c p-t-25">
 						<a th:href="${'/bbs/front/toLogin?toPage='+toPage}" class="txt2">立即登录</a>
 					</div>
@@ -113,52 +93,39 @@
 		                return false;
 		            }
 		        }
-			 	if ($("#email").val() == "") {
-		            layer.msg('邮箱不能为空喔', {icon: 2});
-		            return false;
-			    } else {
-		            var reg = /\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;
-		            var email = $("#email").val();
-		            if (!reg.test(email)) {
-		                layer.msg('邮箱格式错误喔', {icon: 2});
-		                return false;
-		            }
-			    }
-			 	if ($("#phonenumber").val() == "") {
-		            layer.msg('手机号码不能为空喔', {icon: 2});
+			 	if ($("#password2").val() == "") {
+		            layer.msg('确认密码不能为空喔', {icon: 2});
 		            return false;
 		        }else{
-		        	var reg = new RegExp("^((1[0-9]))\d{9}$");
-		            var phonenumber = $("#phonenumber").val();
-		            if (!reg.test(phonenumber)) {
-		                layer.msg('手机号码只能由数字和26个英文字母组成', {icon: 2});
+		        	var reg = new RegExp("^[A-Za-z0-9]+$");
+		            var password2 = $("#password2").val();
+		            if (!reg.test(password2)) {
+		                layer.msg('确认密码只能由数字和26个英文字母组成', {icon: 2});
 		                return false;
 		            }
 		        }
-			 	layer.confirm("(请确认邮箱和手机号码正确以保证找回密码或系统通知等能够及时通知)确定要提交吗?", {
-	                 icon: 3,
-	                 title: "系统提示",
-	                 btn: ['确认', '取消']
-	             }, function (index) {
-	                 layer.close(index);
-	                 $.ajax({
-	 		            type: "POST",
-	 		            url: "/bbs/front/reg",
-	 		            data: $("#regForm").serialize(),
-	 		            dataType: "json",
-	 		            success: function (data) {
-	 		                if (data.code == 200) {
-	 		                	window.location.href=data.msg;
-	 		                }else{
-	 		                	$("#operTip").html(data.msg);
-	 		                }
-	 		            },
-	 		            error: function (jqXHR) {
-	 		            	  //layer.msg('发送错误：' + jqXHR.status, {icon: 2});
-	 		                $("#operTip").html('发送错误：' + jqXHR.status);
-	 		            },
-	 		        });
-	             });
+			 	if($("#password").val()!=$("#password2").val()){
+			 		layer.msg('两次密码不一致', {icon: 2});
+	                return false;
+			 	}
+			    $.ajax({
+ 		            type: "POST",
+ 		            url: "/bbs/front/resetPwd",
+ 		            data: $("#resetPwdForm").serialize(),
+ 		            dataType: "json",
+ 		            success: function (data) {
+ 		                if (data.code == 200) {
+ 		                	layer.msg(data.msg, {icon: 1});
+ 		                	window.location.href="/bbs/front/toLogin?toPage="+$("#toPage").val();
+ 		                }else{
+ 		                	$("#operTip").html(data.msg);
+ 		                }
+ 		            },
+ 		            error: function (jqXHR) {
+ 		            	  //layer.msg('发送错误：' + jqXHR.status, {icon: 2});
+ 		                $("#operTip").html('发送错误：' + jqXHR.status);
+ 		            },
+ 		        });
 		 });
 	 });
 	 </script>

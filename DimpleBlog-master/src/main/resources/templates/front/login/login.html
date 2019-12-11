@@ -7,6 +7,9 @@
 	<title>登录页面</title>
 	<meta name="keywords" content="" />
 	<meta name="description" content="" /> 
+	
+	<script type="text/javascript" th:src="@{/front/js/jquery.min.js}"></script>
+	<script th:src="@{/ajax/libs/layer/layer.min.js}"></script>
 
 	<link rel="stylesheet" type="text/css" href="/public/front-login/vendor/bootstrap/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="/public/front-login/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
@@ -37,7 +40,7 @@
 					</div>
 
 					<div class="text-right p-t-8 p-b-31">
-						<a  th:href="${'/bbs/front/toForgetPwd?toPage='+toPage}">忘记密码？</a>
+						<a id="forgetPwdBtn">忘记密码？</a>
 					</div>
 
 					<div class="container-login100-form-btn">
@@ -100,6 +103,35 @@
 		                $("#operTip").html('发送错误：' + jqXHR.status);
 		            },
 		        });
+		 });
+		 
+		 $("#forgetPwdBtn").click(function(){
+			 layer.confirm("确定要找回密码吗?", {
+                 icon: 3,
+                 title: "系统提示",
+                 btn: ['确认', '取消']
+             }, function (index) {
+                 layer.close(index);
+                 $.ajax({
+ 		            type: "POST",
+ 		            url: "/bbs/front/toForgetPwd",
+ 		            data: {"loginName": $("#loginName").val(),"toPage":$("#toPage").val()},
+ 		            dataType: "json",
+ 		            success: function (data) {
+ 		            	console.info(data);
+ 		            	 if (data.code == 200) {
+ 		                     layer.msg(data.msg, {icon: 1});
+ 		                     window.location.href="/bbs/front/toResetPwd?loginName="+$("#loginName").val()+"&toPage="+$("#toPage").val();
+ 		                 } else {
+ 		                     layer.msg(data.msg, {icon: 2});
+ 		                 }
+ 		            },
+ 		            error: function (jqXHR) {
+ 		                //layer.msg('发送错误：' + jqXHR.status, {icon: 2});
+ 		                $("#operTip").html('发送错误：' + jqXHR.status);
+ 		            },
+ 		        });
+             });
 		 });
 	 });
 	 </script>

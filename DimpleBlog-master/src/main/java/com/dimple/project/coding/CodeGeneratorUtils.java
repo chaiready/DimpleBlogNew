@@ -50,9 +50,9 @@ public class CodeGeneratorUtils {
 
   public static void main(String[] args) throws Exception {
     EntityInfo info = new EntityInfo();
-    info.setEntityName("SuggestEntity");
+    info.setEntityName("UserLogEntity");
     info.setExtendEntityName("SuperEntity");
-    info.setPackagePath("com.dimple.project.king.suggest");
+    info.setPackagePath("com.dimple.project.king.userlog");
     info.setTitle("建议");
     info.setAuthor("ls2008");
     info.setReqMappingPath("/ver/auditCols");
@@ -65,6 +65,13 @@ public class CodeGeneratorUtils {
     col.setColType("String");
     col.setColLenth(250);
     col.setColAnno("内容");
+    col.setEleType(ColInfo.EleType.TEXT);
+    list.add(col);
+    col = new ColInfo();
+    col.setColName("logtype");
+    col.setColType("String");
+    col.setColLenth(10);
+    col.setColAnno("日志类型");
     col.setEleType(ColInfo.EleType.TEXT);
     list.add(col);
     // 生成实体==================================================================================

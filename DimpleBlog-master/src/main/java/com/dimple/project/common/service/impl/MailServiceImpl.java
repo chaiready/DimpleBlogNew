@@ -120,4 +120,22 @@ public class MailServiceImpl implements MailService {
             log.error("send email {} to {} failed {},{}", templateContext, to, e.getMessage(), e);
         }
     }
+
+    @Override
+    @Async
+    public void sendTemplateMail(String to, String subject, String templateName,Context context) {
+      String templateContext = templateEngine.process("email/"+templateName, context);
+      MimeMessage message = mailSender.createMimeMessage();
+      try {
+          MimeMessageHelper helper = new MimeMessageHelper(message, true);
+          helper.setFrom(from);
+          helper.setTo(to);
+          helper.setSubject(subject);
+          helper.setText(templateContext, true);
+          mailSender.send(message);
+          log.info("send email {} to {} success ", templateContext, to);
+      } catch (MessagingException e) {
+          log.error("send email {} to {} failed {},{}", templateContext, to, e.getMessage(), e);
+      }
+    }
 }

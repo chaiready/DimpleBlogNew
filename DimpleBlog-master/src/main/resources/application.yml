@@ -57,7 +57,7 @@ spring:
     host: smtp.163.com
     default-encoding: UTF-8
     username: ls909074489@163.com
-    password:
+    password: 163qq909074489
   # 模板引擎
   thymeleaf:
     mode: HTML

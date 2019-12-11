@@ -1,5 +1,7 @@
 package com.dimple.project.common.service;
 
+import org.thymeleaf.context.Context;
+
 /**
  * @className: MailService
  * @description:
@@ -37,5 +39,8 @@ public interface MailService {
 
 
     void sendReplyEmail(String to, Integer id, String originalContent, String content, String url);
+    
+    
+    void sendTemplateMail(String to, String subject, String templateName,Context context);
 
 }
