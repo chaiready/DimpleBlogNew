@@ -62,4 +62,9 @@ public class Constants {
      * 排序的方向 "desc" 或者 "asc".
      */
     public static String IS_ASC = "isAsc";
+    
+    /**
+     * 博客菜单数量
+     */
+    public static int BLOG_FUNC_COUNT = 3;
 }

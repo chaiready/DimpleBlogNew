@@ -42,7 +42,7 @@
                        th:text="${func.funcName}"></a>
                 </li>
                  <li>
-                    <a onclick="openAddDiolog();">+添加菜单</a>
+                    <a onclick="openAddDiolog();" style="color: #000000;">+添加菜单</a>
                  </li>
             </ul>
 
@@ -56,11 +56,11 @@
             <!--手机下拉菜单-->
             <ul class="mob-ulnav">
                 <li th:each="func:${funcList}">
-                    <a th:href="${func.url}"
+                    <a th:href="${'/king/func/'+func.id+'.html'}"
                        th:text="${func.funcName}"></a>
                 </li>
                 <li>
-                    <a onclick="openAddDiolog();">+添加菜单</a>
+                    <a onclick="openAddDiolog();" style="color: #000000;">+添加菜单</a>
                  </li>
             </ul>
         </div>
@@ -78,6 +78,11 @@
             <span style="float:right;margin-right:10px;">共有文章:<font class="orange-text"
                 th:text="${blogs.total}"></font>篇</span>
         </h4>
+        <div style="font-size: 12px;">
+        	<a th:onclick="toFirst([[${funcId}]]);">【置顶】</a>
+            <a th:onclick="toUpdate([[${funcId}]]);">【修改】</a>
+            <a th:onclick="toDel([[${funcId}]]);">【删除】</a>
+        </div>
         <!--<div>
             <p class="smallText" th:text="${'分类描述：'+funcName}"></p>
             <p class="smallText" th:text="${'创建时间：'+funcName}"></p>
@@ -172,6 +177,81 @@
                  return true;
              }
          });
+    }
+    
+    //置顶
+    function toFirst(funcId){
+    	layer.confirm('确定要置顶该菜单吗?', {icon: 3,title: "系统提示",btn: ['确认', '取消']}, 
+    	function (index) {
+            layer.close(index);
+            $.ajax({
+	            type: "POST",
+	            url: "/king/func/toFirst/"+funcId,
+	            data: {},
+	            dataType: "json",
+	            success: function (data) {
+	            	console.info(data);
+	                if (data.code == 200) {
+	                	layer.msg(data.msg, {icon: 1});
+	                    window.location.reload();
+	                }else{
+	                	 layer.msg(data.msg, {icon: 2});
+	                }
+	            },
+	            error: function (jqXHR) {
+	                layer.msg('发送错误：' + jqXHR.status, {icon: 2});
+	            },
+	        });
+        });
+    }
+    
+    //添加菜单
+    function toUpdate(funcId){
+    	 layer.open({
+             type: 2,
+             area: ['80%', '200px'],
+             fix: false,
+             //不固定
+             maxmin: true,
+             shade: 0.3,
+             title: "添加菜单",
+             content: '/king/func/edit/'+funcId,
+             btn: ['确定', '关闭'],
+             // 弹层外区域关闭
+             shadeClose: true,
+             yes: function (index, layero) {
+                 var iframeWin = layero.find('iframe')[0];
+                 iframeWin.contentWindow.submitHandler(index, layero);
+             },
+             cancel: function (index) {
+                 return true;
+             }
+         });
+    }
+    
+    function toDel(funcId){
+    	layer.confirm('确定要删除该菜单吗?', {icon: 3,title: "系统提示",btn: ['确认', '取消']}, 
+    	function (index) {
+            layer.close(index);
+            $.ajax({
+	            type: "GET",
+	            url: "/king/func/remove/"+funcId,
+	            data: {},
+	            dataType: "json",
+	            success: function (data) {
+	            	console.info(data);
+	                if (data.code == 200) {
+	                	layer.msg(data.msg, {icon: 1});
+	                    window.location.reload();
+	                }else{
+	                	 layer.msg(data.msg, {icon: 2});
+	                }
+	            },
+	            error: function (jqXHR) {
+	                layer.msg('发送错误：' + jqXHR.status, {icon: 2});
+	            },
+	        });
+        });
     }
 </script>
 </body>

@@ -2,6 +2,7 @@ package com.dimple.project.king.func.domain;
 
 import org.springframework.data.annotation.Id;
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.dimple.framework.web.domain.SuperEntity;
@@ -33,6 +34,7 @@ public class Func extends SuperEntity {
   /**
    * 父菜单名称
    */
+  @TableField(exist=false)
   private String parentName;
 
   /**
@@ -43,7 +45,7 @@ public class Func extends SuperEntity {
   /**
    * 显示顺序
    */
-  private String orderNum;
+  private long orderNum;
 
   /**
    * 菜单URL
@@ -112,11 +114,11 @@ public class Func extends SuperEntity {
     this.parentId = parentId;
   }
 
-  public String getOrderNum() {
+  public long getOrderNum() {
     return orderNum;
   }
 
-  public void setOrderNum(String orderNum) {
+  public void setOrderNum(long orderNum) {
     this.orderNum = orderNum;
   }
 

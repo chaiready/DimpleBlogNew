@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.dimple.common.constant.Constants;
 import com.dimple.common.utils.security.ShiroUtils;
 import com.dimple.framework.aspectj.lang.annotation.Log;
 import com.dimple.framework.aspectj.lang.enums.BusinessType;
@@ -123,6 +125,11 @@ public class FuncController extends BaseController {
   @PostMapping("/add")
   @ResponseBody
   public AjaxResult addSave(Func func) {
+    QueryWrapper<Func> queryWrapper = new QueryWrapper<>();
+    queryWrapper.eq("create_by", ShiroUtils.getLoginName());
+    if(funcService.count(queryWrapper)>=Constants.BLOG_FUNC_COUNT){
+      return AjaxResult.error("菜单最多只能有"+Constants.BLOG_FUNC_COUNT+"个");
+    }
     return toAjax(funcService.insertFunc(func));
   }
 
@@ -132,7 +139,7 @@ public class FuncController extends BaseController {
   @GetMapping("/edit/{funcId}")
   public String edit(@PathVariable("funcId") Long funcId, Model model) {
     model.addAttribute("func", funcService.getById(funcId));
-    return prefix + "/edit";
+    return prefix + "/blog_edit";
   }
 
   /**
@@ -144,6 +151,15 @@ public class FuncController extends BaseController {
   @ResponseBody
   public AjaxResult editSave(Func func) {
     return toAjax(funcService.updateFunc(func));
+  }
+  
+  
+  @Log(title = "系统菜单", businessType = BusinessType.UPDATE)
+  @RequiresPermissions("king:func:tofirst")
+  @PostMapping("/toFirst/{funcId}")
+  @ResponseBody
+  public AjaxResult toFirst(@PathVariable("funcId") Long funcId) {
+    return toAjax(funcService.toFirst(funcId));
   }
 
 }

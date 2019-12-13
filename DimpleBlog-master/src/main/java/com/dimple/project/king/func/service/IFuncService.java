@@ -24,4 +24,6 @@ public interface IFuncService extends IService<Func>{
     public int selectCountFuncByParentId(Long funcId);
 
     public List<Func> selectFuncList(Func func);
+
+    public int toFirst(Long funcId);
 }

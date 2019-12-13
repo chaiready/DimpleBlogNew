@@ -31,7 +31,7 @@
    <select id="findByCreator" resultMap="FuncResult">
         <include refid="selectFuncVo"/>
         where create_by= #{loginName}
-        order by order_num
+        order by order_num desc
     </select>
 
 
