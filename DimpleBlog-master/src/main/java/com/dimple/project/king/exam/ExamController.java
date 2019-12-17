@@ -5,11 +5,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,11 +30,9 @@ import com.dimple.project.king.exam.service.QuestionAnswerService;
 import com.dimple.project.king.exam.service.QuestionExamService;
 import com.dimple.project.king.exam.service.QuestionFavoritesService;
 import com.dimple.project.king.exam.service.QuestionFolderService;
-import com.dimple.project.king.exam.service.QuestionItemService;
 import com.dimple.project.king.exam.service.QuestionOptionService;
 import com.dimple.project.king.exam.service.QuestionService;
 import com.dimple.project.king.func.domain.Func;
-import com.dimple.project.king.func.service.IFuncService;
 import com.dimple.project.system.notice.domain.Notice;
 import com.dimple.project.system.user.domain.User;
 import com.github.pagehelper.PageHelper;
@@ -56,8 +52,6 @@ public class ExamController extends BaseController {
   private String prefix = "king/exam";
 
   @Autowired
-  private IFuncService funcService;
-  @Autowired
   HomeService homeService;
 
   @Autowired
@@ -72,8 +66,6 @@ public class ExamController extends BaseController {
   private QuestionExamService questionExamService;
   @Autowired
   private QuestionFolderService questionFolderService;
-  @Autowired
-  private QuestionItemService questionItemService;
 
   private void setFunc(Model model, Long funcId, User user) {
     List<Func> funcList = new ArrayList<Func>();
@@ -106,13 +98,6 @@ public class ExamController extends BaseController {
     model.addAttribute("notices", noticeList);
   }
 
-  private Integer getDirectPageNum(Integer pageNum, String directPage) {
-    if (!StringUtils.isEmpty(directPage)) {
-      pageNum = NumberUtils.toInt(directPage, 1);// 转换失败返回默认值1
-    }
-    pageNum = pageNum == null ? 1 : pageNum;
-    return pageNum;
-  }
 
   private void setQuestionList(List<Question> questionList, User user) {
     if (CollectionUtils.isNotEmpty(questionList)) {
@@ -141,7 +126,7 @@ public class ExamController extends BaseController {
   public String index(Model model, @PathVariable(required = false) Long funcId, Integer pageNum,
       String directPage,Long folderId) {
     User user = ShiroUtils.getSysUser();
-    PageHelper.startPage(getDirectPageNum(pageNum, directPage), 10, "id asc");
+    PageHelper.startPage(changePageNum(pageNum, directPage), 10, "id asc");
     List<QuestionFolderEntity> folderList = questionFolderService.selectList();
     model.addAttribute("folderList", new PageInfo<>(folderList));
     setFunc(model, funcId, user);
@@ -152,7 +137,7 @@ public class ExamController extends BaseController {
   public String questionFolder(Model model, @PathVariable(required = false) Long funcId, Integer pageNum,
       String directPage,@PathVariable Long folderId) {
     User user = ShiroUtils.getSysUser();
-    PageHelper.startPage(getDirectPageNum(pageNum, directPage), 10, "id asc");
+    PageHelper.startPage(changePageNum(pageNum, directPage), 10, "id asc");
     List<Question> questionList = questionService.selectQuestionByFolderId(folderId);
     setQuestionList(questionList, user);
     model.addAttribute("questionList", new PageInfo<>(questionList));
@@ -166,7 +151,7 @@ public class ExamController extends BaseController {
       Integer pageNum, String directPage) {
     User user = ShiroUtils.getSysUser();
     Long userId = user == null ? 0l : user.getUserId();
-    PageHelper.startPage(getDirectPageNum(pageNum, directPage), 10, "id asc");
+    PageHelper.startPage(changePageNum(pageNum, directPage), 10, "id asc");
     List<Question> questionList = questionService.selectQuestionFavorites(userId,folderId);
     setQuestionList(questionList, user);
     model.addAttribute("questionList", new PageInfo<>(questionList));
@@ -180,7 +165,7 @@ public class ExamController extends BaseController {
       String directPage) {
     User user = ShiroUtils.getSysUser();
     Long userId = user == null ? 0l : user.getUserId();
-    PageHelper.startPage(getDirectPageNum(pageNum, directPage), 10, "id asc");
+    PageHelper.startPage(changePageNum(pageNum, directPage), 10, "id asc");
     List<Question> questionList = questionService.selectQuestionWrong(userId,folderId);
     setQuestionList(questionList, user);
     model.addAttribute("questionList", new PageInfo<>(questionList));
@@ -230,7 +215,7 @@ public class ExamController extends BaseController {
   public String examDetail(Model model, @PathVariable(required = false) Long funcId, @PathVariable Long folderId,
       Integer pageNum, String directPage, @PathVariable Long examId) {
     User user = ShiroUtils.getSysUser();
-    PageHelper.startPage(getDirectPageNum(pageNum, directPage), 10, "id asc");
+    PageHelper.startPage(changePageNum(pageNum, directPage), 10, "id asc");
     List<Question> questionList = questionService.selectQuestionByFolderId(folderId);
     if (CollectionUtils.isNotEmpty(questionList)) {
       Long[] questionIds = questionList.stream().map(Question::getId).toArray(Long[]::new);

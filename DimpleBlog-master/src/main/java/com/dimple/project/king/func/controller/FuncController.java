@@ -20,6 +20,8 @@ import com.dimple.framework.web.controller.BaseController;
 import com.dimple.framework.web.domain.AjaxResult;
 import com.dimple.project.front.service.HomeService;
 import com.dimple.project.king.func.domain.Func;
+import com.dimple.project.king.func.domain.FuncBlogEntity;
+import com.dimple.project.king.func.service.FuncBlogService;
 import com.dimple.project.king.func.service.IFuncService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -41,6 +43,8 @@ public class FuncController extends BaseController {
   private IFuncService funcService;
   @Autowired
   HomeService homeService;
+  @Autowired
+  private FuncBlogService funcBlogService;
 
   @RequiresPermissions("king:func:view")
   @GetMapping({"", "/{funcId}.html"})
@@ -87,6 +91,11 @@ public class FuncController extends BaseController {
   public AjaxResult remove(@PathVariable("funcId") Long funcId) {
     if (funcService.selectCountFuncByParentId(funcId) > 0) {
       return error(1, "存在子菜单,不允许删除");
+    }
+    QueryWrapper<FuncBlogEntity> queryWrapper = new QueryWrapper<>();
+    queryWrapper.eq("func_id", funcId);
+    if(funcBlogService.count(queryWrapper)>0){
+      return error("存在博客,不允许删除");
     }
     return toAjax(funcService.removeById(funcId));
   }

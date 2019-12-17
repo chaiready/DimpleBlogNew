@@ -4,6 +4,7 @@ import java.beans.PropertyEditorSupport;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import com.github.pagehelper.PageHelper;
@@ -141,5 +142,13 @@ public class BaseController {
 
     public String getLoginName() {
         return getSysUser().getLoginName();
+    }
+
+    public Integer changePageNum(Integer pageNum, String directPage) {
+        if (!StringUtils.isEmpty(directPage)) {
+            pageNum = NumberUtils.toInt(directPage, 1);// 转换失败返回默认值1
+        }
+        pageNum = pageNum == null ? 1 : pageNum;
+        return pageNum;
     }
 }

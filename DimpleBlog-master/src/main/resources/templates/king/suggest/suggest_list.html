@@ -39,17 +39,12 @@
             <p class="smallText" th:text="${'创建时间：'+funcName}"></p>
         </div>-->
         
-        <h4 class="index-title">
+        <!-- <h4 class="index-title">
             <a th:if="${curUser==null}" class="orange-text"  href="/bbs/front/toLogin?toPage=kaoshi">登录可进行更多操作</a>
             <span  class="orange-text"  th:if="${curUser!=null}">
             	已登录
-            	<!-- ：
-            	<a href="/kaoshi/listExam?toPage=kaoshi">【开始做题】</a>
-           		<a href="/kaoshi/listWrong?toPage=kaoshi">【查看错题】</a>
-             	<a href="/kaoshi/listFavorites?toPage=kaoshi">【查看收藏】</a> 
-             	-->
             </span>
-        </h4>
+        </h4> -->
        <!--  <div style="text-align: center;">
         	<input name="questionSearch" type="text" class="text" id="questionSearch" value="" maxlength="100" 
             	placeholder="请输入要查询的问题" style="width:60%;">
@@ -62,10 +57,11 @@
         <div class="arclist" style="margin-left: 20px;margin-right: 20px;padding-right: 20px;">
             <!--列表开始-->
             <form>
-                <div th:each="folderObj:${folderList.list}">
+                <div th:each="obj:${objList.list}">
                     <div class="arc-left">
+                        <span th:text="${#dates.format(obj.createTime,'yyyy-MM-dd HH:mm:ss')}"></span>
                         <h4 class="blue-text">
-                            <a th:text="${folderObj.folderName}" th:href="${'/kaoshi/questionFolder/'+folderObj.id+'.html'}"></a>
+                            <span th:text="${obj.content}"></span>
                         </h4>
                     </div>
                 </div>
@@ -73,7 +69,7 @@
             <!--列表结束-->
         </div>
         <!--分页开始-->
-        <div th:replace="navigation :: navigation-direct(${folderList})"></div>
+        <div th:replace="navigation :: navigation-direct(${objList})"></div>
         <!--分页结束-->
     </section>
     
@@ -93,67 +89,8 @@
 		$('#banner_prev').click(function(){
 			$('.paginationPrev')[0].click();
 		});
-		$("#searchQuestionBtn").click(function(){
-			console.info($("#questionSearch").val());
-		});
 		
 	});
-
-	//收藏
-   function addFavorites(questionId){
-	   $.ajax({
-           type: "POST",
-           url: "/kaoshi/addFavorites",
-           data: {"questionId": questionId},
-           dataType: "json",
-           success: function (data) {
-        	   console.info(data);
-        	   if(data.hasFavorites==1){//已收藏的
-        		   $("#addQues"+questionId).hide();
-        		   $("#delQues"+questionId).show();
-        	   }else{
-        		   $("#addQues"+questionId).show();
-        		   $("#delQues"+questionId).hide();
-        	   }
-        	   if (data.code == 200) {
-                   layer.msg(data.msg, {icon: 1});
-               } else {
-                   layer.msg(data.msg, {icon: 2});
-               }
-           },
-           error: function (jqXHR) {
-        	   layer.msg('发送错误：' + jqXHR.status);
-           },
-       });
-   }
-	
-   function delFavorites(questionId){
-	   $.ajax({
-           type: "POST",
-           url: "/kaoshi/delFavorites",
-           data: {"questionId": questionId},
-           dataType: "json",
-           success: function (data) {
-        	   console.info(data);
-        	   if(data.hasFavorites==1){//已收藏的
-        		   $("#addQues"+questionId).hide();
-        		   $("#delQues"+questionId).show();
-        	   }else{
-        		   $("#addQues"+questionId).show();
-        		   $("#delQues"+questionId).hide();
-        	   }
-        	   if (data.code == 200) {
-                   layer.msg(data.msg, {icon: 1});
-               } else {
-                   layer.msg(data.msg, {icon: 2});
-               }
-           },
-           error: function (jqXHR) {
-        	   layer.msg('发送错误：' + jqXHR.status);
-           },
-       });
-   }
-   
 </script>
 </body>
 </html>
