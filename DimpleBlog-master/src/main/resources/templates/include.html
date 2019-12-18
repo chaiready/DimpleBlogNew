@@ -100,22 +100,9 @@
     <script th:src="@{/ajax/libs/summernote/summernote-zh-CN.js}"></script>
     <script th:src="@{/ajax/libs/summernote/summernote-ext-highlight.js}"></script>
     <script>
-        /**
-         * 图片选择事件回调
-         */
-        function summerNoteImageSelectCallback(index, layero) {
-            var body = layer.getChildFrame('body', index);
-            //获取上传文件的URL
-            var url = body.find("#url").val();
-            //获取网络地址URL
-            var netUrl = body.find("#netUrl").val();
-            if ($.common.isNotEmpty(url) && $.common.isNotEmpty(netUrl)) {
-                $.modal.alertError("博文封面只能选择一个哦~，请检查是否有选中图片、上传图片或者图片地址输入！");
-                return;
-            }
-            var urlFinal = $.common.isNotEmpty(url) ? url : netUrl;
-            $(".summernote").summernote('editor.insertImage', urlFinal, urlFinal);
-            layer.close(index);
+        //图片上传成功回调方法
+        function callBackUploadImg(fileUrl){
+            $(".summernote").summernote('editor.insertImage', fileUrl, fileUrl);
         }
 
         var selectImageButton = function (context) {
@@ -125,14 +112,23 @@
                 contents: '<i class="note-icon-picture"/>',  //按钮样式
                 tooltip: "图片",
                 click: function (params) {
-                    var option = {
-                        url: "/blog/blog/image",
-                        title: "素材库",
-                        width: $(window).width() / 1.5,
-                        callBack: summerNoteImageSelectCallback
-                    };
-                    $.modal.openOptions(option);
-
+                	 layer.open({
+                         type: 2,
+                         shade: 0.3,
+                         title: false,
+                         fix: false,
+                         area: ['auto','420px'],//$(window).width() / 1.1 + 'px'
+                         content: "/blog/blog/image?callBackMethod=window.parent.callBackUploadImg",
+                         shadeClose: true,// 是否点击遮罩关闭
+                         btn: ['<i class="fa fa-check"></i> 确认', '<i class="fa fa-close"></i> 关闭'],
+                         yes: function (index, layero) {
+                       	    var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                       	 	iframeWin.uploadFile();
+                         },
+                         cancel: function () {
+                             return true;
+                         }
+                     });
                 },
                 callback: function (params) {
                     // 页面加载时执行
@@ -150,13 +146,78 @@
             lang: 'zh-CN',
             toolbar: [
                 ['style', ['style']],
-                ['highlight', ['highlight']],
-                ['font', ['bold', 'italic', 'underline', 'clear']],
+                //['highlight', ['highlight']],
+                //['font', ['bold', 'italic', 'underline', 'clear']],
+                ['font', ['bold', 'italic']],
                 ['fontname', ['fontname']],
                 ['color', ['color']],
                 ['para', ['ul', 'ol', 'paragraph', 'height']],
                 ['table', ['table']],
-                ['insert', ['fileBtn', 'myphoto', 'media', 'link', 'video']],
+                //['insert', ['fileBtn', 'myphoto', 'media', 'link', 'video']],
+                ['insert', ['myphoto']],
+                ['view', ['fullscreen']]
+            ],
+            buttons: {
+                myphoto: selectImageButton      //自已定义的按钮函数
+            },
+        })
+    </script>
+</div>
+
+<div th:fragment="summernote-js-phone">
+    <script th:src="@{/ajax/libs/summernote/summernote.js}"></script>
+    <script th:src="@{/ajax/libs/summernote/summernote-zh-CN.js}"></script>
+    <script th:src="@{/ajax/libs/summernote/summernote-ext-highlight.js}"></script>
+    <script>
+        //图片上传成功回调方法
+        function callBackUploadImg(fileUrl){
+            $(".summernote").summernote('editor.insertImage', fileUrl, fileUrl);
+        }
+
+        var selectImageButton = function (context) {
+            var ui = $.summernote.ui;
+            // create button
+            var button = ui.button({
+                contents: '<i class="note-icon-picture"/>',  //按钮样式
+                tooltip: "图片",
+                click: function (params) {
+                	 layer.open({
+                         type: 2,
+                         shade: 0.3,
+                         title: false,
+                         fix: false,
+                         area: ['auto','420px'],//$(window).width() / 1.1 + 'px'
+                         content: "/blog/blog/image?callBackMethod=window.parent.callBackUploadImg",
+                         shadeClose: true,// 是否点击遮罩关闭
+                         btn: ['<i class="fa fa-check"></i> 确认', '<i class="fa fa-close"></i> 关闭'],
+                         yes: function (index, layero) {
+                       	    var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                       	 	iframeWin.uploadFile();
+                         },
+                         cancel: function () {
+                             return true;
+                         }
+                     });
+                },
+                callback: function (params) {
+                    // 页面加载时执行
+                }
+            });
+            return button.render();    //按钮渲染
+        }
+        $(".summernote").summernote({
+            height: '450px',
+            //设置Dialog淡入淡出效果
+            dialogsFade: true,
+            fontNames: ['宋体', '微软雅黑', '楷体', '黑体', '隶书', 'Arial', 'Arial Black', 'Comic Sans MS', 'Courier New',
+                'Helvetica Neue', 'Helvetica', 'Impact', 'Lucida Grande',
+                'Tahoma', 'Times New Roman', 'Verdana'],
+            lang: 'zh-CN',
+            toolbar: [
+                ['style', ['style']],
+                ['font', ['bold']],
+                ['color', ['color']],
+                ['insert', ['myphoto']],
                 ['view', ['fullscreen']]
             ],
             buttons: {

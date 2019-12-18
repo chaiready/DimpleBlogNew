@@ -48,9 +48,10 @@ public class BlogController extends BaseController {
     }
 
     @GetMapping("/image")
-    public String img() {
+    public String img(String callBackMethod,Model model) {
 //        return "blog/blog/img";
-      return "blog/blog/img_king";
+      model.addAttribute("callBackMethod", callBackMethod);
+      return "blog/blog/img_king_single";
     }
 
     @GetMapping("/list")
@@ -67,9 +68,17 @@ public class BlogController extends BaseController {
     }
 
     @GetMapping("/add")
-    public String add(Model model) {
+    public String add(Model model,Long funcId) {
         model.addAttribute("categories", categoryService.selectCategoryList(new Category()));
+        model.addAttribute("funcId", funcId);
         return "blog/blog/add";
+    }
+    
+    @GetMapping("/add/{funcId}.html")
+    public String toAdd(Model model,@PathVariable Long funcId) {
+        model.addAttribute("categories", categoryService.selectCategoryList(new Category()));
+        model.addAttribute("funcId", funcId);
+        return "blog/blog/add_phone";
     }
 
     @Log(title = "系统博客", businessType = BusinessType.INSERT)

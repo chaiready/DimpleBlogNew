@@ -1,16 +1,14 @@
 package com.dimple.project.blog.blog.domain;
 
 import java.util.List;
-
 import org.springframework.data.annotation.Id;
-
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.dimple.framework.web.domain.BaseEntity;
 import com.dimple.project.blog.category.domain.Category;
 import com.dimple.project.blog.tag.domain.Tag;
-
 import lombok.Data;
 import lombok.ToString;
 
@@ -108,4 +106,7 @@ public class Blog extends BaseEntity {
      * 是否允许评论
      */
     private boolean allowComment;
+    
+    @TableField(exist=false)
+    private Long funcId;
 }

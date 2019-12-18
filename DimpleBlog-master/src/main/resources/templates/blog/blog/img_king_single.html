@@ -32,23 +32,23 @@
     <input type="hidden" id="url" value=""/>
      <div class="row">
          <div class="col-sm-12">
-             <div class="ibox float-e-margins">
+             <div class="iboxXXXXXX float-e-margins" style="height: 100px;">
                  <!-- <div class="ibox-title">
                      <h5>文件上传控件 <small>https://github.com/kartik-v/bootstrap-fileinput</small></h5>
                  </div> -->
-                 <div class="ibox-content">
+                 <div class="ibox-content-XXXX">
                  	<!-- <div class="form-group">
                          <label class="font-noraml">简单示例</label>
 	                      <div class="file-loading">
-				            <input id="fileinput-demo-0" class="file" type="file" name="file" multiple data-min-file-count="1" data-theme="fas">
+				            <input id="fileinput-upload" class="file" type="file" name="file" data-min-file-count="1" data-theme="fas">
 				          </div>
                      </div> -->
                      
-                    <div class="form-group">
-                         <label class="font-noraml">多文件上传</label>
-	                     <div class="file-loading">
-				            <input id="fileinput-demo-1" type="file" name="file" multiple>
-				         </div>
+                   	<div class="form-group">
+                         <!-- <label class="font-noraml">多文件上传</label> -->
+	                     <!-- <div class="file-loading"> -->
+				            <input id="fileinput-upload" type="file" name="file" multiple>
+				        <!--  </div> -->
                      </div>
                      <hr>
                     <!--
@@ -68,15 +68,31 @@
 </div>
 <th:block th:include="include :: footer"/>
 <th:block th:include="include :: bootstrap-fileinput-js"/>
-<script type="text/javascript">
+<script th:inline="javascript">
     $(document).ready(function () {
-    	 $("#fileinput-demo-1").fileinput({
+    	 $("#fileinput-upload").fileinput({
     		 'uploadUrl': "/file/image/add", //上传的地址(访问接口地址)
              'theme': 'explorer-fas',
              overwriteInitial: false,
              minFileCount: 1,// 最小上传数量
              maxFileCount: 1,// 最大上传数量
+             showClose: false,//右上角小叉号
+             showUpload:false,//是否显示上传按钮
+             allowedFileExtensions:  ['jpg', 'png', 'jpeg', 'gif', 'bmp'],
+             //zoomModalHeight:100,
+             //maxImageHeight:'100px',
              initialPreviewAsData: true,
+             previewSettings:{ 
+            	 image: {width: "auto", height: "100px"}/* , 
+            	 html: {width: "213px", height: "100px"}, 
+            	 text: {width: "213px", height: "100px"}, 
+            	 video: {width: "auto", height: "100px", 'max-width': "100%"}, 
+            	 audio: {width: "100%", height: "30px"}, 
+            	 flash: {width: "auto", height: "100px", 'max-width': "100%"}, 
+            	 object: {height: "100px"}, 
+            	 pdf: {width: "100px", height: "100px"}, 
+            	 other: {width: "100px", height: "100px"} */
+           	},
              uploadExtraData: function (previewId, index) {   //额外参数的关键点
                  var obj = {};
                  obj.serverType = 1;  //参数 LOCAL(1), QI_NIU_YUN(2);
@@ -88,13 +104,26 @@
              console.info(params.response);
              if(params.response.code==200){
             	 $.modal.msgSuccess(params.response.msg)
-                 $("#url").val(params.response.path);
+                 //$("#url").val(params.response.path);
+            	 //parent.callBackUploadImg(params.response.path);
+            	 var _method=[[${callBackMethod}]];
+            	 console.info("11111111111111");
+            	 console.info(_method);
+            	 console.info("22222222222222");
+				 if(_method){
+		        	eval(_method+"(params.response.path)"); 
+				 }	
+                 var index = parent.layer.getFrameIndex(window.name);
+                 parent.layer.close(index);
              }else{
             	 $.modal.alertWarning(params.response.msg)           	 
              }
          });
     });
 
+    function uploadFile(){
+    	var aaa = $("#fileinput-upload").fileinput("upload");
+    }
 </script>
 </body>
 </html>

@@ -11,6 +11,8 @@ import com.dimple.project.blog.blog.service.BlogService;
 import com.dimple.project.blog.category.service.CategoryService;
 import com.dimple.project.blog.tag.service.TagService;
 import com.dimple.project.dashboard.domain.BusinessCommonData;
+import com.dimple.project.king.func.domain.FuncBlogEntity;
+import com.dimple.project.king.func.service.FuncBlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -35,7 +37,8 @@ public class BlogServiceImpl implements BlogService {
     BlogTagMapper blogTagMapper;
     @Autowired
     CategoryService categoryService;
-
+    @Autowired
+    private FuncBlogService funcBlogService;
 
     @Override
     public List<Blog> selectBlogList(Blog blog) {
@@ -47,6 +50,12 @@ public class BlogServiceImpl implements BlogService {
         blog.setCreateBy(ShiroUtils.getLoginName());
         int i = blogMapper.insertBlog(blog);
         handlerBlogTag(blog.getBlogId(), blog.getTags());
+        FuncBlogEntity funcBlog = new FuncBlogEntity();
+        if(blog.getFuncId()!=null&&blog.getFuncId()!=0){
+          funcBlog.setBlogId(Long.valueOf(blog.getBlogId()));
+          funcBlog.setFuncId(blog.getFuncId());
+          funcBlogService.save(funcBlog);
+        }
         return i;
     }
 

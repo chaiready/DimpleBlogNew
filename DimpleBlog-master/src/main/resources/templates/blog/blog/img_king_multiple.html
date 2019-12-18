@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh">
+<html lang="zh" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('文件上传')"/>
+    <th:block th:include="include :: bootstrap-fileinput-css"/>
+    <style>
+        #gallery .file-caption-main {
+            display: none;
+        }
+
+        #gallery .file-preview {
+            border: 0;
+        }
+
+        #gallery .active-item {
+            background-color: aliceblue;
+        }
+
+
+        #gallery .file-caption-main {
+            display: none;
+        }
+
+        #gallery .file-drop-zone-title {
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <input type="hidden" id="url" value=""/>
+     <div class="row">
+         <div class="col-sm-12">
+             <div class="ibox float-e-margins">
+                 <!-- <div class="ibox-title">
+                     <h5>文件上传控件 <small>https://github.com/kartik-v/bootstrap-fileinput</small></h5>
+                 </div> -->
+                 <div class="ibox-content">
+                 	<!-- <div class="form-group">
+                         <label class="font-noraml">简单示例</label>
+	                      <div class="file-loading">
+				            <input id="fileinput-demo-0" class="file" type="file" name="file" multiple data-min-file-count="1" data-theme="fas">
+				          </div>
+                     </div> -->
+                     
+                    <div class="form-group">
+                         <label class="font-noraml">多文件上传</label>
+	                     <div class="file-loading">
+				            <input id="fileinput-upload" type="file" name="file" multiple>
+				         </div>
+                     </div>
+                     <hr>
+                    <!--
+                     <div class="form-group">
+                         <label class="font-noraml">相关参数详细信息</label>
+                         <div>
+                         	<a href="http://doc.ruoyi.vip/ruoyi/document/zjwd.html#bootstrap-fileinput" target="_blank">
+                         		http://doc.ruoyi.vip/ruoyi/document/zjwd.html#bootstrap-fileinput
+                         	</a>
+                         </div>
+                     </div>
+                      -->
+                 </div>
+             </div>
+         </div>
+     </div>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: bootstrap-fileinput-js"/>
+<script type="text/javascript">
+    $(document).ready(function () {
+    	 $("#fileinput-upload").fileinput({
+    		 'uploadUrl': "/file/image/add", //上传的地址(访问接口地址)
+             'theme': 'explorer-fas',
+             overwriteInitial: false,
+             minFileCount: 1,// 最小上传数量
+             maxFileCount: 5,// 最大上传数量
+             showClose: false,//右上角小叉号
+             initialPreviewAsData: true,
+             uploadExtraData: function (previewId, index) {   //额外参数的关键点
+                 var obj = {};
+                 obj.serverType = 1;  //参数 LOCAL(1), QI_NIU_YUN(2);
+                 return obj;
+             }/* ,
+             initialPreview: ["/img/profile.jpg"] */
+         }).on('fileuploaded', function(e, params) {
+             console.log('File uploaded params', params);
+             console.info(params.response);
+             if(params.response.code==200){
+            	 $.modal.msgSuccess(params.response.msg)
+                 $("#url").val(params.response.path);
+             }else{
+            	 $.modal.alertWarning(params.response.msg)           	 
+             }
+         });
+    });
+
+</script>
+</body>
+</html>

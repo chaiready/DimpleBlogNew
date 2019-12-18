@@ -653,7 +653,7 @@
                     fix: false,
                     area: [_width + 'px', _height + 'px'],
                     content: _url,
-                    shadeClose: true,
+                    shadeClose: true,// 是否点击遮罩关闭
                     skin: options.skin,
                     btn: $.common.isEmpty(options.btn) ? _btn : options.btn,
                     yes: options.yes,
