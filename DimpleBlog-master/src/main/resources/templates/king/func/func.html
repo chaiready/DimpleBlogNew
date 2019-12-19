@@ -73,7 +73,9 @@
     <!--最新文章-->
     <section class="mysection" style="width: 95%;">
         <h4 class="index-title">
-            <a href="/"><i class="fa fa-home"></i>当前页: &nbsp;> </a>
+            <a th:href="${'/bbs/'+loginName+'.html'}">
+            	<i class="fa fa-home"></i>首页 &nbsp;> 
+            </a>
             <span class="orange-text" th:text="${funcName}"></span>
             <span style="float:right;margin-right:10px;">共有文章:<font class="orange-text"
                 th:text="${blogs.total}"></font>篇</span>
@@ -97,10 +99,18 @@
             <!--列表开始-->
             <ul>
                 <li th:each="blog:${blogs.list}">
+                	<div style="float: right;">
+                		<a class="btn btn-success " href="javascript:void(0)" th:onclick="openModal('/blog/blog/func/edit/[[${blog.blogId}]]','100%','100%','编辑博客');">
+                         	<i class="fa fa-edit"></i> 编辑
+                         </a>
+                         <a class="btn btn-danger  " href="javascript:void(0)" th:onclick="delObj([[${blog.blogId}]]);">
+                         	<i class="fa fa-remove"></i> 删除
+                         </a>
+                	</div>
                     <div class="arcimg">
                         <img
                                 th:src="${blog.headerImg}"
-                                th:alt="${blog.title}" th:title="${blog.title}"/>
+                                th:alt="${blog.title}" th:title="${blog.title}" th:onclick="viewBlog([[${+blog.blogId}]]);"/>
                     </div>
                     <div class="arc-right">
                         <h4 class="blue-text">
@@ -112,14 +122,14 @@
                         <p th:text="${blog.summary}"></p>
                         <ul>
                             <li>
-                                <a th:title="${'ls2008'+#dates.format(blog.createTime, 'yyyy-MM-dd')+'发表'}">
+                                <a th:title="${#dates.format(blog.createTime, 'yyyy-MM-dd')+'发表'}">
                                     <i class="fa fa-clock-o"></i>
                                     <span th:text="${#dates.format(blog.createTime, 'yyyy-MM-dd')}"></span>
                                 </a>
                             </li>
-                            <li>
+                            <!-- <li>
                                 <a title="作者： ls2008"><i class="fa fa-user"></i>ls2008</a>
-                            </li>
+                            </li> -->
                             <li><a th:title="${'已有'+blog.commentCount+'条评论'}">
                                 <i class="fa fa-comments-o"></i>
                                 <span th:text="${blog.commentCount}"></span>
@@ -127,10 +137,6 @@
                             </li>
                             <li><a th:title="${'已有'+blog.click+'次浏览'}"><i class="fa fa-eye"></i><span
                                     th:text="${blog.click}"></span></a></li>
-                            <li>
-                                <a class="btn btn-success btn-xs " href="javascript:void(0)" th:onclick="openModal('/blog/blog/func/edit/[[${blog.blogId}]]','95%','95%','编辑');"><i class="fa fa-edit"></i> 编辑</a>
-                                <a class="btn btn-danger btn-xs " href="javascript:void(0)" th:onclick="delObj([[${blog.blogId}]]);"><i class="fa fa-remove"></i> 删除</a>
-                            </li>
                         </ul>
                     </div>
                 </li>
@@ -155,7 +161,7 @@
         }, function (index) {
             layer.close(index);
             $.operate.submit ('/blog/blog/remove', 'delete', 'json', {"ids":objId}, function(result){
-               window.location.href="/king/func?funcId=[[${funcId}]]";
+               window.location.href="/king/func/[[${funcId}]].html";
             });
         });
     }
@@ -279,6 +285,11 @@
                    return true;
                }
            });
+    }
+    
+    //点击图片跳转到博客明细
+    function viewBlog(blogId){
+    	window.location.href="/f/article/"+blogId+".html";
     }
 </script>
 </body>

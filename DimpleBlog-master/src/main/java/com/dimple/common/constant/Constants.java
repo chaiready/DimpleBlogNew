@@ -67,4 +67,9 @@ public class Constants {
      * 博客菜单数量
      */
     public static int BLOG_FUNC_COUNT = 3;
+    
+    /**
+     * 博主角色key
+     */
+    public static String BLOG_ROLE_KEY = "blogger";
 }

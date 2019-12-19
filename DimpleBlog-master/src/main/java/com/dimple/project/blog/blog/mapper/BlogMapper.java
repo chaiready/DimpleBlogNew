@@ -37,7 +37,7 @@ public interface BlogMapper  extends BaseMapper<Blog> {
      * @param ids 需要批量删除的blog的id
      * @return 受影响的行数
      */
-    int deleteBlogByIds(Integer[] ids);
+    int deleteBlogByIds(String status,Integer[] ids);
 
     /**
      * 更新blog

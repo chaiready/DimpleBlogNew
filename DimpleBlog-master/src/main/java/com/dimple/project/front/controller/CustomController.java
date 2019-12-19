@@ -102,7 +102,7 @@ public class CustomController extends BaseController {
             funcId = funcList.get(0).getId();
             model.addAttribute("funcName", funcList.get(0).getFuncName());
           }else{
-            model.addAttribute("funcName", funcService.getById(funcId).getFuncName());
+            model.addAttribute("funcName", "");
           }
           model.addAttribute("funcId", funcId);
           PageHelper.startPage(pageNum == null ? 1 : pageNum, 12, "create_time desc");
@@ -182,7 +182,7 @@ public class CustomController extends BaseController {
     @VLog(title = "跳转到登录页")
     @GetMapping("/front/toLogin")
     public String toLogin(Model model,String toPage) {
-        model.addAttribute("toPage", toPage);
+        model.addAttribute("toPage", StringUtils.isEmpty(toPage)?"":toPage);
         return "front/login/login";
     }
 
@@ -227,7 +227,7 @@ public class CustomController extends BaseController {
      */
     @GetMapping("/front/toReg")
     public String frontToReg(String toPage, Model model) {
-        model.addAttribute("toPage", toPage);
+        model.addAttribute("toPage", StringUtils.isEmpty(toPage)?"":toPage);
         return "front/login/reg";
     }
 
@@ -238,7 +238,7 @@ public class CustomController extends BaseController {
         try {
           String password = user.getPassword();
             user.setUserName(user.getLoginName());
-            userService.regUser(user);
+            userService.regBlogUser(user);
             if(StringUtils.isEmpty(toPage)){
               return success("/bbs/"+user.getLoginName()+".html");
             }else{

@@ -30,11 +30,8 @@
         <article>
             <!--导航-->
             <div class="mbnav">
-                <i class="fa fa-home"></i>
-                <a href="/" title="">首页</a>
-                &gt;
-                <a th:href="${'/f/category/'+blog.category.categoryId+'.html'}"
-                   th:text="${blog.category.categoryTitle}"></a>&gt;正文
+                <a onclick="location.href=document.referrer;">
+	            	<i class="fa fa-home"></i>&lt;&lt;返回
             </div>
             <!--标题-->
             <h3 class="act-title" th:text="${blog.title}"></h3>

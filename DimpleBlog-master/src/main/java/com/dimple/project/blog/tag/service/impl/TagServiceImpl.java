@@ -6,6 +6,7 @@ import com.dimple.project.blog.blog.mapper.BlogTagMapper;
 import com.dimple.project.blog.tag.domain.Tag;
 import com.dimple.project.blog.tag.mapper.TagMapper;
 import com.dimple.project.blog.tag.service.TagService;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,6 +67,9 @@ public class TagServiceImpl implements TagService {
     @Override
     public List<Integer> insertTags(String[] tagTitles) {
         List<Integer> tagIds = new ArrayList<>();
+        if(tagTitles==null){
+          return tagIds;
+        }
         for (String tagTitle : tagTitles) {
             if (tagMapper.selectTagByTagTitle(tagTitle) == null) {
                 Tag tag = new Tag();

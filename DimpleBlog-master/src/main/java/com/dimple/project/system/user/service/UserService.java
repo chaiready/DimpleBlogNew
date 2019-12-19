@@ -151,5 +151,5 @@ import java.util.List;
      int changeStatus(User user);
 
      
-	 int regUser(User user);
+	 int regBlogUser(User user);
 }

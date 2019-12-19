@@ -51,7 +51,7 @@ public class Blog extends BaseEntity {
     /**
      * 博文状态，1表示已经发表，2表示在草稿箱，3表示在垃圾箱
      */
-    private String status;
+    private String status;//BLogStatusEnum
 
     /**
      * 权重

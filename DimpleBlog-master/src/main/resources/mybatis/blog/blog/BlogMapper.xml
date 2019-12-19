@@ -100,12 +100,12 @@
         delete from bg_blog where blog_id=#{blogId}
     </delete>
 
-    <delete id="deleteBlogByIds">
-        delete from bg_blog where blog_id in
-        <foreach collection="array" item="blogId" open="(" separator="," close=")">
-            #{blogId}
+    <update id="deleteBlogByIds">
+        update bg_blog set status=#{status} where blog_id in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
         </foreach>
-    </delete>
+    </update>
 
     <select id="selectBlogList" resultType="com.dimple.project.blog.blog.domain.Blog">
         select blog_id, title, status, weight, support, click, type,

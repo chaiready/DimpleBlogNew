@@ -38,6 +38,12 @@
 						<input class="input100" type="password" id="password" name="password" placeholder="请输入密码" value="">
 						<span class="focus-input100" data-symbol="&#xf190;"></span>
 					</div>
+					<div class="wrap-input100 validate-input" data-validate="请输入密码">
+						<span class="label-input100">确认密码</span>
+						<input class="input100" type="password" id="password2" name="password2" placeholder="请输入密码" value="">
+						<span class="focus-input100" data-symbol="&#xf190;"></span>
+					</div>
+					
 					<div class="wrap-input100 validate-input" data-validate="请输入邮箱">
 						<span class="label-input100">邮箱</span>
 						<input class="input100" type="text" id="email" name="email" placeholder="请输入邮箱" value="">
@@ -113,6 +119,21 @@
 		                return false;
 		            }
 		        }
+			 	if ($("#password2").val() == "") {
+		            layer.msg('确认密码不能为空喔', {icon: 2});
+		            return false;
+		        }else{
+		        	var reg = new RegExp("^[A-Za-z0-9]+$");
+		            var password2 = $("#password2").val();
+		            if (!reg.test(password2)) {
+		                layer.msg('确认密码只能由数字和26个英文字母组成', {icon: 2});
+		                return false;
+		            }
+		        }
+			 	if($("#password").val()!=$("#password2").val()){
+			 		layer.msg('两次密码不一致', {icon: 2});
+	                return false;
+			 	}
 			 	if ($("#email").val() == "") {
 		            layer.msg('邮箱不能为空喔', {icon: 2});
 		            return false;
@@ -128,10 +149,11 @@
 		            layer.msg('手机号码不能为空喔', {icon: 2});
 		            return false;
 		        }else{
-		        	var reg = new RegExp("^((1[0-9]))\d{9}$");
+		        	var reg = new RegExp("^[1][0-9]{10}$");//^[1][3,4,5,7,8][0-9]{9}$
 		            var phonenumber = $("#phonenumber").val();
+		            console.info(phonenumber);
 		            if (!reg.test(phonenumber)) {
-		                layer.msg('手机号码只能由数字和26个英文字母组成', {icon: 2});
+		                layer.msg('手机号码格式错误', {icon: 2});
 		                return false;
 		            }
 		        }

@@ -69,6 +69,8 @@ public class FuncController extends BaseController {
     model.addAttribute("blogs", new PageInfo<>(homeService.selectBlogListByFuncId(funcId)));
     model.addAttribute("funcId", funcId);
     model.addAttribute("funcName", funcName);
+    // 设置当前访问主页名
+    model.addAttribute("loginName", loginName);
     return prefix + "/func";
   }
 
@@ -96,6 +98,11 @@ public class FuncController extends BaseController {
     queryWrapper.eq("func_id", funcId);
     if(funcBlogService.count(queryWrapper)>0){
       return error("存在博客,不允许删除");
+    }
+    QueryWrapper<Func> queryWrapper2 = new QueryWrapper<>();
+    queryWrapper2.eq("create_by", ShiroUtils.getLoginName());
+    if(funcService.count(queryWrapper2)==1){
+      return AjaxResult.error("至少保留一个菜单");
     }
     return toAjax(funcService.removeById(funcId));
   }

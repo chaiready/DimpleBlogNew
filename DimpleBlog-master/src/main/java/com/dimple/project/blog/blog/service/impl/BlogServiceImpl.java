@@ -11,6 +11,7 @@ import com.dimple.project.blog.blog.service.BlogService;
 import com.dimple.project.blog.category.service.CategoryService;
 import com.dimple.project.blog.tag.service.TagService;
 import com.dimple.project.dashboard.domain.BusinessCommonData;
+import com.dimple.project.enums.BLogStatusEnum;
 import com.dimple.project.king.func.domain.FuncBlogEntity;
 import com.dimple.project.king.func.service.FuncBlogService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -126,7 +127,7 @@ public class BlogServiceImpl implements BlogService {
     })
     @Override
     public int deleteBlogById(Integer[] ids) {
-        return blogMapper.deleteBlogByIds(ids);
+        return blogMapper.deleteBlogByIds(BLogStatusEnum.DUSTBIN.getStatus(),ids);
     }
 
     @Override

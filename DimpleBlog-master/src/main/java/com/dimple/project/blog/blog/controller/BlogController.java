@@ -101,7 +101,7 @@ public class BlogController extends BaseController {
     public String funcEdit(@PathVariable Integer blogId, Model model) {
         model.addAttribute("blog", blogService.selectBlogWithTextAndTagsAndCategoryByBlogId(blogId));
         model.addAttribute("categories", categoryService.selectCategoryList(new Category()));
-        return "blog/blog/func_edit";
+        return "blog/blog/edit_phone";
     }
 
     @PutMapping("/edit")

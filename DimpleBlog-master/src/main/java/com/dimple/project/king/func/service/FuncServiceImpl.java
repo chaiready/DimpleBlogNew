@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.dimple.common.utils.StringUtils;
 import com.dimple.common.utils.security.ShiroUtils;
 import com.dimple.project.king.func.domain.Func;
 import com.dimple.project.king.func.mapper.FuncMapper;
@@ -34,9 +35,11 @@ public class FuncServiceImpl extends ServiceImpl<FuncMapper, Func> implements IF
    */
   @Override
   public int insertFunc(Func func) {
-    User user = ShiroUtils.getSysUser();
-    func.setCreator(user.getUserId());
-    func.setCreateBy(user.getLoginName());
+    if(StringUtils.isEmpty(func.getCreateBy())){
+      User user = ShiroUtils.getSysUser();
+      func.setCreator(user.getUserId());
+      func.setCreateBy(user.getLoginName());
+    }
     func.setOrderNum(System.currentTimeMillis());
     funcMapper.insert(func);
     func.setUrl("/func/" + func.getId() + ".html");

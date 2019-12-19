@@ -1,5 +1,12 @@
 package com.dimple.project.system.user.service;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import com.dimple.common.constant.Constants;
 import com.dimple.common.constant.UserConstants;
 import com.dimple.common.exception.BusinessException;
 import com.dimple.common.utils.StringUtils;
@@ -7,6 +14,8 @@ import com.dimple.common.utils.security.ShiroUtils;
 import com.dimple.common.utils.text.Convert;
 import com.dimple.framework.aspectj.lang.annotation.DataScope;
 import com.dimple.framework.shiro.service.PasswordService;
+import com.dimple.project.king.func.domain.Func;
+import com.dimple.project.king.func.service.IFuncService;
 import com.dimple.project.system.config.service.IConfigService;
 import com.dimple.project.system.role.domain.Role;
 import com.dimple.project.system.role.mapper.RoleMapper;
@@ -15,12 +24,6 @@ import com.dimple.project.system.user.domain.UserRole;
 import com.dimple.project.system.user.mapper.UserMapper;
 import com.dimple.project.system.user.mapper.UserRoleMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @className: UserServiceImpl
@@ -47,6 +50,8 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private PasswordService passwordService;
+    @Autowired
+    private IFuncService funcService;
 
     /**
      * 根据条件分页查询用户对象
@@ -206,7 +211,7 @@ public class UserServiceImpl implements UserService {
         if (StringUtils.isNotNull(roles)) {
             // 新增用户与角色管理
             List<UserRole> list = new ArrayList<UserRole>();
-            for (Long roleId : user.getRoleIds()) {
+            for (Long roleId : roles) {
                 UserRole ur = new UserRole();
                 ur.setUserId(user.getUserId());
                 ur.setRoleId(roleId);
@@ -351,15 +356,29 @@ public class UserServiceImpl implements UserService {
         return userMapper.updateUser(user);
     }
     
+    @Transactional
     @Override
-	public int regUser(User user) {
+	public int regBlogUser(User user) {
 		 user.randomSalt();
 	     user.setPassword(passwordService.encryptPassword(user.getLoginName(), user.getPassword(), user.getSalt()));
 	     user.setCreateBy("前端注册");
 	     // 新增用户信息
 	     int rows = userMapper.insertUser(user);
+	     //创建博客首页菜单
+	     Func func = new Func();
+	     func.setFuncName("首页");
+	     func.setCreateBy(user.getLoginName());
+	     func.setCreator(user.getUserId());
+	     func.setCreateTime(new Date());
+	     funcService.insertFunc(func);
 	     // 新增用户与角色管理
-	     insertUserRole(user);
+	     Role role = roleMapper.checkRoleKeyUnique(Constants.BLOG_ROLE_KEY);
+	     if(role!=null){
+	         Long[] roleIds = new Long[1];
+	         roleIds[0] =role.getRoleId();
+	         user.setRoleIds(roleIds);
+	         insertUserRole(user);
+	     }
 	     return rows;
 	}
 }
