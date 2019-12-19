@@ -65,4 +65,10 @@ public class CarouselMapServiceImpl implements CarouselMapService {
     public List<Business> selectCarouselMapData() {
         return carouselMapper.selectCarouselMapData();
     }
+
+
+    @Override
+    public List<CarouselMap> selectByCreateBy(String loginName) {
+      return carouselMapper.selectByCreateBy(loginName);
+    }
 }

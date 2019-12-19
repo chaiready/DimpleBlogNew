@@ -41,6 +41,9 @@
                     <a th:href="${'/king/func/'+func.id+'.html'}"
                        th:text="${func.funcName}"></a>
                 </li>
+                <li>
+                    <a  th:href="${'/bbs/'+loginName+'.html'}">返回首页</a>
+                 </li>
                  <li>
                     <a onclick="openAddDiolog();" style="color: #000000;">+添加菜单</a>
                  </li>
@@ -59,6 +62,9 @@
                     <a th:href="${'/king/func/'+func.id+'.html'}"
                        th:text="${func.funcName}"></a>
                 </li>
+                <li>
+                    <a  th:href="${'/bbs/'+loginName+'.html'}">返回首页</a>
+                 </li>
                 <li>
                     <a onclick="openAddDiolog();" style="color: #000000;">+添加菜单</a>
                  </li>
@@ -130,13 +136,17 @@
                             <!-- <li>
                                 <a title="作者： ls2008"><i class="fa fa-user"></i>ls2008</a>
                             </li> -->
-                            <li><a th:title="${'已有'+blog.commentCount+'条评论'}">
-                                <i class="fa fa-comments-o"></i>
-                                <span th:text="${blog.commentCount}"></span>
-                            </a>
+                            <li>
+	                             <a th:title="${'已有'+blog.commentCount+'条评论'}" th:href="${'/f/article/'+blog.blogId+'.html#Comment'}">
+	                                <i class="fa fa-comments-o"></i>
+	                                <span th:text="${blog.commentCount}"></span>
+	                            </a>
                             </li>
-                            <li><a th:title="${'已有'+blog.click+'次浏览'}"><i class="fa fa-eye"></i><span
-                                    th:text="${blog.click}"></span></a></li>
+                            <li>
+                            	<a th:title="${'已有'+blog.click+'次浏览'}">
+                            		<i class="fa fa-eye"></i><span th:text="${blog.click}"></span>
+                            	</a>
+                            </li>
                         </ul>
                     </div>
                 </li>

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.dimple.common.constant.CommonConstant;
+import com.dimple.common.constant.Constants;
 import com.dimple.common.utils.AddressUtils;
 import com.dimple.common.utils.QQUtil;
 import com.dimple.common.utils.ServletUtils;
@@ -107,7 +108,7 @@ public class HomeController extends BaseController {
     @VLog(title = "首页")
     public String index(Integer pageNum, Model model) {
         setCommonMessage(model);
-        PageHelper.startPage(pageNum == null ? 1 : pageNum, 12, "create_time desc");
+        PageHelper.startPage(pageNum == null ? 1 : pageNum, Constants.BLOG_PAGE_SIZE, "create_time desc");
         model.addAttribute("blogs", new PageInfo<>(homeService.selectFrontBlogList(new Blog())));
         //放置轮播图
         model.addAttribute("carouselMaps", carouselMapService.selectCarouselMapListFront());
@@ -172,7 +173,7 @@ public class HomeController extends BaseController {
         model.addAttribute("category", categoryService.selectCategoryById(categoryId));
         Blog blog = new Blog();
         blog.setCategoryId(categoryId);
-        PageHelper.startPage(pageNum == null ? 1 : pageNum, 10, "create_time desc");
+        PageHelper.startPage(pageNum == null ? 1 : pageNum, Constants.BLOG_PAGE_SIZE, "create_time desc");
         model.addAttribute("blogs", new PageInfo<>(homeService.selectFrontBlogList(blog)));
         return "front/category";
     }
@@ -181,7 +182,7 @@ public class HomeController extends BaseController {
     @GetMapping("/f/tag/{tagId}.html")
     public String tag(@PathVariable Integer tagId, Integer pageNum, Model model) {
         setCommonMessage(model);
-        PageHelper.startPage(pageNum == null ? 1 : pageNum, 10, "b.create_time desc");
+        PageHelper.startPage(pageNum == null ? 1 : pageNum, Constants.BLOG_PAGE_SIZE, "b.create_time desc");
         List<Blog> blogs = blogService.selectBlogListByTagId(tagId);
         model.addAttribute("blogs", new PageInfo(blogs));
         model.addAttribute("tag", tagService.selectTagById(tagId));
@@ -192,7 +193,7 @@ public class HomeController extends BaseController {
     @GetMapping("/f/search/{keyWord}.html")
     public String search(@PathVariable String keyWord, Integer pageNum, Model model) {
         setCommonMessage(model);
-        PageHelper.startPage(pageNum == null ? 1 : pageNum, 10, "create_time desc");
+        PageHelper.startPage(pageNum == null ? 1 : pageNum, Constants.BLOG_PAGE_SIZE, "create_time desc");
         Blog blog = new Blog();
         blog.setTitle(keyWord);
         List<Blog> blogs = blogService.selectBlogList(blog);

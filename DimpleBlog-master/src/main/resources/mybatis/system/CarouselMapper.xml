@@ -48,12 +48,19 @@
             </if>
         </where>
     </select>
+    
     <select id="selectCarouselMapListFront"
             resultType="com.dimple.project.system.carouselMap.entity.CarouselMap">
         select carousel_id,img_url,title,sub_title,target,url from bg_carousel_map where display='1'
     </select>
+    
     <select id="selectCarouselMapData" resultType="com.dimple.project.chart.business.domain.Business">
         select  title as name,click as value from bg_carousel_map
+    </select>
+    
+    <select id="selectByCreateBy"
+            resultType="com.dimple.project.system.carouselMap.entity.CarouselMap">
+        select carousel_id,img_url,title,sub_title,target,url from bg_carousel_map where display='1' and create_by = #{loginName}
     </select>
 
     <!--新增所有列-->

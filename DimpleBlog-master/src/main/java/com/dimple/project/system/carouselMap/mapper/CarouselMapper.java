@@ -82,4 +82,7 @@ public interface CarouselMapper {
      * @return 图表展示的list集合
      */
     List<Business> selectCarouselMapData();
+
+
+    List<CarouselMap> selectByCreateBy(String loginName);
 }

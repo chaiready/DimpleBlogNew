@@ -170,6 +170,7 @@
 	 		            dataType: "json",
 	 		            success: function (data) {
 	 		                if (data.code == 200) {
+	 		                	layer.msg("已注册成功，正跳转到您的博客...", {icon: 1});
 	 		                	window.location.href=data.msg;
 	 		                }else{
 	 		                	$("#operTip").html(data.msg);

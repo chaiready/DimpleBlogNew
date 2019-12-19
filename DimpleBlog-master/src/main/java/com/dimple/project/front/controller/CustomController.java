@@ -20,6 +20,7 @@ import org.thymeleaf.context.Context;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.dimple.common.constant.Constants;
 import com.dimple.common.utils.RandomUtil;
 import com.dimple.common.utils.StringUtils;
 import com.dimple.common.utils.security.ShiroUtils;
@@ -102,10 +103,10 @@ public class CustomController extends BaseController {
             funcId = funcList.get(0).getId();
             model.addAttribute("funcName", funcList.get(0).getFuncName());
           }else{
-            model.addAttribute("funcName", "");
+            model.addAttribute("funcName", funcService.getById(funcId).getFuncName());
           }
           model.addAttribute("funcId", funcId);
-          PageHelper.startPage(pageNum == null ? 1 : pageNum, 12, "create_time desc");
+          PageHelper.startPage(pageNum == null ? 1 : pageNum, Constants.BLOG_PAGE_SIZE, "create_time desc");
           model.addAttribute("blogs", new PageInfo<>(homeService.selectBlogListByFuncId(funcId)));
         }
         
@@ -130,7 +131,7 @@ public class CustomController extends BaseController {
     public String defaultIndex(@PathVariable String loginName, Integer pageNum, Model model) {
         setCommonMessage(model, loginName,FUNC_FIRST,pageNum);
         // 放置轮播图
-        model.addAttribute("carouselMaps", carouselMapService.selectCarouselMapListFront());
+        model.addAttribute("carouselMaps", carouselMapService.selectByCreateBy(loginName));
         // 查询用户信息
         User user = userService.selectUserByLoginName(loginName);
         if (user != null) {
@@ -347,7 +348,7 @@ public class CustomController extends BaseController {
     @GetMapping("/front/search/{loginName}.html")
     public String search(@PathVariable String loginName, String search_word, Integer pageNum, Model model) {
         setCommonMessage(model, loginName,FUNC_NULL,DEFAULT_PAGENUM);
-        PageHelper.startPage(pageNum == null ? 1 : pageNum, 10, "create_time desc");
+        PageHelper.startPage(pageNum == null ? 1 : pageNum, Constants.BLOG_PAGE_SIZE, "create_time desc");
         Blog blog = new Blog();
         blog.setTitle(search_word);
         List<Blog> blogs = blogService.selectBlogList(blog);

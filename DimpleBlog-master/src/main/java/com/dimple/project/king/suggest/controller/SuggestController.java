@@ -53,7 +53,7 @@ public class SuggestController extends BaseController {
   }
 
 
-  @GetMapping("/toList")
+  @GetMapping("/list.html")
   public String toList(Model model, Integer pageNum, String directPage) {
     User user = ShiroUtils.getSysUser();
     QueryWrapper<SuggestEntity> queryWrapper = new QueryWrapper<>();
@@ -68,6 +68,10 @@ public class SuggestController extends BaseController {
     model.addAttribute("loginName", user.getLoginName());
     // 查询通知
     model.addAttribute("notices", noticeService.selectNoticeListDisplay());
+    // 设置当前访问主页名
+    model.addAttribute("loginName", user.getLoginName());
+    
+    model.addAttribute("curUser", user);
     
     return "king/suggest/suggest_list";
   }
