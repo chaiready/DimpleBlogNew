@@ -415,8 +415,10 @@
     <div class="side-link ">
         <h4 class="index-title"><i class="fa fa-paperclip"></i>友情链接
             <small>Friend Links</small>
-            <a href="/f/link.html"><i
-                    class="fa fa-plus"></i>申请</a></h4>
+            <!-- <a href="/f/link.html">
+            	<i class="fa fa-plus"></i>申请
+            </a> -->
+        </h4>
         <ul>
             <li th:each="link:${links}">
                 <a th:class="${'tstyle-'+(linkStat.index+1)%5}"

@@ -242,9 +242,15 @@
         <!--        轮播图结束-->
 
         <div class="arclist">
-            <h4 class="index-title homeh4"><a href="\"><i class="fa fa-certificate"></i>最新文章
-                <small>New Article</small>
-            </a></h4>
+            <h4 class="index-title">
+	            <a th:href="${'/bbs/'+loginName+'.html'}">
+	            	<i class="fa fa-home"></i>首页 &nbsp;> 
+	            </a>
+	            <span class="orange-text" th:text="${funcName}"></span>
+	            <span style="float:right;margin-right:10px;">共有文章:
+	            	<font class="orange-text" th:text="${blogs.total}">  </font>篇
+	            </span>
+	        </h4>
             <!--列表开始-->
             <ul>
                 <li th:each="blog:${blogs.list}" th:class="${blog.support=='1'?'tuijian':''}">
@@ -271,12 +277,11 @@
                             <li>
                                 <a href="/f/about.html" title="作者： ls2008"><i class="fa fa-user"></i>ls2008</a>
                             </li>
-                            <li><a th:title="${'已有'+blog.commentCount+'条评论'}"
-                                   th:href="${'/f/article/'+blog.blogId+'.html#Comment'}"
-                                   href="article/219.html#Comment">
-                                <i class="fa fa-comments-o"></i>
-                                <span th:text="${blog.commentCount}"></span>
-                            </a>
+                            <li>
+                              	<a th:title="${'已有'+blog.commentCount+'条评论'}" th:href="${'/f/article/'+blog.blogId+'.html#Comment'}">
+	                                <i class="fa fa-comments-o"></i>
+	                                <span th:text="${blog.commentCount}"></span>
+	                            </a>
                             </li>
                             <li><a th:title="${'已有'+blog.click+'次浏览'}"><i class="fa fa-eye"></i><span
                                     th:text="${blog.click}"></span></a></li>
@@ -292,7 +297,8 @@
             </ul>
         </div>
         <!--分页开始-->
-        <div th:replace="navigation :: navigation-index(${blogs})"></div>
+        <!-- <div th:replace="navigation :: navigation-index(${blogs})"></div> -->
+        <div th:replace="navigation :: navigation(${blogs},'bbs/'+${user.loginName}+'/func',${funcId})"></div>
         <!--分页结束-->
     </section>
     <!--左侧结束-->

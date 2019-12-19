@@ -54,18 +54,24 @@
         <!--分页开始-->
         <!-- <div th:replace="navigation :: navigation-direct(${folderList})"></div> -->
         <!--分页结束-->
-        <div class="arclist" style="margin-left: 20px;margin-right: 20px;padding-right: 20px;">
+        <div class="arclist" style="">
+        	<h4 class="index-title">
+	            <a th:href="${'/bbs/'+loginName+'.html'}">
+	            	<i class="fa fa-home"></i>首页 &nbsp;> 
+	            </a>
+	            <span class="orange-text">我的消息</span>
+	        </h4>
             <!--列表开始-->
             <form>
-                <div th:each="obj:${objList.list}">
-                    <div class="arc-left">
-                        <span th:text="${#dates.format(obj.createTime,'yyyy-MM-dd HH:mm:ss')}"></span>
-                        <h4 class="blue-text">
-                            <span th:text="${obj.content}"></span>
-                        </h4>
-                    </div>
-                </div>
-               </form>
+              <div th:each="obj:${objList.list}" style="margin-left: 20px;">
+                  <div class="arc-left">
+                      <span th:text="${#dates.format(obj.createTime,'yyyy-MM-dd HH:mm:ss')}"></span>
+                      <h4 class="blue-text">
+                          <span th:text="${obj.content}"></span>
+                      </h4>
+                  </div>
+              </div>
+             </form>
             <!--列表结束-->
         </div>
         <!--分页开始-->

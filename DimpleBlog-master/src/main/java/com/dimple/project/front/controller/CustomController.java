@@ -28,7 +28,6 @@ import com.dimple.framework.web.controller.BaseController;
 import com.dimple.framework.web.domain.AjaxResult;
 import com.dimple.project.blog.blog.domain.Blog;
 import com.dimple.project.blog.blog.service.BlogService;
-import com.dimple.project.blog.category.domain.Category;
 import com.dimple.project.blog.category.service.CategoryService;
 import com.dimple.project.blog.comment.domain.Comment;
 import com.dimple.project.blog.comment.service.CommentService;
@@ -58,6 +57,13 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @RequestMapping("/bbs")
 public class CustomController extends BaseController {
+  
+    private long FUNC_FIRST = 0;
+    
+    private Long FUNC_NULL = null;
+    
+    private Integer DEFAULT_PAGENUM = 1;
+  
     @Autowired
     HomeService homeService;
     @Autowired
@@ -87,21 +93,24 @@ public class CustomController extends BaseController {
     /**
      * 设置前台页面公用的部分代码 均设置Redis缓存
      */
-    private void setCommonMessage(Model model, String loginName) {
-        // 获取分类下拉项中的分类
-        // model.addAttribute("categories",
-        // categoryService.selectSupportCategoryList());
+    private void setCommonMessage(Model model, String loginName,Long funcId,Integer pageNum) {
         List<Func> funcList = funcService.findBbsByCreator(loginName);
-        // Func indexFunc = new Func();
-        // indexFunc.setUrl("/bbs/" + loginName + "/index.html");
-        // indexFunc.setFuncName("首页");
-        // defaultFucs.add(indexFunc);
         model.addAttribute("funcList", funcList);
 
+        if(funcId!=FUNC_NULL){
+          if (funcId==FUNC_FIRST&&CollectionUtils.isNotEmpty(funcList)) {
+            funcId = funcList.get(0).getId();
+            model.addAttribute("funcName", funcList.get(0).getFuncName());
+          }else{
+            model.addAttribute("funcName", funcService.getById(funcId).getFuncName());
+          }
+          model.addAttribute("funcId", funcId);
+          PageHelper.startPage(pageNum == null ? 1 : pageNum, 12, "create_time desc");
+          model.addAttribute("blogs", new PageInfo<>(homeService.selectBlogListByFuncId(funcId)));
+        }
+        
         // 查询所有的标签
         model.addAttribute("tags", tagService.selectTagList(new Tag()));
-        // 查询最近更新的文章
-//    model.addAttribute("newestUpdateBlog", blogService.selectNewestUpdateBlog());
         // 查询文章排行
         model.addAttribute("blogRanking", blogService.selectBlogRanking());
         // 查询推荐博文
@@ -119,21 +128,9 @@ public class CustomController extends BaseController {
     @GetMapping("/{loginName}.html")
     @VLog(title = "用户首页")
     public String defaultIndex(@PathVariable String loginName, Integer pageNum, Model model) {
-        setCommonMessage(model, loginName);
-        PageHelper.startPage(pageNum == null ? 1 : pageNum, 12, "create_time desc");
-        // Blog blog = new Blog();
-        // blog.setCreateBy(loginName);
-        // model.addAttribute("blogs", new PageInfo<>(homeService.selectBlogsByCreator(blog)));
-        List<Func> funcList = funcService.findByCreator(loginName);
-        Long funcId = 0L;
-        if (CollectionUtils.isNotEmpty(funcList)) {
-            funcId = funcList.get(0).getId();
-        }
-        model.addAttribute("blogs", new PageInfo<>(homeService.selectBlogListByFuncId(funcId)));
-
+        setCommonMessage(model, loginName,FUNC_FIRST,pageNum);
         // 放置轮播图
         model.addAttribute("carouselMaps", carouselMapService.selectCarouselMapListFront());
-
         // 查询用户信息
         User user = userService.selectUserByLoginName(loginName);
         if (user != null) {
@@ -142,17 +139,36 @@ public class CustomController extends BaseController {
         }
         return "front/index";
     }
+    
+    
+    @VLog(title = "分类")
+    @GetMapping({"/{loginName}/func/{funcId}.html"})
+    public String funcBlog(@PathVariable String loginName, @PathVariable Long funcId,
+                           Integer pageNum, Model model) {
+        List<Func> funcList = funcService.findBbsByCreator(loginName);
+        if (CollectionUtils.isNotEmpty(funcList)) {
+            if(funcList.get(0).getId().longValue()==funcId.longValue()){
+              return defaultIndex(loginName, pageNum, model);
+            }
+        }
+        setCommonMessage(model, loginName,funcId,pageNum);
+        model.addAttribute("funcId", funcId);
+        model.addAttribute("funcName", funcService.getById(funcId).getFuncName());
+        return "front/custom/category";
+    }
 
+    
     @GetMapping("/{loginName}/index.html")
     @VLog(title = "用户首页")
     public String loginNameIndex(@PathVariable String loginName, Integer pageNum, Model model) {
         return defaultIndex(loginName, pageNum, model);
     }
 
+    
     @GetMapping("/{loginName}/images.html")
     @VLog(title = "用户首页")
     public String images(@PathVariable String loginName, Integer pageNum, Model model) {
-        setCommonMessage(model, loginName);
+        setCommonMessage(model, loginName,FUNC_NULL,pageNum);
         return "front/images";
     }
 
@@ -196,15 +212,7 @@ public class CustomController extends BaseController {
     public String loginSuc(Model model) {
         User user = ShiroUtils.getSysUser();
         if (user != null) {
-            Integer pageNum = 0;
-            setCommonMessage(model, user.getLoginName());
-            PageHelper.startPage(pageNum == null ? 1 : pageNum, 12, "create_time desc");
-            model.addAttribute("blogs", new PageInfo<>(homeService.selectFrontBlogList(new Blog())));
-            // 放置轮播图
-            model.addAttribute("carouselMaps", carouselMapService.selectCarouselMapListFront());
-
-            model.addAttribute("user", user);
-            return redirect("/front/custom/index");
+          return defaultIndex(user.getLoginName(), DEFAULT_PAGENUM, model);
         }
         return "front/index";
     }
@@ -223,6 +231,7 @@ public class CustomController extends BaseController {
         return "front/login/reg";
     }
 
+    
     @PostMapping("/front/reg")
     @ResponseBody
     public AjaxResult frontReg(User user,String toPage, Model model) {
@@ -306,7 +315,6 @@ public class CustomController extends BaseController {
           if(vericode!=null&&vericode.equals(log.getContent())){
             User user = new User();
             user.setUserId(entity.getUserId());
-//            user.setLoginName(loginName);
             user.setPassword(password);
             userService.resetUserPwd(user);
             return AjaxResult.success("修改密码成功");
@@ -315,23 +323,6 @@ public class CustomController extends BaseController {
         return AjaxResult.error("验证码不一致");
     }
     
-    @VLog(title = "分类")
-    @GetMapping({"/{loginName}/func/{funcId}.html"})
-    public String funcBlog(@PathVariable String loginName, @PathVariable Long funcId,
-                           Integer pageNum, Model model) {
-        setCommonMessage(model, loginName);
-        // model.addAttribute("category", categoryService.selectCategoryById(categoryId));
-        Category category = new Category();
-        category.setCategoryTitle("");
-        category.setDescription("");
-        category.setCreateTime(new Date());
-        model.addAttribute("category", category);
-        PageHelper.startPage(pageNum == null ? 1 : pageNum, 10, "create_time desc");
-        model.addAttribute("blogs", new PageInfo<>(homeService.selectBlogListByFuncId(funcId)));
-        model.addAttribute("funcId", funcId);
-        return "front/custom/category";
-    }
-
 
     /**
      * 留言
@@ -343,18 +334,19 @@ public class CustomController extends BaseController {
         if (user == null) {
             return toLogin(model,"");
         }
-        setCommonMessage(model, user.getLoginName());
+        setCommonMessage(model, user.getLoginName(),FUNC_NULL,DEFAULT_PAGENUM);
         Comment comment = new Comment();
         comment.setPageId(-1000);
         model.addAttribute("comments", commentService.selectCommentListForFront(comment));
         model.addAttribute("pageId", -1000);
         return "front/custom/comment";
     }
+    
 
     @VLog(title = "搜索")
     @GetMapping("/front/search/{loginName}.html")
     public String search(@PathVariable String loginName, String search_word, Integer pageNum, Model model) {
-        setCommonMessage(model, loginName);
+        setCommonMessage(model, loginName,FUNC_NULL,DEFAULT_PAGENUM);
         PageHelper.startPage(pageNum == null ? 1 : pageNum, 10, "create_time desc");
         Blog blog = new Blog();
         blog.setTitle(search_word);

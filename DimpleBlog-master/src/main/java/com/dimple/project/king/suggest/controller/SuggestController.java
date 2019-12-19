@@ -65,8 +65,8 @@ public class SuggestController extends BaseController {
     
     List<Func> funcList = funcService.findBbsByCreator(user.getLoginName());
     model.addAttribute("funcList", funcList);
-    
- // 查询通知
+    model.addAttribute("loginName", user.getLoginName());
+    // 查询通知
     model.addAttribute("notices", noticeService.selectNoticeListDisplay());
     
     return "king/suggest/suggest_list";
