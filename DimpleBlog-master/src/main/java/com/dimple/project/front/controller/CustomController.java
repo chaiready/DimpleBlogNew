@@ -45,6 +45,7 @@ import com.dimple.project.king.suggest.service.SuggestService;
 import com.dimple.project.king.userlog.domain.UserLogEntity;
 import com.dimple.project.king.userlog.service.UserLogService;
 import com.dimple.project.link.service.LinkService;
+import com.dimple.project.system.carouselMap.entity.CarouselMap;
 import com.dimple.project.system.carouselMap.service.CarouselMapService;
 import com.dimple.project.system.notice.service.INoticeService;
 import com.dimple.project.system.user.domain.User;
@@ -132,12 +133,20 @@ public class CustomController extends BaseController {
         model.addAttribute("curUser", ShiroUtils.getSysUser());
     }
 
-    @GetMapping("/{loginName}.html")
+    @GetMapping({"/{loginName}.html","/{loginName}/index.html"})
     @VLog(title = "用户首页")
     public String defaultIndex(@PathVariable String loginName, Integer pageNum, Model model) {
         setCommonMessage(model, loginName,FUNC_FIRST,pageNum);
         // 放置轮播图
-        model.addAttribute("carouselMaps", carouselMapService.selectByCreateBy(loginName));
+        List<CarouselMap> carouselMaps = carouselMapService.selectByCreateBy(loginName);
+        if(CollectionUtils.isEmpty(carouselMaps)){
+          CarouselMap cm = new CarouselMap();
+          cm.setTitle("");
+          cm.setSubTitle("");
+          cm.setImgUrl("/front/images/touploadimg.jpg");
+          carouselMaps.add(cm);
+        }
+        model.addAttribute("carouselMaps", carouselMaps);
         // 查询用户信息
         User user = userService.selectUserByLoginName(loginName);
         if (user != null) {
@@ -164,12 +173,6 @@ public class CustomController extends BaseController {
         return "front/custom/category";
     }
 
-    
-    @GetMapping("/{loginName}/index.html")
-    @VLog(title = "用户首页")
-    public String loginNameIndex(@PathVariable String loginName, Integer pageNum, Model model) {
-        return defaultIndex(loginName, pageNum, model);
-    }
 
     @VLog(title = "博客")
     @GetMapping("/{loginName}/{funcId}/{blogId}.html")
