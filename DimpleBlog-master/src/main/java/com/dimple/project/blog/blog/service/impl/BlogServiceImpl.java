@@ -18,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -49,12 +49,15 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public int insertBlog(Blog blog) {
         blog.setCreateBy(ShiroUtils.getLoginName());
+        blog.setCreateTime(new Date());
         int i = blogMapper.insertBlog(blog);
         handlerBlogTag(blog.getBlogId(), blog.getTags());
         FuncBlogEntity funcBlog = new FuncBlogEntity();
         if(blog.getFuncId()!=null&&blog.getFuncId()!=0){
           funcBlog.setBlogId(Long.valueOf(blog.getBlogId()));
           funcBlog.setFuncId(blog.getFuncId());
+          funcBlog.setCreateBy(ShiroUtils.getLoginName());
+          funcBlog.setCreateTime(new Date());
           funcBlogService.save(funcBlog);
         }
         return i;
@@ -180,6 +183,16 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public Blog selectNextBlogById(Integer blogId) {
         return blogMapper.selectNextBlogById(blogId);
+    }
+    
+    @Override
+    public Blog selectPreviousBlogByFuncIdAndId(Long funcId, Integer blogId) {
+      return blogMapper.selectPreviousBlogByFuncIdAndId(funcId, blogId);
+    }
+
+    @Override
+    public Blog selectNextBlogByFuncIdAndId(Long funcId, Integer blogId) {
+      return blogMapper.selectNextBlogByFuncIdAndId(funcId, blogId);
     }
 
     @Override

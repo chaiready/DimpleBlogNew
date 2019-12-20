@@ -205,24 +205,16 @@
     </select>
     
     <select id="selectBlogListByFuncId" resultType="com.dimple.project.blog.blog.domain.Blog">
-        select b.blog_id,
-        b.category_id,
-        b.title,
-        b.summary,
-        b.click,
-        b.header_img,
-        b.create_by,
-        b.create_time,
-        b.allow_comment,
-        b.support,
-        c.category_title,
+        select b.blog_id,b.category_id,b.title,b.summary,b.click,b.header_img,
+        b.create_by,b.create_time,b.allow_comment,b.support,c.category_title,
         (select count(*) from bg_comment where page_id=b.blog_id and display=1 ) as comment_count
         from bg_blog b left join bg_category c on b.category_id = c.category_id
         left join bg_func_blog fb on b.blog_id = fb.blog_id
         where b.status=1
         <if test="funcId !=null and funcId !=''">
-            and fb.func_id =#{funcId};
+            and fb.func_id =#{funcId} 
         </if>
+        order by b.blog_id desc
     </select>
 
     <select id="selectNewestUpdateBlog" resultType="com.dimple.project.blog.blog.domain.Blog">
@@ -239,6 +231,17 @@
     </select>
     <select id="selectNextBlogById" resultType="com.dimple.project.blog.blog.domain.Blog">
         select blog_id,title from bg_blog where blog_id &gt; #{blogId} and status=1 order by blog_id desc limit 0,1
+    </select>
+    
+    <select id="selectPreviousBlogByFuncIdAndId" resultType="com.dimple.project.blog.blog.domain.Blog">
+    	select b.blog_id,b.title,fb.create_by,fb.func_id from bg_blog b
+		left join bg_func_blog fb on b.blog_id = fb.blog_id
+		where b.status=1 and fb.func_id = #{funcId} and b.blog_id &gt; (select blog_id from bg_blog where blog_id=#{blogId}) order by b.blog_id asc limit 0,1
+    </select>
+    <select id="selectNextBlogByFuncIdAndId" resultType="com.dimple.project.blog.blog.domain.Blog">
+        select b.blog_id,b.title,fb.create_by,fb.func_id from bg_blog b
+		left join bg_func_blog fb on b.blog_id = fb.blog_id
+		where b.status=1 and fb.func_id = #{funcId} and b.blog_id &lt; (select blog_id from bg_blog where blog_id=#{blogId}) order by b.blog_id desc limit 0,1
     </select>
 
     <select id="selectRandBlogListLimit" resultType="com.dimple.project.blog.blog.domain.Blog">

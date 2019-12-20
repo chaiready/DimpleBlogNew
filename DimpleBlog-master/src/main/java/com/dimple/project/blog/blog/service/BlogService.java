@@ -123,6 +123,16 @@ public interface BlogService {
      * @return 下一篇Blog
      */
     Blog selectNextBlogById(Integer blogId);
+    
+    /**
+     * 获取上一篇博文
+     */
+    Blog selectPreviousBlogByFuncIdAndId(Long funcId,Integer blogId);
+
+    /**
+     * 获取下一篇博文
+     */
+    Blog selectNextBlogByFuncIdAndId(Long funcId,Integer blogId);
 
     /**
      * 获取随机的blog列表

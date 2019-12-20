@@ -120,7 +120,7 @@
                     </div>
                     <div class="arc-right">
                         <h4 class="blue-text">
-                            <a th:href="${'/f/article/'+blog.blogId+'.html'}"
+                            <a th:href="${'/bbs/'+loginName+'/'+funcId+'/'+blog.blogId+'.html'}"
                                th:title="${blog.title}"
                                th:text="${blog.title}">
                             </a>
@@ -137,7 +137,7 @@
                                 <a title="作者： ls2008"><i class="fa fa-user"></i>ls2008</a>
                             </li> -->
                             <li>
-	                             <a th:title="${'已有'+blog.commentCount+'条评论'}" th:href="${'/f/article/'+blog.blogId+'.html#Comment'}">
+	                             <a th:title="${'已有'+blog.commentCount+'条评论'}" th:href="${'/bbs/'+loginName+'/'+funcId+'/'+blog.blogId+'.html#Comment'}">
 	                                <i class="fa fa-comments-o"></i>
 	                                <span th:text="${blog.commentCount}"></span>
 	                            </a>
@@ -299,7 +299,7 @@
     
     //点击图片跳转到博客明细
     function viewBlog(blogId){
-    	window.location.href="/f/article/"+blogId+".html";
+    	window.location.href='/bbs/'+[[${loginName}]]+'/'+[[${funcId}]]+'/'+blogId+'.html';
     }
 </script>
 </body>

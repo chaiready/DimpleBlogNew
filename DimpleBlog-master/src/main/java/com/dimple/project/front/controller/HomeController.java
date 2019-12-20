@@ -71,6 +71,10 @@ public class HomeController extends BaseController {
      * 均设置Redis缓存
      */
     private void setCommonMessage(Model model) {
+        // 查询用户信息
+        User user = ShiroUtils.getSysUser();
+        model.addAttribute("user", user);
+      
 		List<Func> funcList = new ArrayList<Func>();
 		String loginName = "admin";
 		funcList.add(new Func("首页","/" + loginName + "/index.html"));
@@ -78,12 +82,7 @@ public class HomeController extends BaseController {
 		funcList.add(new Func("吐槽大会","/" + loginName + "/index.html"));
 		funcList.add(new Func("图片","/" + loginName + "/index.html"));
 		model.addAttribute("funcList", funcList);
-		model.addAttribute("curUser", ShiroUtils.getSysUser());
-
-		// 查询用户信息
-		User user = ShiroUtils.getSysUser();
-		model.addAttribute("user", user);
-
+		model.addAttribute("curUser", user);
 
         //获取分类下拉项中的分类
         model.addAttribute("categories", categoryService.selectSupportCategoryList());
@@ -162,8 +161,7 @@ public class HomeController extends BaseController {
         comment.setPageId(blogId);
         comment.setDisplay(true);
         model.addAttribute("comments", commentService.selectCommentListForFront(comment));
-//        return "front/article";
-        return "front/article_summernote";//将simpleMde 改成 summerNote 编辑器
+        return "front/article";
     }
 
     @VLog(title = "分类")

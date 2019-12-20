@@ -65,7 +65,7 @@ public class FuncController extends BaseController {
         }
       }
     }
-    PageHelper.startPage(pageNum == null ? 1 : pageNum, 10, "b.create_time desc");
+    PageHelper.startPage(changePageNum(pageNum, "") , Constants.BLOG_PAGE_SIZE);
     model.addAttribute("blogs", new PageInfo<>(homeService.selectBlogListByFuncId(funcId)));
     model.addAttribute("funcId", funcId);
     model.addAttribute("funcName", funcName);

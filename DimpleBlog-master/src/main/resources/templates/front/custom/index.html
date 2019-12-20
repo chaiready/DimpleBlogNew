@@ -261,7 +261,7 @@
                     </div>
                     <div class="arc-right">
                         <h4 class="blue-text">
-                            <a th:href="${'/f/article/'+blog.blogId+'.html'}"
+                            <a th:href="${'/bbs/'+loginName+'/'+funcId+'/'+blog.blogId+'.html'}"
                                th:title="${blog.title}"
                                th:text="${blog.title}">
                             </a>
@@ -278,7 +278,7 @@
                                 <a href="/f/about.html" title="作者： ls2008"><i class="fa fa-user"></i>ls2008</a>
                             </li>
                             <li>
-                              	<a th:title="${'已有'+blog.commentCount+'条评论'}" th:href="${'/f/article/'+blog.blogId+'.html#Comment'}">
+                              	<a th:title="${'已有'+blog.commentCount+'条评论'}" th:href="${'/bbs/'+loginName+'/'+funcId+'/'+blog.blogId+'.html#Comment'}">
 	                                <i class="fa fa-comments-o"></i>
 	                                <span th:text="${blog.commentCount}"></span>
 	                            </a>
@@ -297,8 +297,7 @@
             </ul>
         </div>
         <!--分页开始-->
-        <!-- <div th:replace="navigation :: navigation-index(${blogs})"></div> -->
-        <div th:replace="navigation :: navigation(${blogs},'bbs/'+${loginName}+'/func',${funcId})"></div>
+        <div th:replace="navigation :: navigation(${blogs},'bbs/'+${loginName},${funcId})"></div>
         <!--分页结束-->
     </section>
     <!--左侧结束-->

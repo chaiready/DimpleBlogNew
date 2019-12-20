@@ -41,9 +41,9 @@ public class FuncServiceImpl extends ServiceImpl<FuncMapper, Func> implements IF
       func.setCreateBy(user.getLoginName());
     }
     func.setOrderNum(System.currentTimeMillis());
-    funcMapper.insert(func);
-    func.setUrl("/func/" + func.getId() + ".html");
-    return funcMapper.updateById(func);
+    return funcMapper.insert(func);
+//    func.setUrl("/func/" + func.getId() + ".html");
+//    return funcMapper.updateById(func);
   }
 
   /**
@@ -111,7 +111,7 @@ public class FuncServiceImpl extends ServiceImpl<FuncMapper, Func> implements IF
     List<Func> funcList = findByCreator(loginName);
     List<Func> defaultFucs = new ArrayList<Func>();
     for (Func func : funcList) {
-      func.setUrl("/bbs/" + loginName + func.getUrl());
+      func.setUrl("/bbs/" + loginName + "/"+func.getId()+".html");
       defaultFucs.add(func);
     }
     return defaultFucs;

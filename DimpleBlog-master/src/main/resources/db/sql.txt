@@ -167,4 +167,15 @@ delete from bg_link;
 INSERT INTO `dimpleblog`.`bg_link` (`link_id`, `title`, `description`, `header_img`, `click`, `weight`, `available`, `processed`, `display`, `url`, `email`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES ('2', '今日头条', '今日头条', 'http://www.bianxiaofeng.com/imgs/favicon.ico', '5', '0', '1', '1', '1', 'https://www.toutiao.com/', '909074489@qq.com', 'admin', '2019-03-26 10:24:49', NULL, NULL);
 INSERT INTO `dimpleblog`.`bg_link` (`link_id`, `title`, `description`, `header_img`, `click`, `weight`, `available`, `processed`, `display`, `url`, `email`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES ('3', '最代码', '最代码网站', 'http://static.zuidaima.com/resource/img/logo.png', '1', '1111', '1', '1', '1', 'http://www.zuidaima.com/', '909074489@qq.com', 'admin', '2019-04-23 23:43:55', NULL, NULL);
 
+#20191220
+alter table bg_func_blog add COLUMN create_by varchar(64);
+alter table bg_func_blog add COLUMN create_time datetime;
+alter table bg_func_blog add COLUMN update_by varchar(64);
+alter table bg_func_blog add COLUMN update_time datetime;
+update bg_func_blog fb,bg_func f set fb.create_by=f.create_by,fb.create_time = f.create_time where f.id = fb.func_id;
+update bg_blog set create_by='hjhy' where create_by is null;
+
+
+
+
 

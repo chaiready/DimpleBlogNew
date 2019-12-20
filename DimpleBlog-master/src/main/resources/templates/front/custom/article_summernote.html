@@ -26,7 +26,7 @@
 <div class="container">
     <input type="hidden" id="pageId" th:value="${blog.blogId}"/>
     <!--左侧开始-->
-    <section>
+    <section style="width: 100%;">
         <article>
             <!--导航-->
             <div class="mbnav">
@@ -39,14 +39,14 @@
             <div class="post-line bg-color">
                 <ul>
                     <li>
-                        <a th:title="${'ls2008发表于'+#dates.format(blog.createTime,'yyyy-MM-dd')}">
+                        <a th:title="${'发表于'+#dates.format(blog.createTime,'yyyy-MM-dd')}">
                             <i class="fa fa-clock-o"></i>
                             <time th:text="${#dates.format(blog.createTime,'yyyy-MM-dd')}"></time>
                         </a>
                     </li>
                     <li>
                         <a href="/f/about.html" title="本文作者：ls2008">
-                            <i class="fa fa-user"></i>ls2008</a>
+                            <i class="fa fa-user"></i>[[${loginName}]]</a>
                     </li>
                     <li>
                         <a href="#Comment" th:title="${'当前共有 '+comments.size()+' 条评论，点击转到评论'}">
@@ -125,17 +125,19 @@
         <div class="shangyip bg-color">
             <span>
                 <i class="fa fa-arrow-up"></i>上一篇：
-                  <a class='blue-text' th:if="${previousBlog!=null}"
-                     th:href="${'/f/article/'+previousBlog.blogId+'.html'}"
-                     th:title='${previousBlog.title}'
-                     th:text="${previousBlog.title}"></a>
+                <a class='blue-text' th:if="${previousBlog!=null}" 
+                	th:href="${'/bbs/'+previousBlog.createBy+'/'+previousBlog.funcId+'/'+previousBlog.blogId+'.html'}"
+                    th:title='${previousBlog.title}'
+                    th:text="${previousBlog.title}"></a>
+                     
                 <a th:if="${previousBlog==null}" class='blue-text' href="javascript:void(0)">没有了</a>
             </span>
             <span>
                 <i class="fa fa-arrow-down"></i>下一篇：
-                <a class='blue-text' th:if="${nextBlog!=null}" th:href="${'/f/article/'+nextBlog.blogId+'.html'}"
-                   th:title='${nextBlog.title}'
-                   th:text="${nextBlog.title}"></a>
+                <a class='blue-text' th:if="${nextBlog!=null}" 
+                	th:href="${'/bbs/'+nextBlog.createBy+'/'+nextBlog.funcId+'/'+nextBlog.blogId+'.html'}"
+                    th:title='${nextBlog.title}'
+                    th:text="${nextBlog.title}"></a>
                  <a th:if="${nextBlog==null}" class='blue-text' href="javascript:void(0)">没有了</a>
             </span>
         </div>
@@ -236,7 +238,7 @@
         </div>
         <!-- 通用评论结束 -->
     </section>
-    <th:block th:replace="include-front-custom :: side"/>
+    <!-- <th:block th:replace="include-front-custom :: side"/> -->
 </div>
 <div class="hide_box"></div>
 <div class="shang_box">

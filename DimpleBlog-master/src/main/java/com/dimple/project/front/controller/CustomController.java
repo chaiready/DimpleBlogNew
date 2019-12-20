@@ -20,6 +20,7 @@ import org.thymeleaf.context.Context;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.dimple.common.constant.CommonConstant;
 import com.dimple.common.constant.Constants;
 import com.dimple.common.utils.RandomUtil;
 import com.dimple.common.utils.StringUtils;
@@ -106,7 +107,7 @@ public class CustomController extends BaseController {
             model.addAttribute("funcName", funcService.getById(funcId).getFuncName());
           }
           model.addAttribute("funcId", funcId);
-          PageHelper.startPage(pageNum == null ? 1 : pageNum, Constants.BLOG_PAGE_SIZE, "b.create_time desc");
+          PageHelper.startPage(changePageNum(pageNum, "") , Constants.BLOG_PAGE_SIZE);
           model.addAttribute("blogs", new PageInfo<>(homeService.selectBlogListByFuncId(funcId)));
         }
         
@@ -142,8 +143,8 @@ public class CustomController extends BaseController {
     }
     
     
-    @VLog(title = "分类")
-    @GetMapping({"/{loginName}/func/{funcId}.html"})
+    @VLog(title = "菜单的博客")
+    @GetMapping({"/{loginName}/{funcId}.html"})
     public String funcBlog(@PathVariable String loginName, @PathVariable Long funcId,
                            Integer pageNum, Model model) {
         List<Func> funcList = funcService.findBbsByCreator(loginName);
@@ -165,6 +166,30 @@ public class CustomController extends BaseController {
         return defaultIndex(loginName, pageNum, model);
     }
 
+    @VLog(title = "博客")
+    @GetMapping("/{loginName}/{funcId}/{blogId}.html")
+    public String article(@PathVariable String loginName, @PathVariable Long funcId,@PathVariable Integer blogId,Integer pageNum, Model model) {
+        setCommonMessage(model, loginName, funcId, pageNum);
+        Blog blog = blogService.selectBlogWithTextAndTagsAndCategoryByBlogId(blogId);
+        //只能访问是已经发表的文章
+        if (!CommonConstant.one.equals(blog.getStatus())) {
+            return "error/404";
+        }
+        //增加点击量
+        blogService.incrementBlogClick(blogId);
+        model.addAttribute("blog", blog);
+        model.addAttribute("previousBlog", blogService.selectPreviousBlogByFuncIdAndId(funcId, blogId));
+        model.addAttribute("nextBlog", blogService.selectNextBlogByFuncIdAndId(funcId, blogId));
+        model.addAttribute("randBlogList", blogService.selectRandBlogList());
+        Comment comment = new Comment();
+        comment.setPageId(blogId);
+        comment.setDisplay(true);
+        model.addAttribute("comments", commentService.selectCommentListForFront(comment));
+        return "front/custom/article_summernote";//front/article 将simpleMde 改成 summerNote 编辑器
+    }
+    
+    
+    
     
     @GetMapping("/{loginName}/images.html")
     @VLog(title = "用户首页")
