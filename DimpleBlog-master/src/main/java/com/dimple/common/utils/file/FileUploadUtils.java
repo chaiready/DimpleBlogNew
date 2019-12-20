@@ -3,17 +3,13 @@ package com.dimple.common.utils.file;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
-
 import org.springframework.web.multipart.MultipartFile;
-
 import com.dimple.common.exception.file.FileNameLengthLimitExceededException;
 import com.dimple.common.exception.file.FileSizeLimitExceededException;
 import com.dimple.common.utils.ImageUtil;
-import com.dimple.common.utils.spring.SpringUtils;
-import com.dimple.framework.config.ServerConfig;
+import com.dimple.common.vo.FileForm;
 import com.dimple.framework.config.SystemConfig;
 import com.dimple.project.common.domain.FileItemInfo;
-
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -35,27 +31,6 @@ public class FileUploadUtils {
      */
     public static final int DEFAULT_FILE_NAME_LENGTH = 100;
 
-    /**
-     * 默认上传的地址
-     */
-    private static String defaultBaseDir = SystemConfig.getProfile();
-    
-    public static String uploadFilePath ="/profile/upload";
-
-    /**
-     * 系统配置：用于获取系统的绝对访问逻辑
-     */
-    private static ServerConfig serverConfig = SpringUtils.getBean(ServerConfig.class);
-
-    private static int counter = 0;
-
-    public static void setDefaultBaseDir(String defaultBaseDir) {
-        FileUploadUtils.defaultBaseDir = defaultBaseDir;
-    }
-
-    public static String getDefaultBaseDir() {
-        return defaultBaseDir;
-    }
 
     /**
      * 以默认配置进行文件上传
@@ -66,7 +41,7 @@ public class FileUploadUtils {
      */
     public static final FileItemInfo upload(MultipartFile file) throws IOException {
         try {
-            return upload(getDefaultBaseDir(),SystemConfig.getRelativeProfile(), file);
+          return upload(SystemConfig.getUploadPath(), file);
         } catch (Exception e) {
             throw new IOException(e.getMessage(), e);
         }
@@ -83,9 +58,7 @@ public class FileUploadUtils {
      * @throws FileNameLengthLimitExceededException 文件名太长
      * @throws IOException                          比如读写文件出错时
      */
-    public static final FileItemInfo upload(String baseDir,String relativePath, MultipartFile file)
-            throws FileSizeLimitExceededException, IOException, FileNameLengthLimitExceededException {
-
+    public static final FileItemInfo upload(String relativePath,MultipartFile file) throws FileSizeLimitExceededException, IOException, FileNameLengthLimitExceededException {
         int fileNameLength = file.getOriginalFilename().length();
         if (fileNameLength > FileUploadUtils.DEFAULT_FILE_NAME_LENGTH) {
             throw new FileNameLengthLimitExceededException(FileUploadUtils.DEFAULT_FILE_NAME_LENGTH);
@@ -94,26 +67,20 @@ public class FileUploadUtils {
         assertAllowed(file);
 
         String fileName = FileUtils.generateFileName(file);
-
-        File desc = getAbsoluteFile(baseDir, baseDir + fileName);
+        relativePath = relativePath + fileName;
+        String absolutePath = SystemConfig.getProfile()+ relativePath;
+        File desc = getAbsoluteFile(absolutePath);
         file.transferTo(desc);
         
-        //压缩图
-//        String smallThumbnailPath = ImageUtil.generateSize(72, 72,baseDir + fileName);
-        String smallThumbnailPath = ImageUtil.generateSmall(baseDir + fileName);
-        System.out.println(">>>>>>>>"+smallThumbnailPath);
-        
-        FileItemInfo fileItemInfo = new FileItemInfo(fileName, String.valueOf(file.hashCode()), file.getSize(), file.getContentType(), new Date(), 
-        		FileItemInfo.ServerType.LOCAL.getServerType(), baseDir + "/" + fileName,relativePath+"/"+fileName);
-
-        return fileItemInfo;
+        return new FileItemInfo(fileName, String.valueOf(file.hashCode()), file.getSize(), file.getContentType(), new Date(), 
+              FileItemInfo.ServerType.LOCAL.getServerType(), absolutePath,relativePath);
     }
     
     
-    public static final FileItemInfo uploadImg(MultipartFile file)
+    public static final FileItemInfo uploadImg(FileForm form)
             throws FileSizeLimitExceededException, IOException, FileNameLengthLimitExceededException {
+       MultipartFile file = form.getFile();
     	// 上传文件路径
-        String baseDir = SystemConfig.getUploadPath(); 
         int fileNameLength = file.getOriginalFilename().length();
         if (fileNameLength > FileUploadUtils.DEFAULT_FILE_NAME_LENGTH) {
             throw new FileNameLengthLimitExceededException(FileUploadUtils.DEFAULT_FILE_NAME_LENGTH);
@@ -122,24 +89,26 @@ public class FileUploadUtils {
         assertAllowed(file);
 
         String fileName = FileUtils.generateFileName(file);
+        String relativePath = form.getRelativePath() + fileName;
+        String absolutePath = SystemConfig.getProfile()+ relativePath;
 
-        File desc = getAbsoluteFile(baseDir, baseDir + fileName);
+        File desc = getAbsoluteFile(absolutePath);
         file.transferTo(desc);
         
-        //压缩图
-//        String smallThumbnailPath = ImageUtil.generateSize(72, 72,baseDir + fileName);
-        String smallThumbnailPath = ImageUtil.generateSmall(baseDir + fileName);
-        System.out.println(">>>>>>>>"+smallThumbnailPath);
-        
-        fileName = ImageUtil.appendSuffix(fileName, ImageUtil.SUFFIX);
-        FileItemInfo fileItemInfo = new FileItemInfo(fileName, String.valueOf(file.hashCode()), file.getSize(), file.getContentType(), new Date(),
-        		FileItemInfo.ServerType.LOCAL.getServerType(), baseDir + "/" + fileName,SystemConfig.getImagePath()+"/"+fileName);
-
+//      fileName = ImageUtil.appendSuffix(fileName, ImageUtil.SUFFIX);
+        FileItemInfo fileItemInfo = null;
+        if(form.getWidth()!=null&&form.getHeight()!=null&&form.getWidth()!=0&&form.getHeight()!=0){//压缩图
+          fileItemInfo = ImageUtil.generateSize(form.getWidth(), form.getHeight(), absolutePath);
+        }else{
+          fileItemInfo = ImageUtil.generateSmall(absolutePath);
+         
+        }
+        fileItemInfo.setName(fileName);
         return fileItemInfo;
     }
 
 
-    private static final File getAbsoluteFile(String uploadDir, String filename) throws IOException {
+    private static final File getAbsoluteFile(String filename) throws IOException {
         File desc = new File(File.separator + filename);
 
         if (!desc.getParentFile().exists()) {

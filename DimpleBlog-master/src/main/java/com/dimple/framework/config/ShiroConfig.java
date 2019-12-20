@@ -5,9 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
 import javax.servlet.Filter;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.shiro.codec.Base64;
 import org.apache.shiro.config.ConfigurationException;
@@ -26,15 +24,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import com.dimple.common.utils.file.FileUploadUtils;
 import com.dimple.framework.shiro.realm.UserRealm;
 import com.dimple.framework.shiro.session.ShiroSessionListener;
 import com.dimple.framework.shiro.web.filter.FrontLogoutFilter;
 import com.dimple.framework.shiro.web.filter.KickoutSessionControlFilter;
 import com.dimple.framework.shiro.web.filter.LogoutFilter;
 import com.dimple.framework.shiro.web.filter.captcha.CaptchaValidateFilter;
-
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 
 /**
@@ -352,7 +347,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/js/**", "anon");
         filterChainDefinitionMap.put("/dimple/**", "anon");
         filterChainDefinitionMap.put("/druid/**", "anon");
-        filterChainDefinitionMap.put(SystemConfig.getRelativeProfile()+"/**", "anon");
+        filterChainDefinitionMap.put(SystemConfig.relativeProfile+"/**", "anon");
         filterChainDefinitionMap.put("/public/**", "anon");
         
         filterChainDefinitionMap.put("/**.html", "anon");

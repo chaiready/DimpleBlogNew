@@ -71,7 +71,7 @@
 <script th:inline="javascript">
     $(document).ready(function () {
     	 $("#fileinput-upload").fileinput({
-    		 'uploadUrl': "/file/image/add", //上传的地址(访问接口地址)
+    		 'uploadUrl': "/file/image/uploadWithSize?width=[[${width}]]&height=[[${width}]]", //上传的地址(访问接口地址)
              'theme': 'explorer-fas',
              overwriteInitial: false,
              minFileCount: 1,// 最小上传数量
@@ -107,9 +107,6 @@
                  //$("#url").val(params.response.path);
             	 //parent.callBackUploadImg(params.response.path);
             	 var _method=[[${callBackMethod}]];
-            	 console.info("11111111111111");
-            	 console.info(_method);
-            	 console.info("22222222222222");
 				 if(_method){
 		        	eval(_method+"(params.response.path)"); 
 				 }	
@@ -122,7 +119,7 @@
     });
 
     function uploadFile(){
-    	var aaa = $("#fileinput-upload").fileinput("upload");
+    	$("#fileinput-upload").fileinput("upload");
     }
 </script>
 </body>

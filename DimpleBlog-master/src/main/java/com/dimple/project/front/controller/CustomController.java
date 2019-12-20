@@ -106,7 +106,7 @@ public class CustomController extends BaseController {
             model.addAttribute("funcName", funcService.getById(funcId).getFuncName());
           }
           model.addAttribute("funcId", funcId);
-          PageHelper.startPage(pageNum == null ? 1 : pageNum, Constants.BLOG_PAGE_SIZE, "create_time desc");
+          PageHelper.startPage(pageNum == null ? 1 : pageNum, Constants.BLOG_PAGE_SIZE, "b.create_time desc");
           model.addAttribute("blogs", new PageInfo<>(homeService.selectBlogListByFuncId(funcId)));
         }
         

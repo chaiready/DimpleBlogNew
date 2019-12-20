@@ -103,7 +103,6 @@ public class FileUtils {
     public static String generateFileName(MultipartFile file) {
         //获取文件后缀
         String fileExtension = Files.getFileExtension(file.getOriginalFilename());
-//      String fileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".")) + "-" + new SimpleDateFormat("yyyyMMddhhmmss").format(new Date()) + "." + fileExtension;
         String fileName = new SimpleDateFormat("yyyyMMddhhmmss").format(new Date()) + "." + fileExtension;
     	return fileName;
     }

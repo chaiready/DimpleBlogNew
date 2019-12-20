@@ -48,9 +48,11 @@ public class BlogController extends BaseController {
     }
 
     @GetMapping("/image")
-    public String img(String callBackMethod,Model model) {
+    public String img(String callBackMethod,Integer width , Integer height,Model model) {
 //        return "blog/blog/img";
       model.addAttribute("callBackMethod", callBackMethod);
+      model.addAttribute("width", width==null?0:width);
+      model.addAttribute("height", height==null?0:height);
       return "blog/blog/img_king_single";
     }
 

@@ -1,9 +1,5 @@
 package com.dimple.common.utils;
 
-import net.coobird.thumbnailator.Thumbnails;
-import net.coobird.thumbnailator.geometry.Positions;
-import net.coobird.thumbnailator.name.Rename;
-
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -14,9 +10,14 @@ import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-
 import javax.imageio.ImageIO;
+import com.dimple.framework.config.SystemConfig;
+import com.dimple.project.common.domain.FileItemInfo;
+import net.coobird.thumbnailator.Thumbnails;
+import net.coobird.thumbnailator.geometry.Positions;
+import net.coobird.thumbnailator.name.Rename;
 
 /**
  * 图片压缩工具类
@@ -165,22 +166,24 @@ public class ImageUtil {
 	 * 
 	 * @throws IOException
 	 */
-	public static String generateSize(int width, int height, String fileName) throws IOException {
+	public static FileItemInfo generateSize(int width, int height, String fileName) throws IOException {
 		/*
 		 * size(width,height) 若图片横比200小，高比300小，不变
 		 * 若图片横比200小，高比300大，高缩小到300，图片比例不变 若图片横比200大，高比300小，横缩小到200，图片比例不变
 		 * 若图片横比200大，高比300大，图片按比例缩小，横为200或高为300
 		 */
-		String newFile = appendSuffix(fileName, SUFFIX);
+		String newFileName = appendSuffix(fileName, SUFFIX);
 		// 按指定大小把图片进行缩和放（会遵循原图高宽比例）
 		// Thumbnails.of(fileName).size(width,height).toFile(newFile);
 		// 不按比例，就按指定的大小进行缩放
-		Thumbnails.of(fileName).size(width, height).keepAspectRatio(false).toFile(newFile);
-		return newFile;
+		Thumbnails.of(fileName).size(width, height).keepAspectRatio(false).toFile(newFileName);
+		 FileItemInfo fileItemInfo = new FileItemInfo(fileName, "", 0L, "", new Date(), 
+             FileItemInfo.ServerType.LOCAL.getServerType(), newFileName , newFileName.replace(SystemConfig.getProfile(), ""));
+		 return fileItemInfo;
 	}
 
-	public static String generateSmall(String fileName) throws IOException {
-		String newFile = appendSuffix(fileName, SUFFIX);
+	public static FileItemInfo generateSmall(String fileName) throws IOException {
+		String newFileName = appendSuffix(fileName, SUFFIX);
 		File srcFile = new File(fileName);
 		long srcFileSize = srcFile.length();
 		System.out.println("源图片：" + fileName + "，大小：" + srcFileSize / 1024 + "kb========"+srcFileSize);
@@ -196,11 +199,14 @@ public class ImageUtil {
 		System.out.println(">>>>>"+Double.valueOf(scale));
 		double quality = Double.valueOf(scale);
 		if(quality>1){
-			Thumbnails.of(fileName).size(imgWidth, imgHeight).outputQuality(DEFAULT_SCALE).toFile(newFile);
+			Thumbnails.of(fileName).size(imgWidth, imgHeight).outputQuality(DEFAULT_SCALE).toFile(newFileName);
 		}else{
-			Thumbnails.of(fileName).size(imgWidth, imgHeight).outputQuality(quality).toFile(newFile);
+			Thumbnails.of(fileName).size(imgWidth, imgHeight).outputQuality(quality).toFile(newFileName);
 		}
-		return newFile;
+		System.out.println(newFileName);
+        FileItemInfo fileItemInfo = new FileItemInfo(fileName, "", 0L, "", new Date(), 
+            FileItemInfo.ServerType.LOCAL.getServerType(), newFileName , newFileName.replace(SystemConfig.getProfile(), ""));
+        return fileItemInfo;
 	}
 
 	/**
@@ -498,6 +504,8 @@ public class ImageUtil {
 //				 + System.currentTimeMillis() + ".bmp", 1000, 0.8);
 
 //		generateSmall("D:/workspace/self/DimpleBlogNew/DimpleBlog-master/images/Desert.jpg");
+	  
+	    generateSmall("C:/Java/profile/images/20191220100645.jpg");
 		
 	}
 }

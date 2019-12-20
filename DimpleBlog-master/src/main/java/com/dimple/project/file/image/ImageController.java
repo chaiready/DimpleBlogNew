@@ -1,8 +1,10 @@
 package com.dimple.project.file.image;
 
 import com.dimple.common.utils.file.FileUploadUtils;
+import com.dimple.common.vo.FileForm;
 import com.dimple.framework.aspectj.lang.annotation.Log;
 import com.dimple.framework.aspectj.lang.enums.BusinessType;
+import com.dimple.framework.config.SystemConfig;
 import com.dimple.framework.web.controller.BaseController;
 import com.dimple.framework.web.domain.AjaxResult;
 import com.dimple.project.common.domain.FileItemInfo;
@@ -53,22 +55,26 @@ public class ImageController extends BaseController {
     public String image() {
         return "file/image/image";
     }
+    
+    private AjaxResult uploadFile(MultipartFile file, Integer serverType) throws IOException{
+      Objects.requireNonNull(serverType, "上传服务器未选定，请重试！");
+      //检查文件大小
+      FileUploadUtils.assertAllowed(file);
+      String path = null;
+      if (FileItemInfo.ServerType.QI_NIU_YUN.getServerType() == serverType) {
+          path = fileService.insertQiNiuYunImageFile(file);
+      } else if (FileItemInfo.ServerType.LOCAL.getServerType() == serverType) {
+          path = fileService.insertLocalImageFile(new FileForm(SystemConfig.getImagePath(), file));
+      }
+      return AjaxResult.success().put("path", path);
+    }
 
     @PostMapping("/add")
     @Log(title = "系统图片", businessType = BusinessType.UPLOAD)
     @ResponseBody
     @RequiresPermissions("file:image:upload")
     public AjaxResult add(@RequestParam("file") MultipartFile file, Integer serverType) throws IOException {
-        Objects.requireNonNull(serverType, "上传服务器未选定，请重试！");
-        //检查文件大小
-        FileUploadUtils.assertAllowed(file);
-        String path = null;
-        if (FileItemInfo.ServerType.QI_NIU_YUN.getServerType() == serverType) {
-            path = fileService.insertQiNiuYunImageFile(file);
-        } else if (FileItemInfo.ServerType.LOCAL.getServerType() == serverType) {
-            path = fileService.insertLocalImageFile(file);
-        }
-        return AjaxResult.success().put("path", path);
+        return uploadFile(file, serverType);
     }
     
     
@@ -77,16 +83,15 @@ public class ImageController extends BaseController {
     @ResponseBody
     @RequiresPermissions("file:image:upload")
     public AjaxResult upload(@RequestParam("file_data") MultipartFile file_data, Integer serverType) throws IOException {
-        Objects.requireNonNull(serverType, "上传服务器未选定，请重试！");
-        //检查文件大小
-        FileUploadUtils.assertAllowed(file_data);
-        String path = null;
-        if (FileItemInfo.ServerType.QI_NIU_YUN.getServerType() == serverType) {
-            path = fileService.insertQiNiuYunImageFile(file_data);
-        } else if (FileItemInfo.ServerType.LOCAL.getServerType() == serverType) {
-            path = fileService.insertLocalImageFile(file_data);
-        }
-        return AjaxResult.success().put("path", path);
+      return uploadFile(file_data, serverType);
+    }
+    
+    @PostMapping("/uploadWithSize")
+    @Log(title = "系统图片", businessType = BusinessType.UPLOAD)
+    @ResponseBody
+    @RequiresPermissions("file:image:upload")
+    public AjaxResult uploadWithSize(@RequestParam("file") MultipartFile file, Integer serverType,Integer width , Integer height) throws IOException {
+      return AjaxResult.success().put("path", fileService.insertLocalImageFile(new FileForm(SystemConfig.getImagePath(), file, width, height)));
     }
 
     @GetMapping("/list/{serverType}")

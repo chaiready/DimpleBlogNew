@@ -3,6 +3,7 @@ package com.dimple.project.common.service.impl;
 import com.dimple.common.utils.file.FileUploadUtils;
 import com.dimple.common.utils.file.FileUtils;
 import com.dimple.common.utils.file.QiNiuUtils;
+import com.dimple.common.vo.FileForm;
 import com.dimple.framework.config.SystemConfig;
 import com.dimple.project.common.domain.FileItemInfo;
 import com.dimple.project.common.mapper.FileItemInfoMapper;
@@ -88,8 +89,8 @@ public class FileServiceImpl implements FileService {
 
     @Override
     @Transactional
-    public String insertLocalImageFile(MultipartFile file) throws IOException {
-        FileItemInfo fileItemInfo = FileUploadUtils.upload(SystemConfig.getImagePath(),SystemConfig.getRelativeImagePath(), file);
+    public String insertLocalImageFile(FileForm fileForm) throws IOException {
+        FileItemInfo fileItemInfo = FileUploadUtils.uploadImg(fileForm);
         fileItemInfoMapper.insertFileItem(fileItemInfo);
         return fileItemInfo.getRelativePath();//fileItemInfo.getPath();
     }

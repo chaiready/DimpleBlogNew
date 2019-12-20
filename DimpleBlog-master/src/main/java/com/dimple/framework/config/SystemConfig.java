@@ -30,7 +30,7 @@ public class SystemConfig {
      */
     private static String profile;
     
-    private static String relativeProfile="/profile";//相对路径
+    public static String relativeProfile="/profile";//相对路径
     /**
      * 获取地址开关
      */
@@ -69,13 +69,13 @@ public class SystemConfig {
     }
     
 
-    public static String getRelativeProfile() {
-		return relativeProfile;
-	}
-
-	public static void setRelativeProfile(String relativeProfile) {
-		SystemConfig.relativeProfile = relativeProfile;
-	}
+//    public static String getRelativeProfile() {
+//		return relativeProfile;
+//	}
+//
+//	public static void setRelativeProfile(String relativeProfile) {
+//		SystemConfig.relativeProfile = relativeProfile;
+//	}
 
 	public static boolean isAddressEnabled() {
         return addressEnabled;
@@ -86,26 +86,26 @@ public class SystemConfig {
     }
 
     public static String getAvatarPath() {
-        return profile + "avatar/";
+        return relativeProfile + "/avatar/";
     }
     
-    public static String getRelativeAvatarPath() {
-        return relativeProfile + "avatar/";
-    }
+//    public static String getRelativeAvatarPath() {
+//        return relativeProfile + "avatar/";
+//    }
 
     public static String getDownloadPath() {
-        return profile + "download/";
+        return relativeProfile + "/download/";
     }
 
     public static String getUploadPath() {
-        return profile + "upload/";
+        return relativeProfile + "/upload/";
     }
 
     public static String getImagePath() {
-        return profile + "/images/";
-    }
-    
-    public static String getRelativeImagePath() {
         return relativeProfile + "/images/";
     }
+    
+//    public static String getRelativeImagePath() {
+//        return relativeProfile + "/images/";
+//    }
 }

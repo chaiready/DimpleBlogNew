@@ -1,11 +1,11 @@
 package com.dimple.project.common.service;
 
-import com.dimple.project.common.domain.FileItemInfo;
-import com.qiniu.common.QiniuException;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.util.List;
+import org.springframework.web.multipart.MultipartFile;
+import com.dimple.common.vo.FileForm;
+import com.dimple.project.common.domain.FileItemInfo;
+import com.qiniu.common.QiniuException;
 
 /**
  * @className: FileService
@@ -47,7 +47,7 @@ public interface FileService {
      * @param file 需要上传的文件
      * @return 文件路径
      */
-    String insertLocalImageFile(MultipartFile file) throws IOException;
+    String insertLocalImageFile(FileForm fileForm) throws IOException;
 
     /**
      * 刷新本地图片到数据库

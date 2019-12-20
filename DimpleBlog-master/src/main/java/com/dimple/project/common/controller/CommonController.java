@@ -39,11 +39,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class CommonController {
 
-    /**
-     * 文件上传路径
-     */
-    public static final String UPLOAD_PATH = "/profile/upload/";
-
     @Autowired
     private ServerConfig serverConfig;
 
@@ -88,8 +83,8 @@ public class CommonController {
     public AjaxResult uploadFile(MultipartFile file) throws Exception {
         try {
             // 上传并返回新文件名称
-            String fileName = FileUploadUtils.uploadImg(file).getName();
-            String url = serverConfig.getUrl() + UPLOAD_PATH + fileName;
+            String fileName = FileUploadUtils.upload(file).getName();
+            String url = serverConfig.getUrl() + SystemConfig.getUploadPath() + fileName;
             AjaxResult ajax = AjaxResult.success();
             ajax.put("fileName", fileName);
             ajax.put("url", url);

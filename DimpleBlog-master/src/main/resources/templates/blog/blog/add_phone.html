@@ -24,9 +24,9 @@
                 	<input id="funcId" name="funcId" type="hidden" th:value="${funcId}"/>
                     <div class="form-group">
                         <label class="control-label">封面:</label>
+                        <input type="hidden" id="headerImgPath" value="">
                         <img src="/img/blog-default.png" width="150px" onclick="changeImg()"
-                             height="150px"
-                             id="header" name="headerImg" title="点击图片更换标图"/>
+                             height="150px" id="header" name="headerImg" title="点击图片更换标图"/>
                     </div>
                     <div class="form-group">
                         <label class="sr-only control-label">标题:</label>
@@ -168,6 +168,7 @@
     
     function callBackHeaderImg(fileUrl){
     	$("#header").attr("src", fileUrl);
+    	$("#headerImgPath").val(fileUrl);
     }
 
     function changeImg() {
@@ -184,7 +185,7 @@
             title: false,
             fix: false,
             area: ['auto','420px'],//$(window).width() / 1.1 + 'px'
-            content: "/blog/blog/image?callBackMethod=window.parent.callBackHeaderImg",
+            content: "/blog/blog/image?width=180&height=105&callBackMethod=window.parent.callBackHeaderImg",
             shadeClose: true,// 是否点击遮罩关闭
             btn: ['<i class="fa fa-check"></i> 确认', '<i class="fa fa-close"></i> 关闭'],
             yes: function (index, layero) {
@@ -200,7 +201,7 @@
     //获取表单数据
     function getData() {
     	var  funcId = $("#funcId").val();
-        var headerImg = $("#header")[0].src;
+        var headerUrl = $("#headerImgPath").val();//$("#header")[0].src;
         var title = $("input[name='title']").val();
         var summary = $("input[name='summary']").val();
         var tags = $("#tags").val();
@@ -211,7 +212,7 @@
         console.log(tags);
         var data = {
         	funcId: funcId,
-            headerImg: headerImg,
+            headerImg: headerUrl,
             title: title,
             summary: summary,
             tags: tags,
