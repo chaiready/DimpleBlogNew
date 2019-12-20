@@ -135,6 +135,35 @@ CREATE TABLE `bg_func` (
 PRIMARY KEY (`func_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8
 
+
+CREATE TABLE `bg_func` (
+  `id` bigint(11) NOT NULL AUTO_INCREMENT COMMENT '菜单ID',
+  `func_name` varchar(50) NOT NULL COMMENT '菜单名称',
+  `parent_id` int(11) DEFAULT '0' COMMENT '父菜单ID',
+  `order_num` bigint(11) DEFAULT NULL,
+  `url` varchar(200) DEFAULT '#' COMMENT '请求地址',
+  `func_type` char(1) DEFAULT '' COMMENT '菜单类型（M目录 C菜单 F按钮）',
+  `visible` char(1) DEFAULT '0' COMMENT '菜单状态（0显示 1隐藏）',
+  `perms` varchar(100) DEFAULT NULL COMMENT '权限标识',
+  `icon` varchar(100) DEFAULT '#' COMMENT '菜单图标',
+  `create_by` varchar(64) DEFAULT '' COMMENT '创建者',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) DEFAULT '' COMMENT '更新者',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(500) DEFAULT '' COMMENT '备注',
+  `creator` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8
+
+CREATE TABLE `bg_func_blog` (
+  `func_id` int(11) NOT NULL COMMENT '菜单ID',
+  `blog_id` int(11) NOT NULL COMMENT '博客ID',
+  `create_by` varchar(64) DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
+  `update_by` varchar(64) DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+
 #20191210
 CREATE TABLE `bg_suggest` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
@@ -164,8 +193,8 @@ alter table bg_func MODIFY COLUMN order_num BIGINT(11);
 
 #20191218
 delete from bg_link;
-INSERT INTO `dimpleblog`.`bg_link` (`link_id`, `title`, `description`, `header_img`, `click`, `weight`, `available`, `processed`, `display`, `url`, `email`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES ('2', '今日头条', '今日头条', 'http://www.bianxiaofeng.com/imgs/favicon.ico', '5', '0', '1', '1', '1', 'https://www.toutiao.com/', '909074489@qq.com', 'admin', '2019-03-26 10:24:49', NULL, NULL);
-INSERT INTO `dimpleblog`.`bg_link` (`link_id`, `title`, `description`, `header_img`, `click`, `weight`, `available`, `processed`, `display`, `url`, `email`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES ('3', '最代码', '最代码网站', 'http://static.zuidaima.com/resource/img/logo.png', '1', '1111', '1', '1', '1', 'http://www.zuidaima.com/', '909074489@qq.com', 'admin', '2019-04-23 23:43:55', NULL, NULL);
+INSERT INTO `bg_link` (`link_id`, `title`, `description`, `header_img`, `click`, `weight`, `available`, `processed`, `display`, `url`, `email`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES ('2', '今日头条', '今日头条', 'http://www.bianxiaofeng.com/imgs/favicon.ico', '5', '0', '1', '1', '1', 'https://www.toutiao.com/', '909074489@qq.com', 'admin', '2019-03-26 10:24:49', NULL, NULL);
+INSERT INTO `bg_link` (`link_id`, `title`, `description`, `header_img`, `click`, `weight`, `available`, `processed`, `display`, `url`, `email`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES ('3', '最代码', '最代码网站', 'http://static.zuidaima.com/resource/img/logo.png', '1', '1111', '1', '1', '1', 'http://www.zuidaima.com/', '909074489@qq.com', 'admin', '2019-04-23 23:43:55', NULL, NULL);
 
 #20191220
 alter table bg_func_blog add COLUMN create_by varchar(64);

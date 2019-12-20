@@ -1,5 +1,6 @@
 package com.dimple.project.front.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.apache.commons.collections.CollectionUtils;
@@ -39,6 +40,8 @@ import com.dimple.project.common.service.MailService;
 import com.dimple.project.front.service.HomeService;
 import com.dimple.project.king.func.domain.Func;
 import com.dimple.project.king.func.service.IFuncService;
+import com.dimple.project.king.suggest.domain.SuggestEntity;
+import com.dimple.project.king.suggest.service.SuggestService;
 import com.dimple.project.king.userlog.domain.UserLogEntity;
 import com.dimple.project.king.userlog.service.UserLogService;
 import com.dimple.project.link.service.LinkService;
@@ -90,6 +93,8 @@ public class CustomController extends BaseController {
     private MailService mailService;
     @Autowired
     private UserLogService userLogService;
+    @Autowired
+    private SuggestService suggestService;
 
 
     /**
@@ -196,6 +201,30 @@ public class CustomController extends BaseController {
     public String images(@PathVariable String loginName, Integer pageNum, Model model) {
         setCommonMessage(model, loginName,FUNC_NULL,pageNum);
         return "front/images";
+    }
+    
+    
+    @GetMapping("/{loginName}/suggest.html")
+    public String suggestList(Model model,@PathVariable String loginName, Integer pageNum, String directPage) {
+      User user = ShiroUtils.getSysUser();
+      List<SuggestEntity> objList = new ArrayList<SuggestEntity>();
+      if(user!=null){
+        QueryWrapper<SuggestEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("create_by", user.getLoginName()).orderByDesc("create_time");
+        PageHelper.startPage(changePageNum(pageNum, directPage), Constants.BLOG_PAGE_SIZE);
+        objList = suggestService.list(queryWrapper);
+      }
+      PageInfo<SuggestEntity> pageInfo = new PageInfo<>(objList);
+      model.addAttribute("objList", pageInfo);
+      
+      List<Func> funcList = funcService.findBbsByCreator(loginName);
+      model.addAttribute("funcList", funcList);
+      model.addAttribute("loginName", loginName);
+      // 查询通知
+      model.addAttribute("notices", noticeService.selectNoticeListDisplay());
+      model.addAttribute("curUser", user);
+      
+      return "king/suggest/suggest_list";
     }
 
 

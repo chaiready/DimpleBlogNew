@@ -117,7 +117,7 @@
                                 <a href="/king/func">博客管理</a>
                             </li>
                             <li>
-                                <a href="/king/suggest/list.html">我的消息</a>
+                                <a href="/bbs" th:href="${'/bbs/'+curUser.loginName+'/suggest.html'}">我的消息</a>
                             </li>
 	                        <li>
 	                             <a href="/frontLogout">退出登录</a>
@@ -191,7 +191,7 @@
                             <a href="/king/func">我的博客</a>
                         </li>
                         <li>
-                            <a href="/king/suggest/toList">我的消息</a>
+                            <a href="/bbs" th:href="${'/bbs/'+curUser.loginName+'/suggest.html'}">我的消息</a>
                         </li>
                         <li>
                              <a href="/frontLogout">退出登录</a>
