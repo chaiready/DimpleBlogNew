@@ -32,6 +32,7 @@ public class ResourcesConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         /** 文件上传路径 */
+        registry.addResourceHandler("/profile/**").addResourceLocations("file:" + SystemConfig.getProfile()+SystemConfig.relativeProfile+"/");
 
         /** swagger配置 */
         registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
