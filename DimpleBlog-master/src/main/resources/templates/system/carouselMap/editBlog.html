@@ -9,23 +9,14 @@
         <div class="box box-main">
             <div class="ui-layout-content">
                 <form class="" id="blogAddForm">
-                    <div class="form-group">
-                        <label class="control-label">封面:</label>
-                        <input type="hidden" id="headerImgPath" value="">
-                        <img src="/img/blog-default.png" width="150px" onclick="changeImg()"
-                             height="150px" id="header" name="headerImg" title="点击图片更换标图"/>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">封面:</label>
-                        <input type="hidden" id="headerImgPath" value="">
-                        <img src="/img/blog-default.png" width="150px" onclick="changeImg()"
-                             height="150px" id="header" name="headerImg" title="点击图片更换标图"/>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">封面:</label>
-                        <input type="hidden" id="headerImgPath" value="">
-                        <img src="/img/blog-default.png" width="150px" onclick="changeImg()"
-                             height="150px" id="header" name="headerImg" title="点击图片更换标图"/>
+                    <div class="form-group" th:each="carouselMap,cmStat:${carouselMaps}">
+                        <label class="control-label" style="margin-left: 20px;">图片[[${cmStat.count}]]:</label>
+                        <input type="hidden" th:id = "headerImgPath+(${cmStat.count})"  value="">
+                        <img th:src="${carouselMap.imgUrl}" width="150px" th:onclick="changeImg([[${cmStat.count}]]);"
+                             height="150px" th:id = "headerImg+(${cmStat.count})" th:name = "headerImg+(${cmStat.count})" title="点击图片更换标图"/>
+                        <label class="control-label" style="">
+                        	<a class="btn btn-danger btn-xs " href="javascript:void(0)" th:onclick="delImg([[${carouselMap.carouselId}]]);"><i class="fa fa-remove"></i> 删除</a>
+                        </label>
                     </div>
                 </form>
             </div>
@@ -104,19 +95,29 @@
     });
 
     
-    function callBackHeaderImg(fileUrl){
-    	$("#header").attr("src", fileUrl);
-    	$("#headerImgPath").val(fileUrl);
+    function callBackHeaderImg1(fileUrl){
+    	$("#headerImg1").attr("src", fileUrl);
+    	$("#headerImgPath1").val(fileUrl);
+    }
+    
+    function callBackHeaderImg2(fileUrl){
+    	$("#headerImg2").attr("src", fileUrl);
+    	$("#headerImgPath2").val(fileUrl);
+    }
+    
+    function callBackHeaderImg3(fileUrl){
+    	$("#headerImg3").attr("src", fileUrl);
+    	$("#headerImgPath3").val(fileUrl);
     }
 
-    function changeImg() {
+    function changeImg(index) {
     	layer.open({
             type: 2,
             shade: 0.3,
             title: false,
             fix: false,
             area: ['auto','420px'],//$(window).width() / 1.1 + 'px'
-            content: "/blog/blog/image?width=180&height=105&callBackMethod=window.parent.callBackHeaderImg",
+            content: "/blog/blog/image?width=180&height=105&callBackMethod=window.parent.callBackHeaderImg"+index,
             shadeClose: true,// 是否点击遮罩关闭
             btn: ['<i class="fa fa-check"></i> 确认', '<i class="fa fa-close"></i> 关闭'],
             yes: function (index, layero) {
@@ -165,6 +166,19 @@
     function closeDialog(){
     	var index = parent.layer.getFrameIndex(window.name);
         parent.layer.close(index);
+    }
+    
+    function delImg(id){
+    	layer.confirm('确定删除该图片吗?', {
+            icon: 3,
+            title: "系统提示",
+            btn: ['确认', '取消']
+        }, function (index) {
+            layer.close(index);
+            $.operate.submit ('/system/carouselMap/blogEditRemove', 'delete', 'json', {"carouselId":objId}, function(result){
+               window.location.href="/king/func/[[${funcId}]].html";
+            });
+        });
     }
 </script>
 </body>

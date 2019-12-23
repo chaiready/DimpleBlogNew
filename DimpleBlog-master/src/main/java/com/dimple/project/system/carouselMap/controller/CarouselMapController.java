@@ -1,5 +1,6 @@
 package com.dimple.project.system.carouselMap.controller;
 
+import com.dimple.common.constant.Constants;
 import com.dimple.common.utils.security.ShiroUtils;
 import com.dimple.framework.aspectj.lang.annotation.Log;
 import com.dimple.framework.aspectj.lang.enums.BusinessType;
@@ -103,19 +104,23 @@ public class CarouselMapController extends BaseController {
     	User user = ShiroUtils.getSysUser();
     	// 放置轮播图
         List<CarouselMap> carouselMaps = carouselMapService.selectByCreateBy(user.getLoginName());
-        if(CollectionUtils.isEmpty(carouselMaps)){
-          CarouselMap cm = new CarouselMap();
-          cm.setTitle("");
-          cm.setSubTitle("");
-          cm.setImgUrl("/front/images/touploadimg.jpg");
-          carouselMaps.add(cm);
-          cm = new CarouselMap();
-          cm.setTitle("");
-          cm.setSubTitle("");
-          cm.setImgUrl("/front/images/touploadimg.jpg");
-          carouselMaps.add(cm);
+        int carouselMapsSize = carouselMaps.size();
+        for(int i=0;i<Constants.BLOG_INDEX_PIC_COUNT-carouselMapsSize;i++){
+        	 CarouselMap cm = new CarouselMap();
+        	 cm.setCarouselId(0);
+             cm.setTitle("");
+             cm.setSubTitle("");
+             cm.setImgUrl("/front/images/touploadimg.jpg");
+             carouselMaps.add(cm);
         }
         model.addAttribute("carouselMaps", carouselMaps);
     	return "system/carouselMap/editBlog";
     }
+    
+    @DeleteMapping("/blogEditRemove")
+    @ResponseBody
+    public AjaxResult blogEditRemove(Integer carouselId) {
+        return toAjax(carouselMapService.deleteCarouselMapByIds([]));
+    }
+    
 }

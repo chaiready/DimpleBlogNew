@@ -74,4 +74,6 @@ public class Constants {
     public static String BLOG_ROLE_KEY = "blogger";
     
     public static int BLOG_PAGE_SIZE = 10;
+    
+    public static int BLOG_INDEX_PIC_COUNT = 3;
 }
