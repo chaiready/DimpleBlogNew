@@ -1,6 +1,7 @@
 package com.dimple.project.king.func.controller;
 
 import java.util.List;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.dimple.common.constant.Constants;
 import com.dimple.common.utils.security.ShiroUtils;
@@ -23,6 +25,8 @@ import com.dimple.project.king.func.domain.Func;
 import com.dimple.project.king.func.domain.FuncBlogEntity;
 import com.dimple.project.king.func.service.FuncBlogService;
 import com.dimple.project.king.func.service.IFuncService;
+import com.dimple.project.system.carouselMap.entity.CarouselMap;
+import com.dimple.project.system.carouselMap.service.CarouselMapService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
@@ -45,6 +49,8 @@ public class FuncController extends BaseController {
   HomeService homeService;
   @Autowired
   private FuncBlogService funcBlogService;
+  @Autowired
+  CarouselMapService carouselMapService;
 
   @RequiresPermissions("king:func:view")
   @GetMapping({"", "/{funcId}.html"})
@@ -71,6 +77,23 @@ public class FuncController extends BaseController {
     model.addAttribute("funcName", funcName);
     // 设置当前访问主页名
     model.addAttribute("loginName", loginName);
+    
+    // 放置轮播图
+    List<CarouselMap> carouselMaps = carouselMapService.selectByCreateBy(loginName);
+    if(CollectionUtils.isEmpty(carouselMaps)){
+      CarouselMap cm = new CarouselMap();
+      cm.setTitle("");
+      cm.setSubTitle("");
+      cm.setImgUrl("/front/images/touploadimg.jpg");
+      carouselMaps.add(cm);
+      cm = new CarouselMap();
+      cm.setTitle("");
+      cm.setSubTitle("");
+      cm.setImgUrl("/front/images/touploadimg.jpg");
+      carouselMaps.add(cm);
+    }
+    model.addAttribute("carouselMaps", carouselMaps);
+    
     return prefix + "/func";
   }
 

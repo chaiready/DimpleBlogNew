@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('轮播图片')"/>
+</head>
+<body class="gray-bg">
+<div class="ui-layout-west">
+    <div class="main-content">
+        <div class="box box-main">
+            <div class="ui-layout-content">
+                <form class="" id="blogAddForm">
+                    <div class="form-group">
+                        <label class="control-label">封面:</label>
+                        <input type="hidden" id="headerImgPath" value="">
+                        <img src="/img/blog-default.png" width="150px" onclick="changeImg()"
+                             height="150px" id="header" name="headerImg" title="点击图片更换标图"/>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">封面:</label>
+                        <input type="hidden" id="headerImgPath" value="">
+                        <img src="/img/blog-default.png" width="150px" onclick="changeImg()"
+                             height="150px" id="header" name="headerImg" title="点击图片更换标图"/>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">封面:</label>
+                        <input type="hidden" id="headerImgPath" value="">
+                        <img src="/img/blog-default.png" width="150px" onclick="changeImg()"
+                             height="150px" id="header" name="headerImg" title="点击图片更换标图"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-div ui-layout-center">
+    <div class="row">
+        <div class="mail-box">
+            <div class="mail-body text-right tooltip-demo" style="padding: 10px;">
+                <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler()"><i
+                        class="fa fa-check"></i>保 存
+                </button>&nbsp;
+                <button type="button" class="btn btn-sm btn-danger" onclick="closeDialog()"><i
+                        class="fa fa-reply-all"></i>关 闭
+                </button>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+
+<th:block th:include="include :: footer"/>
+<script>
+
+    $(function () {
+        $("#blogAddForm").validate({
+            rules: {
+                headerImg: {
+                    required: true,
+                },
+                title: {
+                    required: true,
+                    rangelength: [2, 45]
+                },
+                summary: {
+                    maxlength: 200
+                },
+                weight: {
+                    //required: true,
+                    number: true
+                },
+                categoryId: {
+                    required: true
+                },
+            },
+            messages: {
+                "headerImg": {
+                    required: "请选择预览图",
+                },
+                "title": {
+                    required: "请输入标题",
+                    rangelength: "请输入长度为 {0} 至 {1} 之间的标题"
+                },
+                "summary": {
+                    maxlength: "最多输入{0}个字符"
+                },
+                "weight": {
+                    required: "请输入权重",
+                    rangelength: "请输入正确格式的权重"
+                },
+                "tags": {
+                    required: "请输入标签",
+                    rangelength: "请输入长度为 {0} 至 {1} 之间的标签"
+                },
+                "categoryId": {
+                    required: "请选择分类",
+                },
+            },
+        });
+        var panehHidden = false;
+        if ($(this).width() < 769) {
+            panehHidden = true;
+        }
+    });
+
+    
+    function callBackHeaderImg(fileUrl){
+    	$("#header").attr("src", fileUrl);
+    	$("#headerImgPath").val(fileUrl);
+    }
+
+    function changeImg() {
+    	layer.open({
+            type: 2,
+            shade: 0.3,
+            title: false,
+            fix: false,
+            area: ['auto','420px'],//$(window).width() / 1.1 + 'px'
+            content: "/blog/blog/image?width=180&height=105&callBackMethod=window.parent.callBackHeaderImg",
+            shadeClose: true,// 是否点击遮罩关闭
+            btn: ['<i class="fa fa-check"></i> 确认', '<i class="fa fa-close"></i> 关闭'],
+            yes: function (index, layero) {
+          	    var iframeWin = window[layero.find('iframe')[0]['name']]; 
+          	 	iframeWin.uploadFile();//得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+            },
+            cancel: function () {
+                return true;
+            }
+        });
+    }
+
+    //获取表单数据
+    function getData() {
+    	var  funcId = $("#funcId").val();
+        var headerUrl = $("#headerImgPath").val();//$("#header")[0].src;
+        var title = $("input[name='title']").val();
+        var summary = $("input[name='summary']").val();
+        var tags = $("#tags").val();
+        var weight = $("input[name='weight']").val();
+        var categoryId = $("select[name='categoryId']").val();
+        var content = $("#summernote").summernote("code");
+        var tagsArray = new Array();
+        console.log(tags);
+        var data = {
+        	funcId: funcId,
+            headerImg: headerUrl,
+            title: title,
+            summary: summary,
+            tags: tags,
+            categoryId: categoryId,
+            weight: weight,
+            content: content
+        }
+        return data;
+    }
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            var data = getData();
+            $.operate.saveTab("/blog/blog/add", data);
+        }
+    }
+    
+    //关闭弹窗
+    function closeDialog(){
+    	var index = parent.layer.getFrameIndex(window.name);
+        parent.layer.close(index);
+    }
+</script>
+</body>
+
+</html>

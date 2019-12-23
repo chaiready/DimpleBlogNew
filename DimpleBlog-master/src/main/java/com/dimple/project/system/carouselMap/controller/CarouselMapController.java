@@ -1,5 +1,6 @@
 package com.dimple.project.system.carouselMap.controller;
 
+import com.dimple.common.utils.security.ShiroUtils;
 import com.dimple.framework.aspectj.lang.annotation.Log;
 import com.dimple.framework.aspectj.lang.enums.BusinessType;
 import com.dimple.framework.web.controller.BaseController;
@@ -7,6 +8,9 @@ import com.dimple.framework.web.domain.AjaxResult;
 import com.dimple.framework.web.page.TableDataInfo;
 import com.dimple.project.system.carouselMap.entity.CarouselMap;
 import com.dimple.project.system.carouselMap.service.CarouselMapService;
+import com.dimple.project.system.user.domain.User;
+
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -86,5 +90,32 @@ public class CarouselMapController extends BaseController {
     @ResponseBody
     public AjaxResult remove(Integer[] ids) {
         return toAjax(carouselMapService.deleteCarouselMapByIds(ids));
+    }
+    
+    
+    /**
+     * 博客修改轮播图片
+     * @param model
+     * @return
+     */
+    @GetMapping("/blogEdit")
+    public String blogEdit(Model model) {
+    	User user = ShiroUtils.getSysUser();
+    	// 放置轮播图
+        List<CarouselMap> carouselMaps = carouselMapService.selectByCreateBy(user.getLoginName());
+        if(CollectionUtils.isEmpty(carouselMaps)){
+          CarouselMap cm = new CarouselMap();
+          cm.setTitle("");
+          cm.setSubTitle("");
+          cm.setImgUrl("/front/images/touploadimg.jpg");
+          carouselMaps.add(cm);
+          cm = new CarouselMap();
+          cm.setTitle("");
+          cm.setSubTitle("");
+          cm.setImgUrl("/front/images/touploadimg.jpg");
+          carouselMaps.add(cm);
+        }
+        model.addAttribute("carouselMaps", carouselMaps);
+    	return "system/carouselMap/editBlog";
     }
 }

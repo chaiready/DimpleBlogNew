@@ -3,11 +3,208 @@
 <head>
     <th:block th:include="include-front-custom :: head('5180it.com','欢迎进入')"/>
 
+
+     <style>
+        .swiper-container {
+            width: 100%;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .swiper-slide {
+            position: relative;
+        }
+
+        .swiper-slide .content {
+            width: 50%;
+            max-width: 460px;
+            position: absolute;
+            right: 60px;
+            bottom: 90px;
+            z-index: 20;
+        }
+
+        @media screen and (max-width: 768px) {
+            .swiper-slide .content {
+                display: none;
+            }
+        }
+
+        .swiper-slide .content .txt {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.85);
+        }
+
+        .swiper-slide .content .txt h3 {
+            font-family: "BerlingskeSans Serif", Georgia, Times, serif;
+            margin: 0;
+            font-size: 2.3em;
+            font-weight: normal;
+        }
+
+        .swiper-slide .content .txt p {
+            margin: 5px 0 0;
+            font-size: 1.2em;
+        }
+
+        .swiper-slide .content .link {
+            border-radius: 25px;
+            display: block;
+            background: #008369;
+            transition: .2s background;
+            color: #fff;
+            font-family: "BerlingskeSans Bd", Tahoma, helvetica, arial, sans-serif;
+            text-align: center;
+            font-weight: 400;
+            font-size: 1.1em;
+            line-height: 1.1em;
+            padding: 10px 30px 10px;
+            float: right;
+            margin-top: 15px;
+            text-decoration: none;
+        }
+
+        .swiper-slide .content .link:hover {
+            background: #006a55;
+        }
+
+        .img-fix {
+            /*margin-top: -25%;*/
+            overflow: hidden;
+        }
+
+        .img-inner {
+            transform: translateY(0%);
+        }
+
+        .swiper-container img {
+            width: 100%;
+            display: block;
+        }
+
+        .swiper-button-next, .swiper-button-prev {
+            background: none;
+            top: auto;
+            bottom: 30px;
+        }
+
+        .swiper-button-prev {
+            left: 0;
+        }
+
+        .swiper-button-next {
+            right: 40px;
+        }
+
+        .swiper-button-next:before, .swiper-button-prev:before {
+            font-family: "upsicons";
+            position: absolute;
+            display: block;
+            height: 54px;
+            width: 50px;
+            top: 0;
+            left: 0;
+            text-align: center;
+            line-height: 54px;
+            color: #fff;
+            font-size: 68px;
+        }
+
+        .swiper-button-prev:before {
+            content: '\e628';
+        }
+
+        .swiper-button-next:before {
+            content: '\e62a';
+        }
+
+        .bottom-nav {
+            width: 100%;
+            text-align: center;
+            position: absolute;
+            bottom: 30px;
+            z-index: 10;
+        }
+
+        .ups-icon-videoplay {
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 15px;
+            cursor: pointer;
+        }
+
+        .ups-icon-videoplay:before {
+            font-family: "upsicons";
+            content: "\e680";
+            font-size: 28px;
+            color: white;
+        }
+
+        .stop-status.ups-icon-videoplay:before {
+            content: "\e681";
+        }
+
+        .swiper-pagination {
+            position: relative;
+            display: inline-block;
+            height: 29px;
+            vertical-align: middle;
+        }
+
+        #ups-banner .swiper-pagination-bullet {
+            width: 18px;
+            height: 18px;
+            background: #fff;
+            opacity: 1;
+            box-sizing: border-box;
+            border: 3px solid #fff;
+            margin: 0 15px;
+            vertical-align: middle;
+        }
+
+        #ups-banner .swiper-pagination-bullet-active {
+            background: #ffb500;
+        }
+
+        @media (max-width: 767px) {
+            .swiper-button-prev:before {
+                content: '\e627';
+            }
+
+            .swiper-button-next:before {
+                content: '\e629';
+            }
+
+            .swiper-button-next, .swiper-button-prev {
+                bottom: 10px;
+            }
+
+            .swiper-button-next:before, .swiper-button-prev:before {
+                font-size: 32px;
+            }
+
+            .bottom-nav {
+                bottom: 10px;
+            }
+
+            #ups-banner .swiper-pagination-bullet {
+                width: 12px;
+                height: 12px;
+                border-width: 2px;
+                margin: 0 10px;
+            }
+
+            .ups-icon-videoplay {
+                margin-right: 10px;
+            }
+        }
+    </style>
+     <link rel="stylesheet" th:href="@{/front/css/font.css}"/>
+     
     <!-- 遮罩层 -->
     <script th:src="@{/ajax/libs/blockUI/jquery.blockUI.js}"></script>
 
     <script th:src="@{/ajax/libs/layer/layer.min.js}"></script>
-   <!-- <script th:src="@{/ajax/libs/layui/layui.js}"></script>-->
     <script th:src="@{/dimple/js/common.js}"></script>
     <script th:src="@{/dimple/js/ui.js}"></script>
 </head>
@@ -78,6 +275,40 @@
 <div class="container">
     <!--最新文章-->
     <section class="mysection" style="width: 95%;">
+    	<span style="float: right;">
+         	<a th:onclick="toCarouselMaps();">【轮播图片管理】</a>
+         </span>
+    	<hr>
+    	 <!--轮播图开始-->
+        <div id="ups-banner">
+            <div class="swiper-container">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide" th:each="carouselMap:${carouselMaps}">
+                        <div class="content">
+                            <div class="txtXXXX"><h3 th:text="${carouselMap.title}" style="background:none;"></h3>
+                                <p th:text="${carouselMap.subTitle}"></p>
+                            </div>
+                            <!-- <a th:target="${(carouselMap.target=='1')?'_blank':''}"
+                               th:href="${'/f/carouselMap/'+carouselMap.carouselId+'?url='+carouselMap.url}"
+                               class="link">详情点击</a> -->
+                         </div>
+                        <div class="img-fix">
+                            <div class="img-inner">
+                                <img th:src="${carouselMap.imgUrl}" class="imgs">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bottom-nav">
+                    <div class="ups-icon-videoplay"></div>
+                    <div class="swiper-pagination"></div>
+                </div>
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+            </div>
+        </div>
+        <!-- 轮播图结束-->
+        
         <h4 class="index-title">
             <a th:href="${'/bbs/'+loginName+'.html'}">
             	<i class="fa fa-home"></i>首页 &nbsp;> 
@@ -163,6 +394,43 @@
 <!--<th:block th:replace="include-front-custom :: footer"/>-->
 
 <script>
+
+	$(function () {
+	    var upsSwiper = new Swiper('.swiper-container', {
+	        speed: 1000,
+	        longSwipes: false,
+	        loop: true,
+	        autoplay: {
+	            disableOnInteraction: false,
+	        },
+	        navigation: {
+	            nextEl: '.swiper-button-next',
+	            prevEl: '.swiper-button-prev',
+	        },
+	        pagination: {
+	            el: '.swiper-pagination',
+	            clickable: true,
+	        },
+	        on: {
+	            autoplayStop: function () {
+	                this.$el.find(".ups-icon-videoplay").addClass('stop-status');
+	            },
+	            autoplayStart: function () {
+	                this.$el.find(".ups-icon-videoplay").removeClass('stop-status');
+	            },
+	
+	        }
+	    });
+	
+	    upsSwiper.$el.find(".ups-icon-videoplay").on('click', function () {
+	        if (upsSwiper.autoplay.running) {
+	            upsSwiper.autoplay.stop();
+	        } else {
+	            upsSwiper.autoplay.start();
+	        }
+	    });
+	});
+
     function delObj(objId){
         layer.confirm('确定删除该记录吗?', {
             icon: 3,
@@ -294,12 +562,34 @@
                cancel: function (index) {
                    return true;
                }
-           });
+         });
     }
     
     //点击图片跳转到博客明细
     function viewBlog(blogId){
     	window.location.href='/bbs/'+[[${loginName}]]+'/'+[[${funcId}]]+'/'+blogId+'.html';
+    }
+    
+    //轮播图片管理
+    function toCarouselMaps(){
+   		layer.open({
+            type: 2,
+            area: ['100%', '100%'],
+            fix: false,//不固定
+            //maxmin: true,
+            shade: 0.3,
+            title: "图片管理",
+            content: '/system/carouselMap/blogEdit',
+            shadeClose: true,//// 弹层外区域关闭
+            //btn: ['确定', '关闭'],
+            yes: function (index, layero) {
+                var iframeWin = layero.find('iframe')[0];
+                iframeWin.contentWindow.submitHandler(index, layero);
+            },
+            cancel: function (index) {
+                return true;
+            }
+      });
     }
 </script>
 </body>
