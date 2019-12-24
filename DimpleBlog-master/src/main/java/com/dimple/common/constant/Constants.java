@@ -75,5 +75,9 @@ public class Constants {
     
     public static int BLOG_PAGE_SIZE = 10;
     
+    //博客首页图片数
     public static int BLOG_INDEX_PIC_COUNT = 3;
+    
+    //博客首页默认图片
+    public static String BLOG_INDEX_PIC_URL="/front/images/touploadimg.jpg";
 }

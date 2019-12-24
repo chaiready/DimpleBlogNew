@@ -1,5 +1,8 @@
 package com.dimple.project.system.carouselMap.service.impl;
 
+import com.dimple.common.constant.Constants;
+import com.dimple.common.exception.BusinessException;
+import com.dimple.common.utils.security.ShiroUtils;
 import com.dimple.project.chart.business.domain.Business;
 import com.dimple.project.system.carouselMap.mapper.CarouselMapper;
 import com.dimple.project.system.carouselMap.entity.CarouselMap;
@@ -7,6 +10,7 @@ import com.dimple.project.system.carouselMap.service.CarouselMapService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -71,4 +75,29 @@ public class CarouselMapServiceImpl implements CarouselMapService {
     public List<CarouselMap> selectByCreateBy(String loginName) {
       return carouselMapper.selectByCreateBy(loginName);
     }
+
+
+	@Override
+	public int blogSave(Integer[] carouselIds, String[] imgUrl) {
+		int count = 0;
+		CarouselMap carouselMap = null;
+		for(int i=0;i<carouselIds.length;i++){
+			if(carouselIds[i]==0&&!imgUrl[i].equals(Constants.BLOG_INDEX_PIC_URL)){
+				carouselMap = new CarouselMap();
+				carouselMap.setDisplay("1");
+				carouselMap.setImgUrl(imgUrl[i]);
+				carouselMap.setCreateBy(ShiroUtils.getLoginName());
+				carouselMap.setCreateTime(new Date());
+				count+=carouselMapper.insertCarouselMap(carouselMap);
+			}else if(carouselIds[i]!=0){
+				carouselMap = carouselMapper.selectCarouselMap(carouselIds[i]);
+				if(!carouselMap.getCreateBy().equals(ShiroUtils.getLoginName())){
+					throw new BusinessException("不是当前博主不能修改图片");
+				}
+				carouselMap.setImgUrl(imgUrl[i]);
+				count+=carouselMapper.updateCarouselMap(carouselMap);
+			}
+		}
+		return count;
+	}
 }

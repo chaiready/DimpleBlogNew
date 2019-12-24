@@ -82,4 +82,6 @@ public interface CarouselMapService {
     
     
     List<CarouselMap> selectByCreateBy(String loginName);
+
+	int blogSave(Integer[] carouselId, String[] imgUrl);
 }

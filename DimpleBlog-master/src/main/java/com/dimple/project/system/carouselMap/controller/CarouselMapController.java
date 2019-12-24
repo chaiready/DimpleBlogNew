@@ -1,5 +1,20 @@
 package com.dimple.project.system.carouselMap.controller;
 
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.dimple.common.constant.Constants;
 import com.dimple.common.utils.security.ShiroUtils;
 import com.dimple.framework.aspectj.lang.annotation.Log;
@@ -10,15 +25,6 @@ import com.dimple.framework.web.page.TableDataInfo;
 import com.dimple.project.system.carouselMap.entity.CarouselMap;
 import com.dimple.project.system.carouselMap.service.CarouselMapService;
 import com.dimple.project.system.user.domain.User;
-
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-
-import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * @className: BgCarouselMapController
@@ -110,17 +116,34 @@ public class CarouselMapController extends BaseController {
         	 cm.setCarouselId(0);
              cm.setTitle("");
              cm.setSubTitle("");
-             cm.setImgUrl("/front/images/touploadimg.jpg");
+             cm.setImgUrl(Constants.BLOG_INDEX_PIC_URL);
              carouselMaps.add(cm);
         }
         model.addAttribute("carouselMaps", carouselMaps);
+        model.addAttribute("defaultPic", Constants.BLOG_INDEX_PIC_URL);
     	return "system/carouselMap/editBlog";
     }
+    
     
     @DeleteMapping("/blogEditRemove")
     @ResponseBody
     public AjaxResult blogEditRemove(Integer carouselId) {
-        return toAjax(carouselMapService.deleteCarouselMapByIds([]));
+    	CarouselMap cm = carouselMapService.selectCarouselMapById(carouselId);
+    	if(cm==null){
+    		return AjaxResult.error("图片不存在");
+    	}
+    	if(cm.getCreateBy()==null||!cm.getCreateBy().equals(ShiroUtils.getLoginName())){
+    		return AjaxResult.error("不是当前博主，不能删除");
+    	}
+    	Integer []ids = {carouselId};
+        return toAjax(carouselMapService.deleteCarouselMapByIds(ids));
     }
     
+    
+    @Log(title = "系统轮播图", businessType = BusinessType.INSERT)
+    @PostMapping("/blogSave")
+    @ResponseBody
+    public AjaxResult blogSave(Integer[] carouselId,String []imgUrl) {
+        return toAjax(carouselMapService.blogSave(carouselId,imgUrl));
+    }
 }

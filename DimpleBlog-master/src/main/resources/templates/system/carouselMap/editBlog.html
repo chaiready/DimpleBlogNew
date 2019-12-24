@@ -8,34 +8,20 @@
     <div class="main-content">
         <div class="box box-main">
             <div class="ui-layout-content">
-                <form class="" id="blogAddForm">
-                    <div class="form-group" th:each="carouselMap,cmStat:${carouselMaps}">
+            	<input type="hidden" id="defaultPic" name="defaultPic" th:value="${defaultPic}">
+                <form class="" id="blogIndexPicForm">
+                    <div class="form-group" th:each="carouselMap,cmStat:${carouselMaps}" style="text-align: center;">
                         <label class="control-label" style="margin-left: 20px;">图片[[${cmStat.count}]]:</label>
-                        <input type="hidden" th:id = "headerImgPath+(${cmStat.count})"  value="">
-                        <img th:src="${carouselMap.imgUrl}" width="150px" th:onclick="changeImg([[${cmStat.count}]]);"
-                             height="150px" th:id = "headerImg+(${cmStat.count})" th:name = "headerImg+(${cmStat.count})" title="点击图片更换标图"/>
+                        <input type="hidden" th:id = "carouselId+(${cmStat.count})" name="carouselId" th:value="${carouselMap.carouselId}">
+                        <input type="hidden" name="imgUrl" th:id = "headerImgPath+(${cmStat.count})"  th:value="${carouselMap.imgUrl}">
+                        <img th:src="${carouselMap.imgUrl}" width="312px" th:onclick="changeImg([[${cmStat.count}]]);"
+                             height="120px" th:id = "headerImg+(${cmStat.count})" th:name = "headerImg+(${cmStat.count})" title="点击图片更换标图"/>
                         <label class="control-label" style="">
-                        	<a class="btn btn-danger btn-xs " href="javascript:void(0)" th:onclick="delImg([[${carouselMap.carouselId}]]);"><i class="fa fa-remove"></i> 删除</a>
+                        	<a class="btn btn-danger btn-xs " href="javascript:void(0)" th:onclick="delImg([[${carouselMap.carouselId}]],[[${cmStat.count}]]);"><i class="fa fa-remove"></i> 删除</a>
                         </label>
                     </div>
                 </form>
             </div>
-        </div>
-    </div>
-</div>
-
-<div class="container-div ui-layout-center">
-    <div class="row">
-        <div class="mail-box">
-            <div class="mail-body text-right tooltip-demo" style="padding: 10px;">
-                <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler()"><i
-                        class="fa fa-check"></i>保 存
-                </button>&nbsp;
-                <button type="button" class="btn btn-sm btn-danger" onclick="closeDialog()"><i
-                        class="fa fa-reply-all"></i>关 闭
-                </button>
-            </div>
-            <div class="clearfix"></div>
         </div>
     </div>
 </div>
@@ -46,46 +32,8 @@
     $(function () {
         $("#blogAddForm").validate({
             rules: {
-                headerImg: {
-                    required: true,
-                },
-                title: {
-                    required: true,
-                    rangelength: [2, 45]
-                },
-                summary: {
-                    maxlength: 200
-                },
-                weight: {
-                    //required: true,
-                    number: true
-                },
-                categoryId: {
-                    required: true
-                },
             },
             messages: {
-                "headerImg": {
-                    required: "请选择预览图",
-                },
-                "title": {
-                    required: "请输入标题",
-                    rangelength: "请输入长度为 {0} 至 {1} 之间的标题"
-                },
-                "summary": {
-                    maxlength: "最多输入{0}个字符"
-                },
-                "weight": {
-                    required: "请输入权重",
-                    rangelength: "请输入正确格式的权重"
-                },
-                "tags": {
-                    required: "请输入标签",
-                    rangelength: "请输入长度为 {0} 至 {1} 之间的标签"
-                },
-                "categoryId": {
-                    required: "请选择分类",
-                },
             },
         });
         var panehHidden = false;
@@ -117,7 +65,7 @@
             title: false,
             fix: false,
             area: ['auto','420px'],//$(window).width() / 1.1 + 'px'
-            content: "/blog/blog/image?width=180&height=105&callBackMethod=window.parent.callBackHeaderImg"+index,
+            content: "/blog/blog/image?width=780&height=300&callBackMethod=window.parent.callBackHeaderImg"+index,
             shadeClose: true,// 是否点击遮罩关闭
             btn: ['<i class="fa fa-check"></i> 确认', '<i class="fa fa-close"></i> 关闭'],
             yes: function (index, layero) {
@@ -130,35 +78,28 @@
         });
     }
 
-    //获取表单数据
-    function getData() {
-    	var  funcId = $("#funcId").val();
-        var headerUrl = $("#headerImgPath").val();//$("#header")[0].src;
-        var title = $("input[name='title']").val();
-        var summary = $("input[name='summary']").val();
-        var tags = $("#tags").val();
-        var weight = $("input[name='weight']").val();
-        var categoryId = $("select[name='categoryId']").val();
-        var content = $("#summernote").summernote("code");
-        var tagsArray = new Array();
-        console.log(tags);
-        var data = {
-        	funcId: funcId,
-            headerImg: headerUrl,
-            title: title,
-            summary: summary,
-            tags: tags,
-            categoryId: categoryId,
-            weight: weight,
-            content: content
-        }
-        return data;
-    }
 
     function submitHandler() {
         if ($.validate.form()) {
-            var data = getData();
-            $.operate.saveTab("/blog/blog/add", data);
+            var data = $("#blogIndexPicForm").serializeArray();
+            console.info(data);
+            $.ajax({
+	            type: "POST",
+	            url: "/system/carouselMap/blogSave",
+	            data: data,
+	            dataType: "json",
+	            success: function (data) {
+	            	console.info(data);
+	                if (data.code == 200) {
+	                	layer.msg(data.msg, {icon: 1});
+	                }else{
+	                	 layer.msg(data.msg, {icon: 2});
+	                }
+	            },
+	            error: function (jqXHR) {
+	                layer.msg('发送错误：' + jqXHR.status, {icon: 2});
+	            },
+	        });
         }
     }
     
@@ -168,16 +109,33 @@
         parent.layer.close(index);
     }
     
-    function delImg(id){
+    function delImg(id,idx){
     	layer.confirm('确定删除该图片吗?', {
             icon: 3,
             title: "系统提示",
             btn: ['确认', '取消']
         }, function (index) {
             layer.close(index);
-            $.operate.submit ('/system/carouselMap/blogEditRemove', 'delete', 'json', {"carouselId":objId}, function(result){
-               window.location.href="/king/func/[[${funcId}]].html";
-            });
+            $.ajax({
+	            type: "delete",
+	            url: "/system/carouselMap/blogEditRemove",
+	            data: {"carouselId":id},
+	            dataType: "json",
+	            success: function (data) {
+	            	console.info(data);
+	                if (data.code == 200) {
+	                	layer.msg(data.msg, {icon: 1});
+	                	$("#carouselId"+idx).val("0");
+	                    $("#headerImg"+idx).attr("src", $("#defaultPic").val());
+	                	$("#headerImgPath"+idx).val($("#defaultPic").val());
+	                }else{
+	                	 layer.msg(data.msg, {icon: 2});
+	                }
+	            },
+	            error: function (jqXHR) {
+	                layer.msg('发送错误：' + jqXHR.status, {icon: 2});
+	            },
+	        });
         });
     }
 </script>

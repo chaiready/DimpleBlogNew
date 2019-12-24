@@ -19,7 +19,7 @@
     <!--查询单个-->
     <select id="selectCarouselMap" resultMap="BgCarouselMapMap">
         select
-          carousel_id, img_url, title, sub_title, url, target, create_time,display
+          carousel_id, img_url, title, sub_title, url, target,create_by, create_time,display
         from bg_carousel_map
         where carousel_id = #{carouselId}
     </select>
