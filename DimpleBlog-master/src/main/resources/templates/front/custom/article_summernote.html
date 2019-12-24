@@ -51,7 +51,7 @@
                     <li>
                         <a href="#Comment" th:title="${'当前共有 '+comments.size()+' 条评论，点击转到评论'}">
                             <i class="fa fa-comments-o"></i>
-                            <span th:text="${'('+comments.size()+')'}">15</span></a>
+                            <span th:text="${'('+comments.size()+')'}"></span></a>
                     </li>
                     <li>
                         <a th:title="${'已有'+blog.click+'次浏览'}">
@@ -73,7 +73,7 @@
                     <!--打赏和分享-->
                     <div class="article-fx">
                         <span class="img-circle" href="javascript:void(0)" onClick="dashangToggle()">打赏</span>&nbsp;&nbsp;&nbsp;
-                        <a class="fx-btn img-circle img-circle" href="javascript:;">分享</a>
+                        <!-- <a class="fx-btn img-circle img-circle" href="javascript:;">分享</a>
                         <div class="bd-fx arc-bdfx">
                             <i class="fa fa-close fx-close"></i>
                             <ul class="bdsharebuttonbox">
@@ -86,12 +86,12 @@
                                 <li><a href="javascript:void(0)" class="bds_tieba" data-cmd="tieba" title="分享到百度贴吧"></a>
                                 </li>
                             </ul>
-                        </div>
+                        </div> -->
                     </div>
                     <!--END 分享-->
                     <hr>
                     <!--分类和标签-->
-                    <div class="article_tag">
+                    <!-- <div class="article_tag">
                         <ul>
                             <li><a th:href="${'/f/category/'+blog.category.categoryId+'.html'}"
                                    th:title="${'归类：'+blog.category.categoryTitle}"
@@ -102,7 +102,7 @@
                                 </a>
                             </li>
                         </ul>
-                    </div>
+                    </div> -->
                     <!--End 分类和标签-->
                 </div>
             </div>
@@ -194,7 +194,7 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <p th:utext="${comment.content}">21321</p>
+                                    <p th:utext="${comment.content}"></p>
                                 </div>
                             </div>
                             <div class="sign" th:id="${'commentDiv-'+comment.id}">

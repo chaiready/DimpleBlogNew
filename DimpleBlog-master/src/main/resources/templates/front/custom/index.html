@@ -253,10 +253,8 @@
             <!--列表开始-->
             <ul>
                 <li th:each="blog:${blogs.list}" th:class="${blog.support=='1'?'tuijian':''}">
-                    <div class="arcimg">
-                        <img
-                                th:src="${blog.headerImg}"
-                                th:alt="${blog.title}" th:title="${blog.title}"/>
+                    <div class="arcimg"  th:onclick="viewBlog([[${+blog.blogId}]]);">
+                        <img th:src="${blog.headerImg}" th:alt="${blog.title}" th:title="${blog.title}"/>
                     </div>
                     <div class="arc-right">
                         <h4 class="blue-text">
@@ -284,12 +282,12 @@
                             </li>
                             <li><a th:title="${'已有'+blog.click+'次浏览'}"><i class="fa fa-eye"></i><span
                                     th:text="${blog.click}"></span></a></li>
-                            <li>
+                            <!-- <li>
                                 <a th:href="${'/f/category/'+blog.categoryId+'.html'}" title="查看分类">
                                     <i class="fa fa-list-ul"></i>
                                     <span th:text="${blog.categoryTitle}"></span>
                                 </a>
-                            </li>
+                            </li> -->
                         </ul>
                     </div>
                 </li>
@@ -341,6 +339,11 @@
             }
         });
     });
+    
+    //点击图片跳转到博客明细
+    function viewBlog(blogId){
+    	window.location.href='/bbs/[[${curUser.loginName}]]/[[${funcId}]]/'+blogId+'.html';
+    }
 </script>
 </body>
 </html>
