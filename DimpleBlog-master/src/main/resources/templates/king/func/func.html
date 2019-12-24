@@ -238,9 +238,6 @@
                     <a th:href="${'/king/func/'+func.id+'.html'}"
                        th:text="${func.funcName}"></a>
                 </li>
-                <li>
-                    <a  th:href="${'/bbs/'+loginName+'.html'}">返回首页</a>
-                 </li>
                  <li>
                     <a onclick="openAddDiolog();" style="color: #000000;">+添加菜单</a>
                  </li>
@@ -259,9 +256,6 @@
                     <a th:href="${'/king/func/'+func.id+'.html'}"
                        th:text="${func.funcName}"></a>
                 </li>
-                <li>
-                    <a  th:href="${'/bbs/'+loginName+'.html'}">返回首页</a>
-                 </li>
                 <li>
                     <a onclick="openAddDiolog();" style="color: #000000;">+添加菜单</a>
                  </li>
@@ -317,7 +311,7 @@
             <span style="float:right;margin-right:10px;">共有文章:<font class="orange-text"
                 th:text="${blogs.total}"></font>篇</span>
         </h4>
-        <div style="font-size: 12px;">
+        <div style="font-size: 14px;">
         	<span>
 	        	<a th:onclick="toFirst([[${funcId}]]);">【置顶】</a>
 	            <a th:onclick="toUpdate([[${funcId}]]);">【修改】</a>
@@ -344,14 +338,12 @@
                          	<i class="fa fa-remove"></i> 删除
                          </a>
                 	</div>
-                    <div class="arcimg">
-                        <img
-                                th:src="${blog.headerImg}"
-                                th:alt="${blog.title}" th:title="${blog.title}" th:onclick="viewBlog([[${+blog.blogId}]]);"/>
+                    <div class="arcimg"  th:onclick="viewBlog([[${+blog.blogId}]]);">
+                        <img th:src="${blog.headerImg}" th:alt="${blog.title}" th:title="${blog.title}"/>
                     </div>
                     <div class="arc-right">
                         <h4 class="blue-text">
-                            <a th:href="${'/bbs/'+loginName+'/'+funcId+'/'+blog.blogId+'.html'}"
+                            <a th:href="${'/bbs/'+curUser.loginName+'/'+funcId+'/'+blog.blogId+'.html'}"
                                th:title="${blog.title}"
                                th:text="${blog.title}">
                             </a>
@@ -368,7 +360,7 @@
                                 <a title="作者： ls2008"><i class="fa fa-user"></i>ls2008</a>
                             </li> -->
                             <li>
-	                             <a th:title="${'已有'+blog.commentCount+'条评论'}" th:href="${'/bbs/'+loginName+'/'+funcId+'/'+blog.blogId+'.html#Comment'}">
+	                             <a th:title="${'已有'+blog.commentCount+'条评论'}" th:href="${'/bbs/'+curUser.loginName+'/'+funcId+'/'+blog.blogId+'.html#Comment'}">
 	                                <i class="fa fa-comments-o"></i>
 	                                <span th:text="${blog.commentCount}"></span>
 	                            </a>
@@ -567,7 +559,7 @@
     
     //点击图片跳转到博客明细
     function viewBlog(blogId){
-    	window.location.href='/bbs/'+[[${loginName}]]+'/'+[[${funcId}]]+'/'+blogId+'.html';
+    	window.location.href='/bbs/[[${curUser.loginName}]]/[[${funcId}]]/'+blogId+'.html';
     }
     
     //轮播图片管理

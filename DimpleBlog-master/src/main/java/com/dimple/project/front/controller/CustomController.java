@@ -253,9 +253,13 @@ public class CustomController extends BaseController {
         try {
             subject.login(token);
             if(StringUtils.isEmpty(toPage)){
-              return success("/bbs/"+loginName+".html");
+              AjaxResult result = AjaxResult.success();
+              result.put("redirectPage", "/bbs/"+loginName+".html");
+              return result;
             }else{
-              return success("/"+toPage);
+              AjaxResult result = AjaxResult.success();
+              result.put("redirectPage", "/bbs/"+toPage+".html");
+              return result;
             }
         } catch (AuthenticationException e) {
             String msg = "用户或密码错误";
@@ -386,13 +390,13 @@ public class CustomController extends BaseController {
      * 留言
      */
     @VLog(title = "留言页")
-    @GetMapping("/front/comment.html")
-    public String leaveComment(Model model) {
+    @GetMapping("/{loginName}/comment.html")
+    public String leaveComment(Model model,@PathVariable String loginName) {
         User user = ShiroUtils.getSysUser();
         if (user == null) {
             return toLogin(model,"");
         }
-        setCommonMessage(model, user.getLoginName(),FUNC_NULL,DEFAULT_PAGENUM);
+        setCommonMessage(model, loginName,FUNC_NULL,DEFAULT_PAGENUM);
         Comment comment = new Comment();
         comment.setPageId(-1000);
         model.addAttribute("comments", commentService.selectCommentListForFront(comment));

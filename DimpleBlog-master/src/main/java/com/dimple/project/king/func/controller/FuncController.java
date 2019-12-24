@@ -7,6 +7,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,6 +28,7 @@ import com.dimple.project.king.func.service.FuncBlogService;
 import com.dimple.project.king.func.service.IFuncService;
 import com.dimple.project.system.carouselMap.entity.CarouselMap;
 import com.dimple.project.system.carouselMap.service.CarouselMapService;
+import com.dimple.project.system.user.domain.User;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
@@ -54,9 +56,12 @@ public class FuncController extends BaseController {
 
   @RequiresPermissions("king:func:view")
   @GetMapping({"", "/{funcId}.html"})
-  public String func(Model model, @PathVariable(required = false) Long funcId, Integer pageNum) {
-    String loginName = ShiroUtils.getSysUser().getLoginName();
-    List<Func> funcList = funcService.findBbsByCreator(loginName);
+  public String func(Model model, @PathVariable(required = false) Long funcId,String loginName, Integer pageNum) {
+    User user = ShiroUtils.getSysUser();
+    if(StringUtils.isEmpty(loginName)){
+    	loginName = user.getLoginName();
+    }
+    List<Func> funcList = funcService.findBbsByCreator(user.getLoginName());
     model.addAttribute("funcList", funcList);
 
     String funcName = "";
@@ -77,9 +82,10 @@ public class FuncController extends BaseController {
     model.addAttribute("funcName", funcName);
     // 设置当前访问主页名
     model.addAttribute("loginName", loginName);
+    model.addAttribute("curUser", user);
     
     // 放置轮播图
-    List<CarouselMap> carouselMaps = carouselMapService.selectByCreateBy(loginName);
+    List<CarouselMap> carouselMaps = carouselMapService.selectByCreateBy(user.getLoginName());
     if(CollectionUtils.isEmpty(carouselMaps)){
       CarouselMap cm = new CarouselMap();
       cm.setTitle("");

@@ -111,13 +111,13 @@
                     <div class="drop-nav orange-text ">
                         <ul>
                             <li>
-	                             <a href="/bbs/front/comment.html" th:text="${curUser.loginName}">当前用户</a>
+	                             <a th:href="${'/bbs/'+loginName+'/comment.html'}" th:text="${curUser.loginName}">当前用户</a>
 	                        </li>
 	                        <li>
                                 <a href="/king/func">博客管理</a>
                             </li>
                             <li>
-                                <a href="/bbs" th:href="${'/bbs/'+curUser.loginName+'/suggest.html'}">我的消息</a>
+                                <a href="/bbs" th:href="${'/bbs/'+loginName+'/suggest.html'}">我的消息</a>
                             </li>
 	                        <li>
 	                             <a href="/frontLogout">退出登录</a>
@@ -126,7 +126,7 @@
                     </div>
                 </li>
                 <li th:if="${curUser==null}">
-                	<a href="/bbs/front/toLogin">
+                	<a th:href = "${'/bbs/front/toLogin?toPage='+loginName}">
 		                <img class="img-circle"
 		                     src="/front/images/default_head_img.gif"
 		                     alt="登录" title="登录" style="margin-top: 12px;">
@@ -185,13 +185,13 @@
                     <a href="javascrip:;">我的<i></i></a>
                     <ul class="mob-dropmenu">
                      	<li>
-                             <a href="/bbs/front/comment.html" th:text="${curUser.loginName}">当前用户</a>
+                             <a th:href="${'/bbs/'+loginName+'/comment.html'}" th:text="${curUser.loginName}">当前用户</a>
                         </li>
                         <li>
                             <a href="/king/func">博客管理</a>
                         </li>
                         <li>
-                            <a href="/bbs" th:href="${'/bbs/'+curUser.loginName+'/suggest.html'}">我的消息</a>
+                            <a href="/bbs" th:href="${'/bbs/'+loginName+'/suggest.html'}">我的消息</a>
                         </li>
                         <li>
                              <a href="/frontLogout">退出登录</a>
@@ -199,7 +199,7 @@
                     </ul>
                 </li>
                 <li th:if="${curUser==null}">
-                	<a href="/bbs/front/toLogin">
+                	<a th:href = "${'/bbs/front/toLogin?toPage='+loginName}">
 		                <img class="img-circle"
 		                     src="/front/images/default_head_img.gif"
 		                     alt="登录" title="登录" style="margin-top: 12px;">

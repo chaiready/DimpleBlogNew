@@ -93,7 +93,7 @@
 		            success: function (data) {
 		            	console.info(data);
 		                if (data.code == 200) {
-		                	window.location.href=data.msg;
+		                	window.location.href=data.redirectPage;
 		                }else{
 		                	$("#operTip").html(data.msg);
 		                }
