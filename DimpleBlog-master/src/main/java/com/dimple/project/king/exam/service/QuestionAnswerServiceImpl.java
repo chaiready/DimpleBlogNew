@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.dimple.framework.web.domain.AjaxResult;
 import com.dimple.project.enums.QuestionAnswerEnum;
+import com.dimple.project.enums.QuestionTypeEnum;
 import com.dimple.project.king.exam.domain.Question;
 import com.dimple.project.king.exam.domain.QuestionAnswer;
 import com.dimple.project.king.exam.domain.QuestionOption;
@@ -68,8 +69,16 @@ public class QuestionAnswerServiceImpl implements QuestionAnswerService {
 		}
 		int correct = QuestionAnswerEnum.wrong.getKey();
 		Question question = questionService.getById(questionId);
-		if (question.getAnswer().trim().equals(option.getOptionOrder().trim())) {
-			correct = QuestionAnswerEnum.right.getKey();
+		
+//		if (question.getAnswer().trim().equals(option.getOptionOrder().trim())) {
+//			correct = QuestionAnswerEnum.right.getKey();
+//		}
+		if(question.getQuestionType().equals(QuestionTypeEnum.scq.getKey())){//单选
+			if(option.getAnswer().equals("1")){
+				correct = QuestionAnswerEnum.right.getKey();
+			}
+		}else if(question.getQuestionType().equals(QuestionTypeEnum.mcq.getKey())){//多选
+			
 		}
 
 		List<QuestionAnswer> answerList = mapper.selectList(new QueryWrapper<QuestionAnswer>().select("*").eq("user_id", userId).eq("exam_id", examId)

@@ -70,20 +70,24 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
 		question.setCreateBy(ShiroUtils.getLoginName());
 		question.setCreateTime(new Date());
 		questionMapper.insert(question);
-		int i=0;
 		List<QuestionOption> optionList = new ArrayList<>();
-		for(String ov:optionVal){
+		List<String> answerList = new ArrayList<>();
+		for(int i=0;i<optionVal.length;i++){
 			QuestionOption option = new QuestionOption();
-			option.setOptionVal(ov);
+			option.setOptionVal(optionVal[i]);
 			option.setAnswer(checkIsAnswer(optionAnswer, i));
-			i++;
-			option.setOptionOrder(Convert.numberToLetter(i));
+			option.setOptionOrder(Convert.numberToLetter(i+1));
+			if(option.getAnswer().equals("1")){
+				answerList.add(option.getOptionOrder());
+			}
 			option.setCreateBy(ShiroUtils.getLoginName());
 			option.setCreateTime(new Date());
 			option.setQuestionId(question.getId());
 			optionList.add(option);
 		}
 		questionOptionService.saveBatch(optionList);
+		question.setAnswer(Convert.joinStrBy(answerList));
+		questionMapper.updateById(question);
 		return 1;
 	}
 
@@ -95,12 +99,16 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
 		}
 		List<QuestionOption> addOptionList = new ArrayList<>();
 		List<QuestionOption> updateOptionList = new ArrayList<>();
+		List<String> answerList = new ArrayList<>();
 		for(int i=0;i<optionId.length;i++){
 			if(optionId[i]==0){//新增的
 				QuestionOption option = new QuestionOption();
 				option.setOptionVal(optionVal[i]);
 				option.setAnswer(checkIsAnswer(optionAnswer, i));
 				option.setOptionOrder(Convert.numberToLetter(i+1));
+				if(option.getAnswer().equals("1")){
+					answerList.add(option.getOptionOrder());
+				}
 				option.setCreateBy(ShiroUtils.getLoginName());
 				option.setCreateTime(new Date());
 				option.setQuestionId(question.getId());
@@ -111,6 +119,9 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
 				option.setOptionVal(optionVal[i]);
 				option.setAnswer(checkIsAnswer(optionAnswer, i));
 				option.setOptionOrder(Convert.numberToLetter(i+1));
+				if(option.getAnswer().equals("1")){
+					answerList.add(option.getOptionOrder());
+				}
 				option.setUpdateBy(ShiroUtils.getLoginName());
 				option.setUpdateTime(new Date());
 				option.setQuestionId(question.getId());
@@ -119,6 +130,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
 		}
 		questionOptionService.saveBatch(addOptionList);
 		questionOptionService.updateBatchById(updateOptionList);
+		question.setAnswer(Convert.joinStrBy(answerList));
 		return questionMapper.updateById(question);
 	}
 

@@ -870,6 +870,11 @@ public class Convert {
         return head + s.replaceAll("(零.)*零元", "元").replaceFirst("(零.)+", "").replaceAll("(零.)+", "零").replaceAll("^整$", "零元整");
     }
     
+    /**
+     * 数字转成字母
+     * @param num
+     * @return
+     */
     public static String numberToLetter(int num) {
         if (num <= 0) {
             return null;
@@ -886,4 +891,14 @@ public class Convert {
 
         return letter;
     }
+    
+    
+	public static String joinStrBy(List<String> idList) {
+		return StringUtils.join(idList, ",");
+	}
+
+	
+	public static String joinStrBy(List<String> idList,String splitStr) {
+		return StringUtils.join(idList, splitStr);
+	}
 }

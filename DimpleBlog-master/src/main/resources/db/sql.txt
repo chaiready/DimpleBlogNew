@@ -211,3 +211,12 @@ alter table bg_question_option add COLUMN answer VARCHAR(2) DEFAULT '0' COMMENT 
 
 update bg_question set create_by='admin' where create_by is null;
 update bg_question set question_type='scq';
+
+
+#20191227
+update bg_question_option set answer='0';
+
+update bg_question_option set answer='1' where id in(
+select * from (select qo.id from bg_question q
+left join bg_question_option qo on q.id=qo.question_id and q.answer=qo.option_order)t
+) 
