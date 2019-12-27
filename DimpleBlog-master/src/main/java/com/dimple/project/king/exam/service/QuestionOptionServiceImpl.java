@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dimple.project.king.exam.domain.QuestionOption;
 import com.dimple.project.king.exam.mapper.QuestionOptionMapper;
 
@@ -16,7 +17,7 @@ import com.dimple.project.king.exam.mapper.QuestionOptionMapper;
  * @version: 1.0
  */
 @Service
-public class QuestionOptionServiceImpl implements QuestionOptionService {
+public class QuestionOptionServiceImpl extends ServiceImpl<QuestionOptionMapper, QuestionOption> implements QuestionOptionService {
 
     @Autowired
     QuestionOptionMapper questionOptionMapper;

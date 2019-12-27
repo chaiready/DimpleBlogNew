@@ -7,7 +7,10 @@ import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.text.NumberFormat;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @className: Convert
@@ -317,7 +320,7 @@ public class Convert {
     }
 
     /**
-     * 转换为String数组<br>
+     * 转换为List<String><br>
      *
      * @param split 分隔符
      * @param split 被转换的值
@@ -326,6 +329,23 @@ public class Convert {
     public static String[] toStrArray(String split, String str) {
         return str.split(split);
     }
+    
+    
+    public static List<String> toStrList(String str) {
+        return  Arrays.asList(str.split(",")).stream().map(s -> (s.trim())).collect(Collectors.toList());
+    }
+
+    /**
+     * 转换为List<String><br>
+     *
+     * @param split 分隔符
+     * @param split 被转换的值
+     * @return 结果
+     */
+    public static List<String> toStrList(String split, String str) {
+    	return  Arrays.asList(str.split(split)).stream().map(s -> (s.trim())).collect(Collectors.toList());
+    }
+    
 
     /**
      * 转换为long<br>
@@ -848,5 +868,22 @@ public class Convert {
             s = p.replaceAll("(零.)*零$", "").replaceAll("^$", "零") + unit[0][i] + s;
         }
         return head + s.replaceAll("(零.)*零元", "元").replaceFirst("(零.)+", "").replaceAll("(零.)+", "零").replaceAll("^整$", "零元整");
+    }
+    
+    public static String numberToLetter(int num) {
+        if (num <= 0) {
+            return null;
+        }
+        String letter = "";
+        num--;
+        do {
+            if (letter.length() > 0) {
+                num--;
+            }
+            letter = ((char) (num % 26 + (int) 'A')) + letter;
+            num = (int) ((num - num % 26) / 26);
+        } while (num > 0);
+
+        return letter;
     }
 }

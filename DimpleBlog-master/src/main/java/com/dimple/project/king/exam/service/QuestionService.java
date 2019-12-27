@@ -11,11 +11,15 @@ import com.dimple.project.king.exam.domain.Question;
  * @date: 03/27/19
  * @version: 1.0
  */
-public interface QuestionService extends IService<Question>{
+public interface QuestionService extends IService<Question> {
 
-  List<Question> selectQuestionByFolderId(Long folderId);
+	List<Question> selectQuestionByFolderId(Long folderId);
 
-  List<Question> selectQuestionFavorites(Long userId,Long folderId);// 收藏的问题
+	List<Question> selectQuestionFavorites(Long userId, Long folderId);// 收藏的问题
 
-  List<Question> selectQuestionWrong(Long userId,Long folderId);
+	List<Question> selectQuestionWrong(Long userId, Long folderId);
+
+	int saveQuestionOption(Question question, String[] optionVal,Integer []optionAnswer);
+
+	int updateQuestionOption(Question question, Long[] optionId,String[] optionVal,Integer []optionAnswer, Long[] delOptinId);
 }

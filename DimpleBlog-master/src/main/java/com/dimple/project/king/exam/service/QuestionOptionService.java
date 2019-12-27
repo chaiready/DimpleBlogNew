@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.dimple.project.king.exam.domain.QuestionOption;
 
 /**
@@ -13,7 +14,7 @@ import com.dimple.project.king.exam.domain.QuestionOption;
  * @date: 03/27/19
  * @version: 1.0
  */
-public interface QuestionOptionService {
+public interface QuestionOptionService extends IService<QuestionOption>{
 
 	int insertObj(QuestionOption questionOption);
 	

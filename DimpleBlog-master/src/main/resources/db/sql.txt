@@ -206,5 +206,8 @@ update bg_blog set create_by='hjhy' where create_by is null;
 
 
 
+#20191225
+alter table bg_question_option add COLUMN answer VARCHAR(2) DEFAULT '0' COMMENT '是否答案';
 
-
+update bg_question set create_by='admin' where create_by is null;
+update bg_question set question_type='scq';

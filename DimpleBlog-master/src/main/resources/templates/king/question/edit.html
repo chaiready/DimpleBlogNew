@@ -1,0 +1,185 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('修改通知公告')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    	<fieldset>
+    		<legend>题目信息</legend>
+	        <form class="form-horizontal m" id="form-question-edit" th:object="${question}">
+	            <input id="id" name="id" th:field="*{id}"  type="hidden">
+	            <div class="form-group">
+		            <label class="col-sm-3 control-label">题目类型：</label>
+		            <div class="col-sm-8">
+		                <select id="questionType" name="questionType" th:with="type=${@dict.getType('question_type')}" onchange="changeQuestionType();">
+		                    <option value="">所有</option>
+		                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+		                            th:value="${dict.dictValue}" th:field="${question.questionType}"></option>
+		                </select>
+		            </div>
+		        </div>
+	            <div class="form-group">	
+	                <label class="col-sm-3 control-label">题目：</label>
+	                <div class="col-sm-8">
+	                    <input id="content" name="content" th:field="*{content}" class="form-control" type="text" required>
+	                </div>
+	            </div>
+	            <hr>
+	            <div class="form-group">	
+	                <label class="col-sm-3 control-label"></label>
+	                <div class="col-sm-1" style="width: 80px;">
+	                	答案
+	                </div>
+	                <div class="col-sm-7">
+	                	选项内容
+	                </div>
+	                <div class="col-sm-1">
+	                </div>
+	            </div>
+	            <div id="optionContentId">
+	            	<div class="form-group  optionValDiv" th:each="qo:${optionList}" >	
+	            		<input id="optionId" name="optionId" th:value="${qo.id}"  type="hidden">
+		                <label class="col-sm-3 control-label"></label>
+		                <div class="col-sm-1 optionSelTypeCls" style="width: 50px;">
+		                	<input th:if="${question.questionType eq 'scq'}" class="optionAnswerCls" type="radio"    name="optionAnswer" 
+		                	value="0" style="width: 20px;height: 20px;" th:checked="${qo.answer == '1'}"/>
+		                	
+		                	<input th:if="${question.questionType eq 'mcq'}" class="optionAnswerCls" type="checkbox" name="optionAnswer" 
+		                	value="0"  style="width: 20px;height: 20px;" th:checked="${qo.answer == '1'}"/>
+		                </div>
+		                <div class="col-sm-7">
+		                    <input id="optionVal[[${qo.id}]]" name="optionVal" th:value="${qo.optionVal}" class="form-control" type="text" required>
+		                </div>
+		                <div class="col-sm-1">
+		                	<a class="btn btn-danger btn-del" th:onclick="delOption(this,[[${qo.id}]]);">
+				                <i class="fa fa-trash"></i> 删除
+				            </a>
+		                </div>
+		            </div>
+	            </div>
+	            <div id="delOptionDiv"></div>
+	            <div class="form-group">
+	            	<label class="col-sm-3 control-label"></label>
+	                <div class="col-sm-8">
+	                    <a class="btn btn-success" onclick="addOption();">
+			                <i class="fa fa-plus"></i> 新增选项
+			            </a>
+	                </div>
+	            </div>
+			</form>
+		</fieldset>
+    </div>
+    <th:block th:include="include :: footer" />
+    
+    <script type="text/javascript">
+        var prefix = ctx + "king/question";
+	    
+
+        $(function () {
+       	 //相同name的校验
+       	 if ($.validator) {
+                $.validator.prototype.elements = function () {
+                    var validator = this,
+                      rulesCache = {};
+                    return $(this.currentForm)
+                    .find("input, select, textarea")
+                    .not(":submit, :reset, :image, [disabled]")
+                    .not(this.settings.ignore)
+                    .filter(function () {
+                        if (!this.name && validator.settings.debug && window.console) {
+                            console.error("%o has no name assigned", this);
+                        }
+                        rulesCache[this.name] = true;
+                        return true;
+                    });
+                }
+            }
+       });
+        
+		$("#form-question-edit").validate({
+			focusCleanup: true
+		});
+		
+		function submitHandler() {
+			if($(".optionValDiv").length<2){
+	    		$.modal.msgWarning('至少添加两个选项');
+	    		return false;
+	    	}
+	    	$("input[name='optionVal']").each(function() {
+	        	$(this).rules("add", {required:true,maxlength:200,messages:{required:"必输",maxlength:"最大长达为200字符"}});
+	        });
+	    	
+	    	var optionIndex = 0;
+	    	$(".optionAnswerCls").each(function(){
+	    		console.info($(this).attr('checked'));
+	    		console.info($(this).is(':checked'));
+	    		
+	    		if($(this).is(':checked')){
+	    			$(this).val(optionIndex);
+	    		}/* else{
+	    			$(this).val(0);
+	    		} */
+	    		optionIndex++;
+	    	});
+	    	console.info($('#form-question-edit').serialize());
+	        if ($.validate.form()) {
+				$.operate.save(prefix + "/edit", $('#form-question-edit').serialize());
+	        }
+	    }
+		
+		//添加选项
+		function addOption(){
+			var questionType = $("#questionType").val();
+			if(questionType==''){
+				$.modal.msgWarning('请选择题目类型');
+				return false;
+			}
+			var selectTypeStr ="";
+			if(questionType=='scq'){
+				selectTypeStr = '<input type="radio" class="optionAnswerCls"    name="optionAnswer" value=""  style="width: 20px;height: 20px;"/>';
+        	}else if(questionType=='mcq'){
+        		selectTypeStr = '<input type="checkbox" class="optionAnswerCls" name="optionAnswer" value=""  style="width: 20px;height: 20px;"/>';
+        	}
+			var str='<div class="form-group optionValDiv">'+	
+						'<input id="optionId" name="optionId" value="0" type="hidden">'+
+			            '<label class="col-sm-3 control-label"></label>'+	
+			            '<div class="col-sm-1 optionSelTypeCls" style="width: 50px;">'+
+			               	selectTypeStr+
+			          	'</div>'+
+			            '<div class="col-sm-7">'+	
+			                '<input id="optionVal'+(new Date()).getTime()+'" name="optionVal" value="" class="form-control" type="text" required>'+	
+			            '</div>'+	
+			            '<div class="col-sm-1">'+
+		                	'<a class="btn btn-danger btn-del" onclick="delOption(this,0);">'+
+				                '<i class="fa fa-trash"></i> 删除'+
+				           ' </a>'+
+		                '</div>'+
+			        '</div>';
+	        $("#optionContentId").append(str);
+		}
+		
+		//删除选项
+		function delOption(t,optionId){
+			if(optionId!=0){//删除的选项
+				$("#delOptionDiv").append('<input id="delOptinId" name="delOptinId" value="'+optionId+'" type="hidden">');
+			}			
+			$(t).closest(".optionValDiv").remove();
+		}
+		
+		function changeQuestionType(){
+			console.info($("#questionType").val());
+			var questionType = $("#questionType").val();
+			$(".optionSelTypeCls").each(function() {
+	        	var str = "";
+	        	if(questionType=='scq'){
+	        		str = '<input type="radio" class="optionAnswerCls"    name="optionAnswer" value=""  style="width: 20px;height: 20px;"/>';
+	        	}else if(questionType=='mcq'){
+	        		str = '<input type="checkbox" class="optionAnswerCls" name="optionAnswer" value=""  style="width: 20px;height: 20px;"/>';
+	        	}
+	        	$(this).html(str);
+	        });
+		}
+	</script>
+</body>
+</html>

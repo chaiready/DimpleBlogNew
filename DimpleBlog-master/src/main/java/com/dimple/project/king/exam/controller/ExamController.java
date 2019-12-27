@@ -1,4 +1,4 @@
-package com.dimple.project.king.exam;
+package com.dimple.project.king.exam.controller;
 
 import java.util.ArrayList;
 import java.util.Date;

@@ -27,6 +27,8 @@ public class QuestionOption  extends SuperEntity{
 
 	private String optionVal;
 	
+	private String answer="0";//是否答案
+	
 	@TableField(exist = false)
 	private int correct = -1;//是否正確 QuestionAnswerEnum
 
@@ -69,5 +71,13 @@ public class QuestionOption  extends SuperEntity{
     public void setCorrect(int correct) {
       this.correct = correct;
     }
+
+	public String getAnswer() {
+		return answer;
+	}
+
+	public void setAnswer(String answer) {
+		this.answer = answer;
+	}
 
 }
