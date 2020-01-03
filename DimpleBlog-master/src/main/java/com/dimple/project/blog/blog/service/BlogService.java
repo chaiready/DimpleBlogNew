@@ -2,6 +2,8 @@ package com.dimple.project.blog.blog.service;
 
 import com.dimple.project.blog.blog.domain.Blog;
 import com.dimple.project.dashboard.domain.BusinessCommonData;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.util.List;
 
@@ -27,7 +29,7 @@ public interface BlogService {
      * @param blog 需要新增的博客的实体
      * @return 受影响的行数
      */
-    int insertBlog(Blog blog);
+    int insertBlog(Blog blog,List<MultipartFile> files);
 
     /**
      * 根据id修改blog
@@ -43,7 +45,7 @@ public interface BlogService {
      * @param blog 需要修改的blog实体
      * @return 受影响的行数
      */
-    int updateBlog(Blog blog);
+    int updateBlog(Blog blog,List<MultipartFile> files);
 
     /**
      * 切换support状态

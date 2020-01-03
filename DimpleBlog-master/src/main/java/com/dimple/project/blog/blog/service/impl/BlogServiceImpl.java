@@ -4,20 +4,28 @@ import com.dimple.common.constant.CacheConstant;
 import com.dimple.common.constant.CommonConstant;
 import com.dimple.common.utils.security.ShiroUtils;
 import com.dimple.common.utils.text.Convert;
+import com.dimple.common.vo.FileForm;
+import com.dimple.framework.config.SystemConfig;
 import com.dimple.project.blog.blog.domain.Blog;
 import com.dimple.project.blog.blog.mapper.BlogMapper;
 import com.dimple.project.blog.blog.mapper.BlogTagMapper;
 import com.dimple.project.blog.blog.service.BlogService;
 import com.dimple.project.blog.category.service.CategoryService;
 import com.dimple.project.blog.tag.service.TagService;
+import com.dimple.project.common.service.FileService;
 import com.dimple.project.dashboard.domain.BusinessCommonData;
 import com.dimple.project.enums.BLogStatusEnum;
 import com.dimple.project.king.func.domain.FuncBlogEntity;
 import com.dimple.project.king.func.service.FuncBlogService;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -40,6 +48,8 @@ public class BlogServiceImpl implements BlogService {
     CategoryService categoryService;
     @Autowired
     private FuncBlogService funcBlogService;
+    @Autowired
+    FileService fileService;
 
     @Override
     public List<Blog> selectBlogList(Blog blog) {
@@ -47,18 +57,28 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-    public int insertBlog(Blog blog) {
+    public int insertBlog(Blog blog,List<MultipartFile> files) {
         blog.setCreateBy(ShiroUtils.getLoginName());
         blog.setCreateTime(new Date());
         int i = blogMapper.insertBlog(blog);
         handlerBlogTag(blog.getBlogId(), blog.getTags());
         FuncBlogEntity funcBlog = new FuncBlogEntity();
         if(blog.getFuncId()!=null&&blog.getFuncId()!=0){
-          funcBlog.setBlogId(Long.valueOf(blog.getBlogId()));
-          funcBlog.setFuncId(blog.getFuncId());
-          funcBlog.setCreateBy(ShiroUtils.getLoginName());
-          funcBlog.setCreateTime(new Date());
-          funcBlogService.save(funcBlog);
+            funcBlog.setBlogId(Long.valueOf(blog.getBlogId()));
+            funcBlog.setFuncId(blog.getFuncId());
+            funcBlog.setCreateBy(ShiroUtils.getLoginName());
+            funcBlog.setCreateTime(new Date());
+            funcBlogService.save(funcBlog);
+        }
+        //上传附件
+        if(CollectionUtils.isNotEmpty(files)){
+            for (MultipartFile file:files){
+                try {
+                    fileService.uploadFile(new FileForm(SystemConfig.getAttachmentPath(), file,Long.valueOf(blog.getBlogId()),"blog"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         return i;
     }
@@ -83,11 +103,21 @@ public class BlogServiceImpl implements BlogService {
 
     @CacheEvict(value = CacheConstant.BUSINESS_CACHE_BLOG_ITEM, key = "#blog.blogId")
     @Override
-    public int updateBlog(Blog blog) {
+    public int updateBlog(Blog blog ,List<MultipartFile> files) {
         blog.setUpdateBy(ShiroUtils.getLoginName());
         //添加新的tag
         tagService.insertTags(blog.getTags());
         updateBlogTag(blog.getBlogId(), blog.getTags());
+        //上传附件
+        if(CollectionUtils.isNotEmpty(files)){
+            for (MultipartFile file:files){
+                try {
+                    fileService.uploadFile(new FileForm(SystemConfig.getAttachmentPath(), file,Long.valueOf(blog.getBlogId()),"blog"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
         return blogMapper.updateBlog(blog);
     }
 
@@ -184,15 +214,15 @@ public class BlogServiceImpl implements BlogService {
     public Blog selectNextBlogById(Integer blogId) {
         return blogMapper.selectNextBlogById(blogId);
     }
-    
+
     @Override
     public Blog selectPreviousBlogByFuncIdAndId(Long funcId, Integer blogId) {
-      return blogMapper.selectPreviousBlogByFuncIdAndId(funcId, blogId);
+        return blogMapper.selectPreviousBlogByFuncIdAndId(funcId, blogId);
     }
 
     @Override
     public Blog selectNextBlogByFuncIdAndId(Long funcId, Integer blogId) {
-      return blogMapper.selectNextBlogByFuncIdAndId(funcId, blogId);
+        return blogMapper.selectNextBlogByFuncIdAndId(funcId, blogId);
     }
 
     @Override

@@ -115,4 +115,13 @@ public class FileServiceImpl implements FileService {
         return 0;
     }
 
+    @Override
+    public FileItemInfo uploadFile(FileForm fileForm) throws IOException {
+        FileItemInfo fileItemInfo = FileUploadUtils.upload(fileForm.getRelativePath(),fileForm.getFile());
+        fileItemInfo.setEntityId(fileForm.getEntityId());
+        fileItemInfo.setEntityType(fileForm.getEntityType());
+        fileItemInfoMapper.insertFileItem(fileItemInfo);
+        return fileItemInfo;
+    }
+
 }

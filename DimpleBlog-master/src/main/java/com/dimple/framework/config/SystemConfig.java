@@ -108,7 +108,11 @@ public class SystemConfig {
     public static String getLinkPath() {
         return relativeProfile + "/link/";
     }
-    
+
+    public static String getAttachmentPath() {
+        return relativeProfile + "/attachment/";
+    }
+
 //    public static String getRelativeImagePath() {
 //        return relativeProfile + "/images/";
 //    }

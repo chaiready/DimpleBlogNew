@@ -220,3 +220,7 @@ update bg_question_option set answer='1' where id in(
 select * from (select qo.id from bg_question q
 left join bg_question_option qo on q.id=qo.question_id and q.answer=qo.option_order)t
 ) 
+
+#20200103
+alter table bg_file_item_info add COLUMN entity_type VARCHAR(10) COMMENT '实体类型';
+alter table bg_file_item_info add COLUMN entity_id BIGINT(11) COMMENT '实体id';

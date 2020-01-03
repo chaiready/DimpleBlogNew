@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.util.List;
 
@@ -86,8 +87,8 @@ public class BlogController extends BaseController {
     @RequiresPermissions("blog:blog:add")
     @PostMapping("/add")
     @ResponseBody
-    public AjaxResult addSave(Blog blog) {
-        int i = blogService.insertBlog(blog);
+    public AjaxResult addSave(Blog blog,MultipartHttpServletRequest request) {
+        int i = blogService.insertBlog(blog,request.getFiles("attachment[]"));
         return toAjax(i);
     }
 
@@ -109,8 +110,8 @@ public class BlogController extends BaseController {
     @RequiresPermissions("blog:blog:edit")
     @Log(title = "系统博客", businessType = BusinessType.UPDATE)
     @ResponseBody
-    public AjaxResult editSave(Blog blog) {
-        return toAjax(blogService.updateBlog(blog));
+    public AjaxResult editSave(Blog blog, MultipartHttpServletRequest request) {
+        return toAjax(blogService.updateBlog(blog,request.getFiles("attachment[]")));
     }
 
     @PutMapping("/support/{support}")

@@ -49,6 +49,12 @@ public class FileItemInfo extends BaseEntity {
     
     private String relativePath;//相对路径
 
+    private Long entityId;
+
+    private String entityType;
+
+
+
     public FileItemInfo() {
         super();
     }

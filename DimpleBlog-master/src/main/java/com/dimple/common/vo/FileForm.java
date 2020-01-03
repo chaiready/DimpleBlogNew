@@ -17,7 +17,11 @@ public class FileForm {
   
   private Integer height;
 
-  
+  private Long entityId;
+
+  private String entityType;
+
+
   public FileForm() {
   }
   
@@ -25,7 +29,14 @@ public class FileForm {
     this.relativePath = relativePath;
     this.file = file;
   }
-  
+
+  public FileForm(String relativePath, MultipartFile file, Long entityId, String entityType) {
+    this.relativePath = relativePath;
+    this.file = file;
+    this.entityId = entityId;
+    this.entityType = entityType;
+  }
+
   public FileForm(String relativePath, MultipartFile file, Integer width, Integer height) {
     this.relativePath = relativePath;
     this.file = file;
@@ -64,6 +75,20 @@ public class FileForm {
   public void setHeight(Integer height) {
     this.height = height;
   }
-  
-  
+
+  public Long getEntityId() {
+    return entityId;
+  }
+
+  public void setEntityId(Long entityId) {
+    this.entityId = entityId;
+  }
+
+  public String getEntityType() {
+    return entityType;
+  }
+
+  public void setEntityType(String entityType) {
+    this.entityType = entityType;
+  }
 }

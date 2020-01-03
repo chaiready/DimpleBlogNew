@@ -2,7 +2,7 @@
 https://github.com/DimpleFeng/DimpleBlog
 
 
-
+管理员：小西瓜
 
 www.u311.com
 ######################host文件######################

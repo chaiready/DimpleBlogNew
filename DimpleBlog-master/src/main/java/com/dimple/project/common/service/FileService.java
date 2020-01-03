@@ -63,4 +63,6 @@ public interface FileService {
      * @return 受影响的行数
      */
     int deleteLocalImageFile(String name);
+
+    FileItemInfo uploadFile(FileForm fileForm) throws IOException;
 }

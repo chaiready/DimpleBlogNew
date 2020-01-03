@@ -226,7 +226,7 @@
     function submitHandler() {
         if ($.validate.form()) {
             var data = getData();
-            $.operate.saveTab("/blog/blog/add", data);
+            $.operate.saveTab("/blog/blog/add", data,function(){window.parent.location.reload(););
         }
     }
     
