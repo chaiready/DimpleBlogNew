@@ -247,7 +247,7 @@ public class CustomController extends BaseController {
 
     @PostMapping("/front/login")
     @ResponseBody
-    public AjaxResult frontLogin(String loginName, String password,String toPage, Model model) {
+    public AjaxResult frontLogin(String loginName, String password,String toPage) {
         UsernamePasswordToken token = new UsernamePasswordToken(loginName, password, false);
         Subject subject = SecurityUtils.getSubject();
         try {
@@ -281,9 +281,7 @@ public class CustomController extends BaseController {
 
     /**
      * 注册
-     *
-     * @param loginName
-     * @param password
+     * @param toPage
      * @param model
      * @return
      */
@@ -296,7 +294,7 @@ public class CustomController extends BaseController {
     
     @PostMapping("/front/reg")
     @ResponseBody
-    public AjaxResult frontReg(User user,String toPage, Model model) {
+    public AjaxResult frontReg(User user,String toPage ){
         try {
           String password = user.getPassword();
             user.setUserName(user.getLoginName());
@@ -304,7 +302,7 @@ public class CustomController extends BaseController {
             if(StringUtils.isEmpty(toPage)){
               return success("/bbs/"+user.getLoginName()+".html");
             }else{
-              return frontLogin(user.getLoginName(), password, toPage, model);
+              return frontLogin(user.getLoginName(), password, toPage);
             }
         } catch (DuplicateKeyException e) {
             log.error(e.getMessage());
@@ -323,8 +321,8 @@ public class CustomController extends BaseController {
 
     /**
      * 忘记密码
-     * @param toPage
-     * @param model
+     * @param loginName 登录名
+     * @param model model对象
      * @return
      */
     @ResponseBody

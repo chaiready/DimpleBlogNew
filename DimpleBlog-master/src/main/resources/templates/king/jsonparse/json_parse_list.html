@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('json解析')"/>
+    <th:block th:include="include :: layout-latest-css"/>
+    <th:block th:include="include :: ztree-css"/>
+</head>
+
+<body class="gray-bg">
+
+<div class="container-div ui-layout-center">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="user-form">
+                <textarea id="jsonContent" style="width: 100%;">[{"authSpace":"cloudLock_authSpace","resourceKey":"C2_0A_D4_75_35_32","functionNameList":[{"functionName":"frozen","startDateTime":null,"endDateTime":null,"startTime":null,"endTime":null,"startDate":null,"endDate":null,"count":null,"shareAble":true},{"functionName":"auth","startDateTime":null,"endDateTime":null,"startTime":"08:00","endTime":"17:30","startDate":"2019-10-01","endDate":"2020-10-01","count":10,"shareAble":false},{"functionName":"unAuth","startDateTime":null,"endDateTime":null,"startTime":"08:00","endTime":"17:30","startDate":"2019-10-01","endDate":"2020-10-01","count":10,"shareAble":false}]},{"authSpace":"cloudLock_authSpace","resourceKey":"C2_0A_D4_75_35_33","functionNameList":[{"functionName":"frozen","startDateTime":null,"endDateTime":null,"startTime":null,"endTime":null,"startDate":null,"endDate":null,"count":null,"shareAble":true}]}]</textarea>
+            </form>
+        </div>
+
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-success" onclick="parseJson();">
+                <i class="fa fa-plus"></i> 解析
+            </a>
+        </div>
+
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table" data-mobile-responsive="true"></table>
+        </div>
+    </div>
+</div>
+
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: layout-latest-js"/>
+<th:block th:include="include :: ztree-js"/>
+<script th:inline="javascript">
+    var datas = [[${@dict.getType('sys_normal_disable')}]];
+    var prefix = ctx + "system/user";
+
+    $(function () {
+        var panehHidden = false;
+        if ($(this).width() < 769) {
+            panehHidden = true;
+        }
+        $('body').layout({initClosed: panehHidden, west__size: 185});
+    });
+
+    function parseJson() {
+        let content = $("#jsonContent").val();
+        //console.info(content);
+
+        var jsonResp = jQuery.parseJSON(content);
+        console.info(jsonResp);
+
+        //parseToArr(jsonResp);
+
+
+        var i = 1;
+        for(var item in jsonResp){
+            var subItem = jsonResp[item];
+            var columnObj = getColumnObj(1);
+            printObj(subItem,columnObj,i);
+            console.info(">>>>>>>>>>>>>>>>>>>>>>>>>");
+            console.info(columnObj);
+        }
+        //getColumnObj(1);
+        //printObj(jsonResp);
+    }
+
+    function printObj(sonItem,columnObj,index){
+        if(typeof sonItem == 'object') {
+            var arr = new Array();
+            for (var item in sonItem) {
+               var minItem = sonItem[item];
+                var isobj = (typeof minItem == 'object')&&(minItem!=null);
+                if(isobj) {
+                    printObj(minItem,columnObj,index);
+                    index++;
+                }else{
+                    //console.info(item+">>>>>>>>>>111>>>>>>>>>>>>>>"+minItem);
+                    //console.info(columnObj);
+                    //eval("columnObj["+item+"]='"+minItem+"'");
+                    columnObj[item+""+index]=minItem;
+                }
+            }
+        }else{
+            console.info("son 2>>>"+ sonItem);
+        }
+    }
+
+    function getColumnObj(id){
+        var obj = new Object();
+        obj.id = id;
+        obj.main_id = id;
+        obj.rep_org_code = id;
+        obj.rep_org_code = id;
+        obj.report_id = 5;
+        return obj;
+    }
+
+    function parseToArr (jsonResp){
+        var arr = new Array();
+        for(var item in jsonResp){
+            var subItem = jsonResp[item];
+            if(typeof subItem == 'object'){
+                var subArr = parseToArr (subItem);
+                console.info(item+"==object==="+subArr);
+            }else{
+                //console.info(item+"====="+jsonResp[item]);
+                arr.push(jsonResp[item]);
+            }
+        }
+        if(arr.length>0){
+            console.info(arr);
+        }
+        return arr;
+    }
+
+
+    /* 用户管理-重置密码 */
+    function resetPwd(userId) {
+        var url = prefix + '/resetPwd/' + userId;
+        $.modal.open("重置密码", url, '800', '300');
+    }
+
+    /* 用户状态显示 */
+    function statusTools(row) {
+        if (row.status == 1) {
+            return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="enable(\'' + row.userId + '\')"></i> ';
+        } else {
+            return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.userId + '\')"></i> ';
+        }
+    }
+
+    /* 用户管理-停用 */
+    function disable(userId) {
+        $.modal.confirm("确认要停用用户吗？", function () {
+            $.operate.post(prefix + "/changeStatus", {"userId": userId, "status": 1});
+        })
+    }
+
+    /* 用户管理启用 */
+    function enable(userId) {
+        $.modal.confirm("确认要启用用户吗？", function () {
+            $.operate.post(prefix + "/changeStatus", {"userId": userId, "status": 0});
+        })
+    }
+</script>
+</body>
+<form id="importForm" enctype="multipart/form-data" class="mt20 mb10" style="display: none;">
+    <div class="col-xs-offset-1">
+        <input type="file" id="file" name="file"/>
+        <div class="mt10 pt5">
+            <input type="checkbox" id="updateSupport" name="updateSupport" title="如果登录账户已经存在，更新这条数据。"> 是否更新已经存在的用户数据
+            &nbsp; <a onclick="$.table.importTemplate()" class="btn btn-default btn-xs"><i
+                class="fa fa-file-excel-o"></i> 下载模板</a>
+        </div>
+        <font color="red" class="pull-left mt10">
+            提示：仅允许导入“xls”或“xlsx”格式文件！
+        </font>
+    </div>
+</form>
+</html>

@@ -75,10 +75,10 @@ public class QrCodeUtils {
     private static void insertImage(BufferedImage source, String logoPath, boolean needCompress) throws IOException {
         InputStream inputStream = null;
         try {
-            inputStream = FileUtils.getResourceAsStream(logoPath);
+            inputStream = FileUtils.getInputStream(logoPath);
             Image src = ImageIO.read(inputStream);
-            int width = src.getWidth(null);
-            int height = src.getHeight(null);
+            int width = 60;//src.getWidth(null);
+            int height = 60;//src.getHeight(null);
             if (needCompress) { // 压缩LOGO
                 if (width > LOGO_WIDTH) {
                     width = LOGO_WIDTH;
@@ -222,5 +222,11 @@ public class QrCodeUtils {
      */
     public static void encode(String content, OutputStream output) throws Exception {
         QrCodeUtils.encode(content, null, output, false);
+    }
+
+
+    public static void main(String[] args) throws Exception {
+        QrCodeUtils.encode("http://120.77.174.112:8080","D:\\workspace\\idea\\study\\DimpleBlogNew\\DimpleBlog-master\\src\\main\\resources\\static\\img\\wm.jpg",
+                "D:\\workspace\\idea\\study\\DimpleBlogNew\\DimpleBlog-master\\src\\main\\resources\\static\\img");
     }
 }

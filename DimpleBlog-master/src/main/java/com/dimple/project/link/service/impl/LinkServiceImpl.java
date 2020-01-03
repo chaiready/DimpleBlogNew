@@ -3,12 +3,18 @@ package com.dimple.project.link.service.impl;
 import com.dimple.common.constant.LinkConstants;
 import com.dimple.common.utils.security.ShiroUtils;
 import com.dimple.common.utils.text.Convert;
+import com.dimple.common.vo.FileForm;
+import com.dimple.framework.config.SystemConfig;
+import com.dimple.project.common.service.FileService;
 import com.dimple.project.link.domain.Link;
 import com.dimple.project.link.mapper.LinkMapper;
 import com.dimple.project.link.service.LinkService;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +31,8 @@ public class LinkServiceImpl implements LinkService {
 
     @Autowired
     LinkMapper linkMapper;
+    @Autowired
+    FileService fileService;
 
     @Override
     public List<Link> selectLinkList(Link link) {
@@ -32,10 +40,21 @@ public class LinkServiceImpl implements LinkService {
     }
 
     @Override
-    public int insertLink(Link link) {
+    public int insertLink(Link link,List<MultipartFile> files ) {
         link.setCreateBy(ShiroUtils.getLoginName());
         //设置为已经处理
         link.setProcessed(LinkConstants.LINK_PROCESSED);
+
+        String headerUrl = "";
+        if(CollectionUtils.isNotEmpty(files)){
+            try {
+                headerUrl = fileService.insertLocalImageFile(new FileForm(SystemConfig.getLinkPath(), files.get(0)));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        link.setHeaderImg(headerUrl);
+
         return linkMapper.insertLink(link);
     }
 
@@ -50,8 +69,17 @@ public class LinkServiceImpl implements LinkService {
     }
 
     @Override
-    public int updateLink(Link link) {
+    public int updateLink(Link link,List<MultipartFile> files) {
         link.setUpdateBy(ShiroUtils.getLoginName());
+        String headerUrl = "";
+        if(CollectionUtils.isNotEmpty(files)){
+            try {
+                headerUrl = fileService.insertLocalImageFile(new FileForm(SystemConfig.getLinkPath(), files.get(0)));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        link.setHeaderImg(headerUrl);
         return linkMapper.updateLink(link);
     }
 

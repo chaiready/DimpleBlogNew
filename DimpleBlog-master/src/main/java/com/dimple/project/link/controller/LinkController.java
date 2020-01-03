@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.util.List;
 
@@ -54,8 +56,9 @@ public class LinkController extends BaseController {
     @ResponseBody
     @Log(title = "系统友链", businessType = BusinessType.INSERT)
     @RequiresPermissions("link:link:add")
-    public AjaxResult addSave(Link link) {
-        return toAjax(linkService.insertLink(link));
+    public AjaxResult addSave(MultipartHttpServletRequest request, Link link) {
+        List<MultipartFile> files = request.getFiles("attachment[]");
+        return toAjax(linkService.insertLink(link,files));
     }
 
     @GetMapping("/edit/{linkId}")
@@ -68,8 +71,9 @@ public class LinkController extends BaseController {
     @Log(title = "系统友链", businessType = BusinessType.UPDATE)
     @ResponseBody
     @RequiresPermissions("link:link:edit")
-    public AjaxResult editSave(Link link) {
-        return toAjax(linkService.updateLink(link));
+    public AjaxResult editSave(MultipartHttpServletRequest request,Link link) {
+        List<MultipartFile> files = request.getFiles("attachment[]");
+        return toAjax(linkService.updateLink(link,files));
     }
 
     @RequiresPermissions("link:link:remove")

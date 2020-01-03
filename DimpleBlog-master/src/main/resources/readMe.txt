@@ -38,8 +38,10 @@ www.u311.com
 <a class="btn btn-success btn-xs " href="javascript:void(0)" th:onclick="openModal('/blog/blog/edit/[[${blog.blogId}]]');"><i class="fa fa-edit"></i> 编辑</a>
 
 
-
-
+######################layer 提示######################
+$.modal.alertSuccess(result.msg)
+$.modal.alertWarning(result.msg)
+$.modal.alertError(result.msg);
 
 
 

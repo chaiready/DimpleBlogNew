@@ -36,8 +36,24 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">图标地址：</label>
                 <div class="col-sm-8">
-                    <input id="linkHeaderUrl" class="form-control" name="headerImg" required=""
+                    <input type="hidden"  id="linkHeaderUrl" class="form-control" name="headerImg" required=""
                            th:value="${link.headerImg}">
+
+                    <div  id="divPreview" style="width: 200px;height: 200px;border:1px solid #ecdddd;">
+                        <img alt=""  id="imgHeadPhoto" th:src="${link.headerImg}" style="width: 200px;height: 200px;"  onclick="showFilePic();">
+                        <!--  点击显示大图片 -->
+                        <div id="outerdiv" style="position:fixed;top:0;left:0;background:rgba(0,0,0,0.7);z-index:2;width:100%;height:100%;display:none;">
+                            <div id="innerdiv" style="position:absolute;">
+                                <div align="right">
+                                    <img src="" style="width: 230px;height: 230px;">
+                                </div>
+                                <img id="bigimg" style="border:5px solid #fff;" src=""/>
+                            </div>
+                        </div>
+                    </div>
+                    <span id="fileSpanId">
+                        <input type="file" id="multifile" name="attachment"  class="btn" style=""/>
+                    </span>
                 </div>
             </div>
             <div class="form-group">
@@ -77,9 +93,39 @@
     </div>
 </div>
 <th:block th:include="include :: footer"/>
-
+<script th:src="@{/js/king/preview_image.js}"></script>
 <script type="text/javascript">
     var prefix = ctx + "link/link";
+
+    var _files=new Array();
+
+    $(document).ready(function() {
+        $("#multifile").bind('change', onQueryFile);
+    });
+
+    //选择文件后
+    function onQueryFile(){
+        var fileName = this.files[0].name;
+        var prefix = fileName.substring(fileName.lastIndexOf('.')+1,fileName.length);
+        $("#fileName").val(this.files[0].name);
+        _files=new Array();
+        _files.push(this.files[0]);
+
+        prefix= prefix.toUpperCase();
+        if(prefix=='JPG'||prefix=='JPEG'||prefix=='PNG'||prefix=='BMP'){
+            //$("#fileName").val(this.files[0].name);
+            PreviewImage(this,'imgHeadPhoto','divPreview');
+        }else{
+            $("#fileSpanId").html('<input type="file" id="multifile" name="attachment"  class="btn" style=""/>');
+            $("#multifile").bind('change', onQueryFile);
+            $.modal.alertWarning("请上传jpg、jpep、png、bmp文件格式的图片");
+        }
+    }
+
+    //点击浏览
+    function onfindfileFile(){
+        $("#multifile").click();
+    }
 
     $("#linkAddForm").validate({
         rules: {
@@ -137,9 +183,71 @@
     function submitHandler() {
         if ($.validate.form()) {
             var display = $("input[id='display']").is(':checked') == true ? 1 : 0;
-            var data = $('#linkUpdateForm').serializeArray();
+            /*var data = $('#linkUpdateForm').serializeArray();
             data.push({"name": "display", "value": display})
-            $.operate.updateTab(prefix + "/edit", data);
+            $.operate.updateTab(prefix + "/edit", data);*/
+
+            var formData = new FormData($('#linkUpdateForm')[0]);
+            formData.append("display", display);
+            //附件
+            $.each(_files, function(i, file) {
+                formData.append("attachment[]", file,file.name);
+            });
+            $.ajax( {
+                url : prefix + "/edit",
+                data: formData,
+                type: 'put',
+                cache: false,contentType: false,processData: false,
+                beforeSend: function () {
+                    $.modal.loading("正在处理中，请稍后...");
+                },
+                success : function(result) {
+                    $.operate.successTabCallback(result);
+                },
+                error: function(data){
+                    $.modal.alertError("保存失败，HTTP错误。");
+                }
+            });
+        }
+    }
+
+    function showFilePic(){
+        var file=_files[0];
+        if(file!=null&&typeof(file) != "undefined"){
+            //建立一個可存取到該file的url
+            var url = null ;
+            try{
+                if (window.createObjectURL!=undefined) { // basic
+                    url = window.createObjectURL(file) ;
+                } else if (window.URL!=undefined) { // mozilla(firefox)
+                    url = window.URL.createObjectURL(file) ;
+                } else if (window.webkitURL!=undefined) { // webkit or chrome
+                    url = window.webkitURL.createObjectURL(file) ;
+                }
+            } catch(err) {
+                url=null;
+            }
+            if(url){
+                layer.open({
+                    type : 2,//type : 1,
+                    title : '图片预览',
+                    shadeClose : false,
+                    shade : 0.8,
+                    area : [ '90%', '90%' ],
+                    content: ctx+'file/image/toViewImg?imgurl='+url
+                });
+            }else{
+                $.modal.alertError("该浏览器不支持未上传图片预览功能");
+            }
+        }else{
+            layer.open({
+                type : 2,//type : 1,
+                title : '图片预览',
+                shadeClose : false,
+                shade : 0.8,
+                area : [ '90%', '90%' ],
+                content: ctx+'file/image/toViewImg?imgurl='+encodeURI(encodeURI($("#imgHeadPhoto").attr("src")))
+            });
         }
     }
 </script>

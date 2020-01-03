@@ -71,7 +71,7 @@ public class ExamController extends BaseController {
     List<Func> funcList = new ArrayList<Func>();
     model.addAttribute("funcList", funcList);
     String funcName = "";
-    
+
     Func funcVo = new Func();
     funcVo.setUrl("/kaoshi/questionFolder/1.html");
     funcVo.setFuncName("医药学");

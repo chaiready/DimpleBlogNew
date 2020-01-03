@@ -1,6 +1,7 @@
 package com.dimple.project.link.service;
 
 import com.dimple.project.link.domain.Link;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -27,7 +28,7 @@ public interface LinkService {
      * @param link 需要新增的link的实体类信息
      * @return 受影响的行数
      */
-    int insertLink(Link link);
+    int insertLink(Link link,List<MultipartFile> files );
 
     /**
      * 根据Id查询友链
@@ -51,7 +52,7 @@ public interface LinkService {
      * @param link 需要更新的link的实体
      * @return 受影响的行数
      */
-    int updateLink(Link link);
+    int updateLink(Link link,List<MultipartFile> files );
 
     /**
      * 切换友链的状态显示

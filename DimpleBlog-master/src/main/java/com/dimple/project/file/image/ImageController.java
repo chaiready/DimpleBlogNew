@@ -11,6 +11,7 @@ import com.dimple.project.common.domain.FileItemInfo;
 import com.dimple.project.common.service.FileService;
 import com.qiniu.common.QiniuException;
 import io.swagger.annotations.Api;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,7 +26,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.List;
 import java.util.Objects;
 
@@ -130,5 +134,17 @@ public class ImageController extends BaseController {
             i = fileService.deleteLocalImageFile(name);
         }
         return toAjax(i);
+    }
+
+    @RequestMapping(value = "/toViewImg")
+    public String toViewImg(Model model, HttpServletRequest request, String pk, String imgurl) {
+        try {
+            imgurl= URLDecoder.decode(imgurl,"UTF-8");
+            imgurl=imgurl.replaceAll( "\\\\","/");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        model.addAttribute("imgurl", imgurl);
+        return "file/image/img_view";
     }
 }

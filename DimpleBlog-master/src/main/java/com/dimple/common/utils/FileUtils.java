@@ -1,4 +1,5 @@
 package com.dimple.common.utils;
+import com.dimple.common.exception.BusinessException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
@@ -99,5 +100,15 @@ public class FileUtils {
         }
         os.close();
         ins.close();
+    }
+
+    public static InputStream getInputStream(String filePath) {
+        InputStream is = null;
+        try {
+            is = new FileInputStream(new File(filePath));
+        } catch (FileNotFoundException e) {
+            throw new BusinessException("拷贝文件发生异常");
+        }
+        return is;
     }
 }
