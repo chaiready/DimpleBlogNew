@@ -3,6 +3,8 @@ package com.dimple.project.front.controller;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import com.dimple.project.common.service.FileService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -96,6 +98,8 @@ public class CustomController extends BaseController {
     private UserLogService userLogService;
     @Autowired
     private SuggestService suggestService;
+    @Autowired
+    FileService fileService;
 
 
     /**
@@ -193,6 +197,7 @@ public class CustomController extends BaseController {
         comment.setPageId(blogId);
         comment.setDisplay(true);
         model.addAttribute("comments", commentService.selectCommentListForFront(comment));
+        model.addAttribute("fileList",fileService.listByEntityInfo(Constants.FILE_ITEM_ENTITYTYPE_BLOG,Long.valueOf(blogId)));
         return "front/custom/article_summernote";//front/article 将simpleMde 改成 summerNote 编辑器
     }
     

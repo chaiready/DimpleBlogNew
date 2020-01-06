@@ -1,6 +1,8 @@
 package com.dimple.project.common.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.dimple.project.common.domain.FileItemInfo;
+import com.dimple.project.king.exam.domain.QuestionExamEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -14,7 +16,7 @@ import java.util.List;
  * @version: 1.0
  */
 @Mapper
-public interface FileItemInfoMapper {
+public interface FileItemInfoMapper extends BaseMapper<FileItemInfo> {
 
     List<FileItemInfo> getFileItemList(FileItemInfo fileItemInfo);
 

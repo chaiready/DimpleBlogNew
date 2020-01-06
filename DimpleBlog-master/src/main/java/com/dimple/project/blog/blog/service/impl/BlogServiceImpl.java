@@ -2,6 +2,7 @@ package com.dimple.project.blog.blog.service.impl;
 
 import com.dimple.common.constant.CacheConstant;
 import com.dimple.common.constant.CommonConstant;
+import com.dimple.common.constant.Constants;
 import com.dimple.common.utils.security.ShiroUtils;
 import com.dimple.common.utils.text.Convert;
 import com.dimple.common.vo.FileForm;
@@ -112,7 +113,7 @@ public class BlogServiceImpl implements BlogService {
         if(CollectionUtils.isNotEmpty(files)){
             for (MultipartFile file:files){
                 try {
-                    fileService.uploadFile(new FileForm(SystemConfig.getAttachmentPath(), file,Long.valueOf(blog.getBlogId()),"blog"));
+                    fileService.uploadFile(new FileForm(SystemConfig.getAttachmentPath(), file,Long.valueOf(blog.getBlogId()), Constants.FILE_ITEM_ENTITYTYPE_BLOG));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

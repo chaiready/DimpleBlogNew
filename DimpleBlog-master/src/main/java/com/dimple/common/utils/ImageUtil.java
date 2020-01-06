@@ -177,7 +177,7 @@ public class ImageUtil {
 		// Thumbnails.of(fileName).size(width,height).toFile(newFile);
 		// 不按比例，就按指定的大小进行缩放
 		Thumbnails.of(fileName).size(width, height).keepAspectRatio(false).toFile(newFileName);
-		 FileItemInfo fileItemInfo = new FileItemInfo(fileName, "", 0L, "", new Date(), 
+		 FileItemInfo fileItemInfo = new FileItemInfo(fileName, fileName,"", 0L, "", new Date(),
              FileItemInfo.ServerType.LOCAL.getServerType(), newFileName , newFileName.replace(SystemConfig.getProfile(), ""));
 		 return fileItemInfo;
 	}
@@ -204,7 +204,7 @@ public class ImageUtil {
 			Thumbnails.of(fileName).size(imgWidth, imgHeight).outputQuality(quality).toFile(newFileName);
 		}
 		System.out.println(newFileName);
-        FileItemInfo fileItemInfo = new FileItemInfo(fileName, "", 0L, "", new Date(), 
+        FileItemInfo fileItemInfo = new FileItemInfo(fileName, fileName, "", 0L, "", new Date(),
             FileItemInfo.ServerType.LOCAL.getServerType(), newFileName , newFileName.replace(SystemConfig.getProfile(), ""));
         return fileItemInfo;
 	}

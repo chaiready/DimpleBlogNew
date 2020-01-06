@@ -1,6 +1,7 @@
 package com.dimple.project.blog.blog.controller;
 
 import com.dimple.common.constant.BlogConstants;
+import com.dimple.common.constant.Constants;
 import com.dimple.common.utils.security.ShiroUtils;
 import com.dimple.framework.aspectj.lang.annotation.Log;
 import com.dimple.framework.aspectj.lang.enums.BusinessType;
@@ -11,6 +12,7 @@ import com.dimple.project.blog.blog.domain.Blog;
 import com.dimple.project.blog.blog.service.BlogService;
 import com.dimple.project.blog.category.domain.Category;
 import com.dimple.project.blog.category.service.CategoryService;
+import com.dimple.project.common.service.FileService;
 import com.dimple.project.system.user.domain.User;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +39,9 @@ public class BlogController extends BaseController {
 
     @Autowired
     CategoryService categoryService;
+
+    @Autowired
+    FileService fileService;
 
     @RequiresPermissions("blog:blog:view")
     @GetMapping()
@@ -103,6 +108,7 @@ public class BlogController extends BaseController {
     public String funcEdit(@PathVariable Integer blogId, Model model) {
         model.addAttribute("blog", blogService.selectBlogWithTextAndTagsAndCategoryByBlogId(blogId));
         model.addAttribute("categories", categoryService.selectCategoryList(new Category()));
+        model.addAttribute("fileList",fileService.listByEntityInfo(Constants.FILE_ITEM_ENTITYTYPE_BLOG,Long.valueOf(blogId)));
         return "blog/blog/edit_phone";
     }
 

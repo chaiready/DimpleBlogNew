@@ -5,6 +5,7 @@
     <insert id="insertFileItem">
         insert into bg_file_item_info (
         <if test="name != null and name != '' ">name,</if>
+        <if test="originalName != null and originalName != '' ">original_name,</if>
         <if test="hash != null and hash != '' ">hash,</if>
         <if test="size != null  ">size,</if>
         <if test="mimeType != null and mimeType != '' ">mime_type,</if>
@@ -13,9 +14,12 @@
         <if test="path != null and path != ''">path,</if>
         <if test="entityId != null and entityId != ''">entity_id,</if>
         <if test="entityType != null and entityType != ''">entity_type,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        <if test="createTime != null">create_time,</if>
         <if test="relativePath != null and relativePath != ''">relative_path</if>
         )values(
         <if test="name != null and name != ''">#{name},</if>
+        <if test="originalName != null and originalName != '' ">#{originalName},</if>
         <if test="hash != null and hash != ''">#{hash},</if>
         <if test="size != null ">#{size},</if>
         <if test="mimeType != null and mimeType != ''">#{mimeType},</if>
@@ -24,6 +28,8 @@
         <if test="path != null and path != ''">#{path},</if>
         <if test="entityId != null">#{entityId},</if>
         <if test="entityType != null and entityType != ''">#{entityType},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        <if test="createTime != null">#{createTime},</if>
         <if test="relativePath != null and relativePath != ''">#{relativePath}</if>
         )
     </insert>
@@ -38,9 +44,10 @@
 
 
     <select id="getFileItemList" resultType="com.dimple.project.common.domain.FileItemInfo">
-        select name,hash,size,mime_type,put_time,server_type,path
+        select id,name,original_name,hash,size,mime_type,put_time,server_type,path,relative_path,create_by,create_time
         from bg_file_item_info
         <where>
+            status = '1'
             <if test="name != null and name != ''">
                 and name like concat('%', #{configName}, '%')
             </if>
@@ -50,11 +57,17 @@
             <if test="serverType !=null and serverType !=''">
                 and server_type =#{serverType}
             </if>
-            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
-                and date_format(put_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            <!--<if test="beginTime != null and beginTime != ''">&lt;!&ndash; 开始时间检索 &ndash;&gt;
+                and date_format(put_time,'%y%m%d') &gt;= date_format(#{beginTime},'%y%m%d')
             </if>
-            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
-                and date_format(put_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            <if test="endTime != null and endTime != ''">&lt;!&ndash; 结束时间检索 &ndash;&gt;
+                and date_format(put_time,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')
+            </if>-->
+            <if test="entityType != null and entityType != ''">
+                and entity_type = #{entityType}
+            </if>
+            <if test="entityId != null and entityId != 0">
+                and entity_id = #{entityId}
             </if>
         </where>
     </select>

@@ -66,6 +66,8 @@ public class QiNiuUtils {
         Auth auth = Auth.create(qiNiuConfig.getAccessKey(), qiNiuConfig.getSecretKey());
         String token = auth.uploadToken(qiNiuConfig.getBucket());
         Response response = null;
+
+        String orginalName = file.getOriginalFilename();
         //生成文件名
         String fileName = FileUtils.generateFileName(file);
         FileItemInfo fileItemInfo = null;
@@ -74,7 +76,7 @@ public class QiNiuUtils {
             DefaultPutRet defaultPutRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
             String path = qiNiuConfig.getPath() + File.separator + defaultPutRet.key;
             log.info("上传文件到七牛云服务器成功{}", path);
-            fileItemInfo = new FileItemInfo(fileName, defaultPutRet.hash, file.getSize(), file.getContentType(), new Date(),
+            fileItemInfo = new FileItemInfo(fileName, orginalName,defaultPutRet.hash, file.getSize(), file.getContentType(), new Date(),
             		FileItemInfo.ServerType.QI_NIU_YUN.getServerType(), path,path);
         } catch (QiniuException e) {
             Response r = e.response;

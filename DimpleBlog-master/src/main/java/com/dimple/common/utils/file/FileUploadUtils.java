@@ -51,7 +51,7 @@ public class FileUploadUtils {
     /**
      * 文件上传
      *
-     * @param baseDir 相对应用的基目录
+     * @param relativePath 相对应用的基目录
      * @param file    上传的文件
      * @return 返回上传成功的文件
      * @throws FileSizeLimitExceededException       如果超出最大大小
@@ -59,20 +59,20 @@ public class FileUploadUtils {
      * @throws IOException                          比如读写文件出错时
      */
     public static final FileItemInfo upload(String relativePath,MultipartFile file) throws FileSizeLimitExceededException, IOException, FileNameLengthLimitExceededException {
-        int fileNameLength = file.getOriginalFilename().length();
+        String originalFilename = file.getOriginalFilename();
+        int fileNameLength = originalFilename.length();
         if (fileNameLength > FileUploadUtils.DEFAULT_FILE_NAME_LENGTH) {
             throw new FileNameLengthLimitExceededException(FileUploadUtils.DEFAULT_FILE_NAME_LENGTH);
         }
 
         assertAllowed(file);
-
         String fileName = FileUtils.generateFileName(file);
         relativePath = relativePath + fileName;
         String absolutePath = SystemConfig.getProfile()+ relativePath;
         File desc = getAbsoluteFile(absolutePath);
         file.transferTo(desc);
         
-        return new FileItemInfo(fileName, String.valueOf(file.hashCode()), file.getSize(), file.getContentType(), new Date(), 
+        return new FileItemInfo(fileName, originalFilename, String.valueOf(file.hashCode()), file.getSize(), file.getContentType(), new Date(),
               FileItemInfo.ServerType.LOCAL.getServerType(), absolutePath,relativePath);
     }
     

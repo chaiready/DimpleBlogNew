@@ -224,3 +224,14 @@ left join bg_question_option qo on q.id=qo.question_id and q.answer=qo.option_or
 #20200103
 alter table bg_file_item_info add COLUMN entity_type VARCHAR(10) COMMENT '实体类型';
 alter table bg_file_item_info add COLUMN entity_id BIGINT(11) COMMENT '实体id';
+
+#20200106
+alter table bg_file_item_info add COLUMN original_name VARCHAR(250) COMMENT '文件原始名字';
+alter table bg_file_item_info add COLUMN status char(1) DEFAULT '1' COMMENT '状态0删除 1:正常';
+alter table bg_file_item_info add COLUMN create_by varchar(64);
+alter table bg_file_item_info add COLUMN update_by varchar(64);
+alter table bg_file_item_info add COLUMN create_time datetime;
+alter table bg_file_item_info add COLUMN update_time datetime;
+
+
+

@@ -8,6 +8,10 @@ import java.net.URLEncoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.dimple.common.constant.Constants;
+import com.dimple.common.utils.security.ShiroUtils;
+import com.dimple.project.common.domain.FileItemInfo;
+import com.dimple.project.common.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,6 +45,8 @@ public class CommonController {
 
     @Autowired
     private ServerConfig serverConfig;
+    @Autowired
+    private FileService fileService;
 
     @GetMapping("/error/{type}")
     public String error(@PathVariable String type) {
@@ -92,6 +98,21 @@ public class CommonController {
         } catch (Exception e) {
             return AjaxResult.error(e.getMessage());
         }
+    }
+
+    @PostMapping("/common/delFile")
+    @ResponseBody
+    public AjaxResult delFile(Long fileId) throws Exception {
+        FileItemInfo fileInfo = fileService.getById(fileId);
+        if(fileInfo == null){
+            return AjaxResult.error("文件不存在");
+        }
+        if(fileInfo.getCreateBy()==null||!fileInfo.getCreateBy().equals(ShiroUtils.getLoginName())){
+            return AjaxResult.error("文件不属于当前用户");
+        }
+        fileInfo.setStatus(Constants.STATUS_DEL);
+        fileService.updateById(fileInfo);
+        return AjaxResult.success();
     }
 
     public String setFileDownloadHeader(HttpServletRequest request, String fileName) throws UnsupportedEncodingException {

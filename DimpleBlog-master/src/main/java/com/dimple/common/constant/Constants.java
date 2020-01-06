@@ -80,4 +80,11 @@ public class Constants {
     
     //博客首页默认图片
     public static String BLOG_INDEX_PIC_URL="/front/images/touploadimg.jpg";
+
+
+    public static String FILE_ITEM_ENTITYTYPE_BLOG = "blog";//附件实体类型-博客
+
+
+    public static String STATUS_NORMAL = "1";
+    public static String STATUS_DEL = "0";
 }

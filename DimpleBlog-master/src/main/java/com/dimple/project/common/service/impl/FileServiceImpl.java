@@ -1,8 +1,10 @@
 package com.dimple.project.common.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dimple.common.utils.file.FileUploadUtils;
 import com.dimple.common.utils.file.FileUtils;
 import com.dimple.common.utils.file.QiNiuUtils;
+import com.dimple.common.utils.security.ShiroUtils;
 import com.dimple.common.vo.FileForm;
 import com.dimple.framework.config.SystemConfig;
 import com.dimple.project.common.domain.FileItemInfo;
@@ -35,7 +37,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @Slf4j
-public class FileServiceImpl implements FileService {
+public class FileServiceImpl extends ServiceImpl<FileItemInfoMapper,FileItemInfo> implements FileService {
     @Autowired
     FileItemInfoMapper fileItemInfoMapper;
 
@@ -50,7 +52,7 @@ public class FileServiceImpl implements FileService {
 
         //将fileListing.item转换为FileItem类型
         List<FileItemInfo> fileItemsQiNiuYunInfo = Arrays.stream(fileListing.items).map(item -> 
-        new FileItemInfo(item.key, item.hash, item.fsize, item.mimeType, new Date(Long.valueOf(String.valueOf(item.putTime).substring(0, String.valueOf(item.putTime).length() - 7))),
+        new FileItemInfo(item.key, item.key, item.hash, item.fsize, item.mimeType, new Date(Long.valueOf(String.valueOf(item.putTime).substring(0, String.valueOf(item.putTime).length() - 7))),
         		FileItemInfo.ServerType.QI_NIU_YUN.getServerType(), QiNiuUtils.getPathByName(item.key),QiNiuUtils.getPathByName(item.key))).collect(Collectors.toList());
 
         //删除数据库现有的在七牛云上的记录
@@ -91,6 +93,8 @@ public class FileServiceImpl implements FileService {
     @Transactional
     public String insertLocalImageFile(FileForm fileForm) throws IOException {
         FileItemInfo fileItemInfo = FileUploadUtils.uploadImg(fileForm);
+        fileItemInfo.setCreateBy(ShiroUtils.getLoginName());
+        fileItemInfo.setCreateTime(new Date());
         fileItemInfoMapper.insertFileItem(fileItemInfo);
         return fileItemInfo.getRelativePath();//fileItemInfo.getPath();
     }
@@ -120,8 +124,18 @@ public class FileServiceImpl implements FileService {
         FileItemInfo fileItemInfo = FileUploadUtils.upload(fileForm.getRelativePath(),fileForm.getFile());
         fileItemInfo.setEntityId(fileForm.getEntityId());
         fileItemInfo.setEntityType(fileForm.getEntityType());
+        fileItemInfo.setCreateBy(ShiroUtils.getLoginName());
+        fileItemInfo.setCreateTime(new Date());
         fileItemInfoMapper.insertFileItem(fileItemInfo);
         return fileItemInfo;
+    }
+
+    @Override
+    public List<FileItemInfo> listByEntityInfo(String entityType, Long entityId) {
+        FileItemInfo fileItemInfo = new FileItemInfo();
+        fileItemInfo.setEntityType(entityType);
+        fileItemInfo.setEntityId(entityId);
+        return this.selectFileItemImageList(fileItemInfo);
     }
 
 }

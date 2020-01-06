@@ -1,7 +1,11 @@
 package com.dimple.project.common.domain;
 
-import com.dimple.framework.web.domain.BaseEntity;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.dimple.framework.web.domain.SuperEntity;
 import lombok.Data;
+import org.springframework.data.annotation.Id;
 
 import java.util.Date;
 
@@ -13,11 +17,14 @@ import java.util.Date;
  * @version: 1.0
  */
 @Data
-public class FileItemInfo extends BaseEntity {
+@TableName("bg_file_item_info")
+public class FileItemInfo extends SuperEntity {
 	
 	private static final long serialVersionUID = 1L;
-	
-	private Integer id;
+
+    @Id
+    @TableId(value = "id", type = IdType.AUTO)
+	private Long id;
     /**
      * 资源名。
      */
@@ -53,14 +60,19 @@ public class FileItemInfo extends BaseEntity {
 
     private String entityType;
 
+    private String originalName;
+
+    private String status;//状态0删除 1:正常
+
 
 
     public FileItemInfo() {
         super();
     }
 
-    public FileItemInfo(String name, String hash, Long size, String mimeType, Date putTime, Integer serverType, String path,String relativePath) {
+    public FileItemInfo(String name,String originalName, String hash, Long size, String mimeType, Date putTime, Integer serverType, String path,String relativePath) {
         this.name = name;
+        this.originalName = originalName;
         this.hash = hash;
         this.size = size;
         this.mimeType = mimeType;

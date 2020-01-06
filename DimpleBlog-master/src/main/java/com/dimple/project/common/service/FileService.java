@@ -2,6 +2,8 @@ package com.dimple.project.common.service;
 
 import java.io.IOException;
 import java.util.List;
+
+import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.web.multipart.MultipartFile;
 import com.dimple.common.vo.FileForm;
 import com.dimple.project.common.domain.FileItemInfo;
@@ -14,7 +16,7 @@ import com.qiniu.common.QiniuException;
  * @date: 07/24/19
  * @version: 1.0
  */
-public interface FileService {
+public interface FileService extends IService<FileItemInfo> {
 
     /**
      * 刷新七牛云数据到数据库保存
@@ -65,4 +67,7 @@ public interface FileService {
     int deleteLocalImageFile(String name);
 
     FileItemInfo uploadFile(FileForm fileForm) throws IOException;
+
+
+    List<FileItemInfo> listByEntityInfo(String entityType,Long entityId);
 }

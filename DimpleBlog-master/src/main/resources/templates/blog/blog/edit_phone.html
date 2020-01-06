@@ -106,6 +106,13 @@
                     <button type="button" class="btn btn-sm btn-primary" onclick="addAttachment()"><i
                             class="fa fa-plus"></i> 添加附件
                     </button>&nbsp;
+
+                    <div th:each="fileObj:${fileList}" th:id="${'fileSpan_'+fileObj.id}" style="border: 2px solid #f5f5f5;height: 45px;" >
+                        <span th:text="${fileObj.originalName}"></span>
+                        <a class="btn btn-danger" th:onclick="delOldAttach([[${fileObj.id}]]);">
+                            <i class="fa fa-remove"></i> 删除
+                        </a>
+                    </div>
                 </div>
             </div>
             <div class="mail-body text-right tooltip-demo" style="padding: 10px;">
@@ -300,6 +307,21 @@
     //删除附件
     function delAttachment(fileId){
         $("#fileSpan_"+fileId).remove();
+    }
+    //删除已经上传的附件
+    function delOldAttach(fileId){
+        $.modal.confirm("确认要删除该文件吗？", function () {
+            $.operate.ajaxSend("/common/delFile", "post", "json", {"fileId":fileId}, function callBackFunc(result){
+                console.info(result);
+                $.modal.closeLoading();
+                if(result.code == web_status.SUCCESS){
+                    delAttachment(fileId)
+                    $.modal.msgSuccess(result.msg);
+                }else{
+                    $.modal.alertWarning(result.msg)
+                }
+            });
+        })
     }
 </script>
 </body>
