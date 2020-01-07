@@ -27,4 +27,12 @@ public class CarouselMap extends BaseEntity {
     private String target;
     //是否显示
     private String display;
+
+    public CarouselMap() {
+    }
+    public CarouselMap(String imgUrl, String title, String subTitle) {
+        this.imgUrl = imgUrl;
+        this.title = title;
+        this.subTitle = subTitle;
+    }
 }

@@ -290,7 +290,7 @@
     <select id="selectBookmarksList" resultType="com.dimple.project.blog.blog.domain.Blog">
        select b.blog_id,b.category_id,b.title,b.summary,b.click,b.header_img,
         b.create_by,b.create_time,b.allow_comment,b.support,c.category_title,
-        (select count(*) from bg_comment where page_id=b.blog_id and display=1 ) as comment_count
+        (select count(*) from bg_comment where page_id=b.blog_id and display=1 ) as comment_count,fb.id bookmarksId
         from bg_bookmarks fb left join bg_blog b on b.blog_id = fb.blog_id
         left join bg_category c on b.category_id = c.category_id
         where b.status=1 and fb.user_id = #{userId} order by fb.create_time desc

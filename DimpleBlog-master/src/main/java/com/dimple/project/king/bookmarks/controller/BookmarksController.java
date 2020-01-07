@@ -1,15 +1,14 @@
 package com.dimple.project.king.bookmarks.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.dimple.common.constant.Constants;
 import com.dimple.common.utils.security.ShiroUtils;
-import com.dimple.framework.web.controller.BaseController;
 import com.dimple.framework.web.domain.AjaxResult;
 import com.dimple.project.blog.blog.domain.Blog;
 import com.dimple.project.blog.blog.service.BlogService;
+import com.dimple.project.front.controller.BaseBlogController;
 import com.dimple.project.king.bookmarks.domain.BookmarksEntity;
 import com.dimple.project.king.bookmarks.service.BookmarksService;
-import com.dimple.project.king.func.domain.Func;
-import com.dimple.project.king.func.service.IFuncService;
 import com.dimple.project.system.user.domain.User;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Date;
-import java.util.List;
 
 
 /**
@@ -30,14 +28,12 @@ import java.util.List;
  */
 @Controller
 @RequestMapping(value = "/bookmarks")
-public class BookmarksController extends BaseController{
+public class BookmarksController extends BaseBlogController {
 
 	@Autowired
 	private BookmarksService service;
 	@Autowired
 	private BlogService blogService;
-	@Autowired
-	private IFuncService funcService;
 
 	/**
 	 *
@@ -52,12 +48,12 @@ public class BookmarksController extends BaseController{
 	@RequestMapping("/list.html")
 	public String listView(Model model, Integer pageNum, String directPage) {
 		User user = ShiroUtils.getSysUser();
-		List<Func> funcList = funcService.findBbsByCreator(user.getLoginName());
-		model.addAttribute("funcList", funcList);
+		if(user==null){
+			return blogLoginPage();
+		}
 		PageHelper.startPage(changePageNum(pageNum, "") , Constants.BLOG_PAGE_SIZE);
 		model.addAttribute("blogs", new PageInfo<>(blogService.selectBookmarksList(user.getUserId())));
-		model.addAttribute("loginName", user.getLoginName());
-		model.addAttribute("curUser", user);
+		setBLogHead(user.getLoginName(),model);
 		return "king/bookmarks/bookmarks_list";
 	}
 
@@ -65,10 +61,20 @@ public class BookmarksController extends BaseController{
 	@RequestMapping("/add")
 	public AjaxResult addView(Long blogId) {
 		User user = ShiroUtils.getSysUser();
+		if(user==null){
+			return AjaxResult.error("请重新登录");
+		}
 		Blog blog = blogService.selectBlogById(blogId);
 		if(blog == null){
 			return AjaxResult.error("博客不存在");
 		}
+		QueryWrapper<BookmarksEntity> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("blog_id",blogId);
+		queryWrapper.eq("user_id",user.getUserId());
+		if(service.count(queryWrapper)>0){
+			return AjaxResult.error("该博客已收藏");
+		}
+
 		BookmarksEntity obj = new BookmarksEntity();
 		obj.setBlogId(blogId);
 		obj.setUserId(user.getUserId());

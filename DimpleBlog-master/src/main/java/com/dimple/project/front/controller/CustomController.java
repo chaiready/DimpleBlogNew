@@ -9,7 +9,6 @@ import com.dimple.common.utils.RandomUtil;
 import com.dimple.common.utils.StringUtils;
 import com.dimple.common.utils.security.ShiroUtils;
 import com.dimple.framework.aspectj.lang.annotation.VLog;
-import com.dimple.framework.web.controller.BaseController;
 import com.dimple.framework.web.domain.AjaxResult;
 import com.dimple.project.blog.blog.domain.Blog;
 import com.dimple.project.blog.blog.service.BlogService;
@@ -60,7 +59,7 @@ import java.util.List;
 @Slf4j
 @Controller
 @RequestMapping("/bbs")
-public class CustomController extends BaseController {
+public class CustomController extends BaseBlogController {
   
     private long FUNC_FIRST = 0;
     
@@ -102,8 +101,7 @@ public class CustomController extends BaseController {
      * 设置前台页面公用的部分代码 均设置Redis缓存
      */
     private void setCommonMessage(Model model, String loginName,Long funcId,Integer pageNum) {
-        List<Func> funcList = funcService.findBbsByCreator(loginName);
-        model.addAttribute("funcList", funcList);
+        List<Func> funcList = setBLogHead(loginName,model);
 
         if(funcId!=FUNC_NULL){
           if (funcId==FUNC_FIRST&&CollectionUtils.isNotEmpty(funcList)) {
@@ -127,10 +125,6 @@ public class CustomController extends BaseController {
         model.addAttribute("notices", noticeService.selectNoticeListDisplay());
         // 获取友链信息
         model.addAttribute("links", linkService.selectLinkListFront());
-        // 设置当前访问主页名
-        model.addAttribute("loginName", loginName);
-
-        model.addAttribute("curUser", ShiroUtils.getSysUser());
     }
 
     @GetMapping({"/{loginName}.html","/{loginName}/index.html"})
@@ -140,20 +134,17 @@ public class CustomController extends BaseController {
         // 放置轮播图
         List<CarouselMap> carouselMaps = carouselMapService.selectByCreateBy(loginName);
         if(CollectionUtils.isEmpty(carouselMaps)){
-          CarouselMap cm = new CarouselMap();
-          cm.setTitle("");
-          cm.setSubTitle("");
-          cm.setImgUrl("/front/images/touploadimg.jpg");
-          carouselMaps.add(cm);
+          carouselMaps.add(new CarouselMap("/front/images/touploadimg.jpg","",""));
         }
         model.addAttribute("carouselMaps", carouselMaps);
         // 查询用户信息
-        User user = userService.selectUserByLoginName(loginName);
-        if (user != null) {
-            model.addAttribute("user", user);
-            return "front/custom/index";
-        }
-        return "front/index";
+//        User user = userService.selectUserByLoginName(loginName);
+//        if (user != null) {
+//            model.addAttribute("user", user);
+//            return "front/custom/index";
+//        }
+//        return "front/index";
+        return "front/custom/index";
     }
     
     
@@ -168,8 +159,8 @@ public class CustomController extends BaseController {
             }
         }
         setCommonMessage(model, loginName,funcId,pageNum);
-        model.addAttribute("funcId", funcId);
-        model.addAttribute("funcName", funcService.getById(funcId).getFuncName());
+//        model.addAttribute("funcId", funcId);
+//        model.addAttribute("funcName", funcService.getById(funcId).getFuncName());
         return "front/custom/category";
     }
 
@@ -189,10 +180,7 @@ public class CustomController extends BaseController {
         model.addAttribute("previousBlog", blogService.selectPreviousBlogByFuncIdAndId(funcId, blogId));
         model.addAttribute("nextBlog", blogService.selectNextBlogByFuncIdAndId(funcId, blogId));
         model.addAttribute("randBlogList", blogService.selectRandBlogList());
-        Comment comment = new Comment();
-        comment.setPageId(blogId);
-        comment.setDisplay(true);
-        model.addAttribute("comments", commentService.selectCommentListForFront(comment));
+        model.addAttribute("comments", commentService.selectCommentListForFront(new Comment(blogId,true)));
         model.addAttribute("fileList",fileService.listByEntityInfo(Constants.FILE_ITEM_ENTITYTYPE_BLOG,Long.valueOf(blogId)));
         return "front/custom/article_summernote";//front/article 将simpleMde 改成 summerNote 编辑器
     }
@@ -202,7 +190,9 @@ public class CustomController extends BaseController {
     @GetMapping("/detail/{blogId}.html")
     public String articleDetail(@PathVariable Integer blogId,Integer pageNum, Model model) {
         User user = ShiroUtils.getSysUser();
-        //TODO
+        if(user==null){
+            return blogLoginPage();
+        }
         setCommonMessage(model, user.getLoginName(), FUNC_NULL, pageNum);
         Blog blog = blogService.selectBlogWithTextAndTagsAndCategoryByBlogId(blogId);
         //只能访问是已经发表的文章
@@ -212,11 +202,7 @@ public class CustomController extends BaseController {
         //增加点击量
         blogService.incrementBlogClick(blogId);
         model.addAttribute("blog", blog);
-        System.out.println("aaaaaaaaaaaaaaaaaaaaaaaa111111111a");
-        Comment comment = new Comment();
-        comment.setPageId(blogId);
-        comment.setDisplay(true);
-        model.addAttribute("comments", commentService.selectCommentListForFront(comment));
+        model.addAttribute("comments", commentService.selectCommentListForFront(new Comment(blogId,true)));
         model.addAttribute("fileList",fileService.listByEntityInfo(Constants.FILE_ITEM_ENTITYTYPE_BLOG,Long.valueOf(blogId)));
         return "front/custom/article_summernote_detail";//front/article 将simpleMde 改成 summerNote 编辑器
     }
@@ -243,14 +229,11 @@ public class CustomController extends BaseController {
       }
       PageInfo<SuggestEntity> pageInfo = new PageInfo<>(objList);
       model.addAttribute("objList", pageInfo);
-      
-      List<Func> funcList = funcService.findBbsByCreator(loginName);
-      model.addAttribute("funcList", funcList);
-      model.addAttribute("loginName", loginName);
+
+      setBLogHead(loginName,model);
       // 查询通知
       model.addAttribute("notices", noticeService.selectNoticeListDisplay());
-      model.addAttribute("curUser", user);
-      
+
       return "king/suggest/suggest_list";
     }
 
@@ -265,7 +248,7 @@ public class CustomController extends BaseController {
     @GetMapping("/front/toLogin")
     public String toLogin(Model model,String toPage) {
         model.addAttribute("toPage", StringUtils.isEmpty(toPage)?"":toPage);
-        return "front/login/login";
+        return blogLoginPage();
     }
 
 
@@ -300,7 +283,7 @@ public class CustomController extends BaseController {
         if (user != null) {
           return defaultIndex(user.getLoginName(), DEFAULT_PAGENUM, model);
         }
-        return "front/index";
+        return blogIndex();
     }
 
     /**

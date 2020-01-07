@@ -1,7 +1,5 @@
 package com.dimple.project.blog.blog.domain;
 
-import java.util.List;
-import org.springframework.data.annotation.Id;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -11,6 +9,9 @@ import com.dimple.project.blog.category.domain.Category;
 import com.dimple.project.blog.tag.domain.Tag;
 import lombok.Data;
 import lombok.ToString;
+import org.springframework.data.annotation.Id;
+
+import java.util.List;
 
 /**
  * @className: Blog
@@ -109,4 +110,7 @@ public class Blog extends BaseEntity {
     
     @TableField(exist=false)
     private Long funcId;
+
+    @TableField(exist=false)
+    private Long bookmarksId;
 }

@@ -73,4 +73,10 @@ public class Comment extends BaseEntity {
 
     private Comment parentComment;
 
+    public Comment() {
+    }
+    public Comment(Integer pageId, boolean display) {
+        this.pageId = pageId;
+        this.display = display;
+    }
 }

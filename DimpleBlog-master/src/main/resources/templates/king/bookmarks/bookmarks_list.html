@@ -59,6 +59,7 @@
                 <a th:href="${'/bbs/'+loginName+'.html'}">
                     <i class="fa fa-home"></i>首页 &nbsp;&gt;
                 </a>
+                <a class="orange-text" th:href="${'/bookmarks/list.html'}">当前页:我的收藏</a>
                 <span style="float:right;margin-right:10px;">共有文章:
 	            	<font class="orange-text" th:text="${blogs.total}">  </font>篇
 	            </span>
@@ -79,6 +80,13 @@
                         <p th:text="${blog.summary}"></p>
                         <ul>
                             <li>
+                                <a title="取消收藏" th:onclick="cancelBookmarks([[${blog.bookmarksId}]]);">
+                                    <i class="fa fa fa-user-times"></i>
+                                    <span>取消收藏</span>
+                                </a>
+                            </li>
+                            <!--fa fa-user-plus-->
+                            <!--<li>
                                 <a th:title="${'ls2008'+#dates.format(blog.createTime, 'yyyy-MM-dd')+'发表'}">
                                     <i class="fa fa-clock-o"></i>
                                     <span th:text="${#dates.format(blog.createTime, 'yyyy-MM-dd')}"></span>
@@ -94,7 +102,7 @@
                                 </a>
                             </li>
                             <li><a th:title="${'已有'+blog.click+'次浏览'}"><i class="fa fa-eye"></i><span
-                                    th:text="${blog.click}"></span></a></li>
+                                    th:text="${blog.click}"></span></a></li>-->
                             <!-- <li>
                                 <a th:href="${'/f/category/'+blog.categoryId+'.html'}" title="查看分类">
                                     <i class="fa fa-list-ul"></i>
@@ -129,6 +137,31 @@
 		});
 		
 	});
+
+	function cancelBookmarks(objId){
+        $.modal.confirm("确定要取消收藏吗？", function () {
+            $.ajax( {
+                url : "/bookmarks/del",
+                type: 'post',
+                data: {"objId": objId},
+                dataType: "json",
+                /*beforeSend: function () {
+                    $.modal.loading("正在处理中，请稍后...");
+                },*/
+                success : function(result) {
+                    if (result.code == web_status.SUCCESS) {
+                        $.modal.alertSuccess(result.msg);
+                        window.parent.location.reload();
+                    }else{
+                        $.modal.alertWarning(result.msg);
+                    }
+                },
+                error: function(data){
+                    $.modal.alertError("保存失败，HTTP错误。");
+                }
+            });
+        });
+    }
 </script>
 </body>
 </html>
