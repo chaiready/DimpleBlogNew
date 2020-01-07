@@ -24,7 +24,6 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.io.IOException;
 import java.util.Date;
@@ -98,7 +97,7 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-    public Blog selectBlogById(Integer blogId) {
+    public Blog selectBlogById(Long blogId) {
         return blogMapper.selectBlogById(blogId);
     }
 
@@ -256,6 +255,11 @@ public class BlogServiceImpl implements BlogService {
     public int incrementBlogClick(Integer blogId) {
         //新增blog访问量
         return blogMapper.incrementBlogClick(blogId);
+    }
+
+    @Override
+    public List<Blog> selectBookmarksList(Long userId) {
+        return blogMapper.selectBookmarksList(userId);
     }
 
 }

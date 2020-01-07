@@ -50,7 +50,7 @@ public class CodeGeneratorUtils {
 
   public static void main(String[] args) throws Exception {
     EntityInfo info = new EntityInfo();
-    info.setEntityName("UserLogEntity");
+    info.setEntityName("BookmarksEntity");
     info.setExtendEntityName("SuperEntity");
     info.setPackagePath("com.dimple.project.king.userlog");
     info.setTitle("建议");
@@ -61,17 +61,17 @@ public class CodeGeneratorUtils {
     // 生成实体==================================================================================
     List<ColInfo> list = new ArrayList<ColInfo>();
     ColInfo col = new ColInfo();
-    col.setColName("content");
-    col.setColType("String");
+    col.setColName("userId");
+    col.setColType("Long");
     col.setColLenth(250);
-    col.setColAnno("内容");
+    col.setColAnno("用户id");
     col.setEleType(ColInfo.EleType.TEXT);
     list.add(col);
     col = new ColInfo();
-    col.setColName("logtype");
-    col.setColType("String");
+    col.setColName("blogId");
+    col.setColType("Long");
     col.setColLenth(10);
-    col.setColAnno("日志类型");
+    col.setColAnno("博客日志");
     col.setEleType(ColInfo.EleType.TEXT);
     list.add(col);
     // 生成实体==================================================================================

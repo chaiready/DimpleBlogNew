@@ -61,7 +61,7 @@ public interface BlogMapper  extends BaseMapper<Blog> {
      * @param id blog 的id
      * @return blog实体类
      */
-    Blog selectBlogById(Integer id);
+    Blog selectBlogById(Long id);
 
     /**
      * 根据blog的id切换博客的状态
@@ -218,4 +218,7 @@ public interface BlogMapper  extends BaseMapper<Blog> {
 
     
 	List<Blog> selectBlogListByFuncId(@Param("funcId")Long funcId);
+
+
+    List<Blog> selectBookmarksList(Long userId);
 }

@@ -1,25 +1,5 @@
 package com.dimple.project.front.controller;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import com.dimple.project.common.service.FileService;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.subject.Subject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DuplicateKeyException;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.thymeleaf.context.Context;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -38,6 +18,7 @@ import com.dimple.project.blog.comment.domain.Comment;
 import com.dimple.project.blog.comment.service.CommentService;
 import com.dimple.project.blog.tag.domain.Tag;
 import com.dimple.project.blog.tag.service.TagService;
+import com.dimple.project.common.service.FileService;
 import com.dimple.project.common.service.MailService;
 import com.dimple.project.front.service.HomeService;
 import com.dimple.project.king.func.domain.Func;
@@ -55,6 +36,21 @@ import com.dimple.project.system.user.service.UserService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.thymeleaf.context.Context;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 用户定义
@@ -178,7 +174,7 @@ public class CustomController extends BaseController {
     }
 
 
-    @VLog(title = "博客")
+    @VLog(title = "博客详情")
     @GetMapping("/{loginName}/{funcId}/{blogId}.html")
     public String article(@PathVariable String loginName, @PathVariable Long funcId,@PathVariable Integer blogId,Integer pageNum, Model model) {
         setCommonMessage(model, loginName, funcId, pageNum);
@@ -200,7 +196,30 @@ public class CustomController extends BaseController {
         model.addAttribute("fileList",fileService.listByEntityInfo(Constants.FILE_ITEM_ENTITYTYPE_BLOG,Long.valueOf(blogId)));
         return "front/custom/article_summernote";//front/article 将simpleMde 改成 summerNote 编辑器
     }
-    
+
+
+    @VLog(title = "博客详情")
+    @GetMapping("/detail/{blogId}.html")
+    public String articleDetail(@PathVariable Integer blogId,Integer pageNum, Model model) {
+        User user = ShiroUtils.getSysUser();
+        //TODO
+        setCommonMessage(model, user.getLoginName(), FUNC_NULL, pageNum);
+        Blog blog = blogService.selectBlogWithTextAndTagsAndCategoryByBlogId(blogId);
+        //只能访问是已经发表的文章
+        if (!CommonConstant.one.equals(blog.getStatus())) {
+            return "error/404";
+        }
+        //增加点击量
+        blogService.incrementBlogClick(blogId);
+        model.addAttribute("blog", blog);
+        System.out.println("aaaaaaaaaaaaaaaaaaaaaaaa111111111a");
+        Comment comment = new Comment();
+        comment.setPageId(blogId);
+        comment.setDisplay(true);
+        model.addAttribute("comments", commentService.selectCommentListForFront(comment));
+        model.addAttribute("fileList",fileService.listByEntityInfo(Constants.FILE_ITEM_ENTITYTYPE_BLOG,Long.valueOf(blogId)));
+        return "front/custom/article_summernote_detail";//front/article 将simpleMde 改成 summerNote 编辑器
+    }
     
     
     

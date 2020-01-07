@@ -6,7 +6,7 @@
     <th:block th:include="include-front-custom :: highlight-js"/>
     <link rel="stylesheet" th:href="@{/front/css/comment.css}"/>
     <link rel="stylesheet" th:href="@{/front/css/font-awesome.min.css}"/>
-    
+
     <!-- summernote -->
     <!-- <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}"/> -->
     <link rel="stylesheet" th:href="@{/css/king/bootstrap.3.3.5.css}"/>
@@ -29,10 +29,12 @@
     <section style="width: 100%;">
         <article>
             <!--导航-->
-            <div class="mbnav">
-                <a onclick="location.href=document.referrer;">
-	            	<i class="fa fa-home"></i>&lt;&lt;返回
-            </div>
+            <h4 class="index-title">
+                <a th:href="${'/bbs/'+loginName+'.html'}">
+                    <i class="fa fa-home"></i>首页 &nbsp;&gt;
+                </a>
+                <span class="orange-text" th:href="${'/bookmarks/list.html'}">我的收藏</span>
+            </h4>
             <!--标题-->
             <h3 class="act-title" th:text="${blog.title}"></h3>
             <!--副标题信息-->
@@ -115,27 +117,27 @@
         </article>
 
         <!--上一篇，下一篇-->
-        <div class="shangyip bg-color">
+       <!-- <div class="shangyip bg-color">
             <span>
                 <i class="fa fa-arrow-up"></i>上一篇：
-                <a class='blue-text' th:if="${previousBlog!=null}" 
-                	th:href="${'/bbs/'+previousBlog.createBy+'/'+previousBlog.funcId+'/'+previousBlog.blogId+'.html'}"
-                    th:title='${previousBlog.title}'
-                    th:text="${previousBlog.title}"></a>
-                     
+                <a class='blue-text' th:if="${previousBlog!=null}"
+                   th:href="${'/bbs/'+previousBlog.createBy+'/'+previousBlog.funcId+'/'+previousBlog.blogId+'.html'}"
+                   th:title='${previousBlog.title}'
+                   th:text="${previousBlog.title}"></a>
+
                 <a th:if="${previousBlog==null}" class='blue-text' href="javascript:void(0)">没有了</a>
             </span>
             <span>
                 <i class="fa fa-arrow-down"></i>下一篇：
-                <a class='blue-text' th:if="${nextBlog!=null}" 
-                	th:href="${'/bbs/'+nextBlog.createBy+'/'+nextBlog.funcId+'/'+nextBlog.blogId+'.html'}"
-                    th:title='${nextBlog.title}'
-                    th:text="${nextBlog.title}"></a>
+                <a class='blue-text' th:if="${nextBlog!=null}"
+                   th:href="${'/bbs/'+nextBlog.createBy+'/'+nextBlog.funcId+'/'+nextBlog.blogId+'.html'}"
+                   th:title='${nextBlog.title}'
+                   th:text="${nextBlog.title}"></a>
                  <a th:if="${nextBlog==null}" class='blue-text' href="javascript:void(0)">没有了</a>
             </span>
-        </div>
+        </div>-->
         <!--随机推荐-->
-        <div class="maybe-love">
+        <!--<div class="maybe-love">
             <h4 class="index-title"><i class="fa fa-heart"></i>您还可能喜欢</h4>
             <ul>
                 <li th:each="blog:${randBlogList}">
@@ -147,7 +149,7 @@
                     </a>
                 </li>
             </ul>
-        </div>
+        </div>-->
         <!--END 随机推荐-->
         <h3 class="form-btn blue-text">
             <a href="javascript:;">
@@ -293,9 +295,9 @@
 <!-- <script th:src="@{/front/js/comment.js}"></script>
 <script th:src="@{/front/plugin/simplemde/simplemde.min.js}"></script> -->
 
-  <script th:src="@{/js/king/bootstrap.3.3.5.js}"></script>
-  <script th:src="@{/ajax/libs/summernote/summernote.js}"></script>
-  <script th:src="@{/front/js/comment_summernote.js?v=3}"></script>
+<script th:src="@{/js/king/bootstrap.3.3.5.js}"></script>
+<script th:src="@{/ajax/libs/summernote/summernote.js}"></script>
+<script th:src="@{/front/js/comment_summernote.js?v=3}"></script>
 <script>
     $(function () {
         $(".pay_item").click(function () {

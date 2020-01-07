@@ -234,4 +234,14 @@ alter table bg_file_item_info add COLUMN create_time datetime;
 alter table bg_file_item_info add COLUMN update_time datetime;
 
 
+CREATE TABLE `bg_bookmarks` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `user_id` bigint(20) DEFAULT NULL COMMENT '用户id',
+  `blog_id` bigint(20) DEFAULT NULL COMMENT '博客id',
+  `create_by` varchar(64) DEFAULT NULL COMMENT '创建者',
+  `create_time` datetime DEFAULT NULL,
+  `update_by` varchar(64) DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='博客收藏'
 

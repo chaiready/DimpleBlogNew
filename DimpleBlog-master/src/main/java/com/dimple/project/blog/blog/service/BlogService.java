@@ -3,7 +3,6 @@ package com.dimple.project.blog.blog.service;
 import com.dimple.project.blog.blog.domain.Blog;
 import com.dimple.project.dashboard.domain.BusinessCommonData;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.util.List;
 
@@ -37,7 +36,7 @@ public interface BlogService {
      * @param blogId 需要修改的blog的id
      * @return blog实体
      */
-    Blog selectBlogById(Integer blogId);
+    Blog selectBlogById(Long blogId);
 
     /**
      * 修改blog信息
@@ -177,4 +176,11 @@ public interface BlogService {
      */
     int incrementBlogClick(Integer blogId);
 
+
+    /**
+     * 查看收藏的博客
+     * @param userId
+     * @return
+     */
+    List<Blog> selectBookmarksList(Long userId);
 }

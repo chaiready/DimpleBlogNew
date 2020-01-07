@@ -107,9 +107,9 @@
                             class="fa fa-plus"></i> 添加附件
                     </button>&nbsp;
 
-                    <div th:each="fileObj:${fileList}" th:id="${'fileSpan_'+fileObj.id}" style="border: 2px solid #f5f5f5;height: 45px;" >
+                    <div th:each="fileObj:${fileList}" th:id="${'fileSpan_'+fileObj.id}" style="border: 2px solid #f5f5f5;height: 35px;line-height:2.5;" >
                         <span th:text="${fileObj.originalName}"></span>
-                        <a class="btn btn-danger" th:onclick="delOldAttach([[${fileObj.id}]]);">
+                        <a class="" th:onclick="delOldAttach([[${fileObj.id}]]);">
                             <i class="fa fa-remove"></i> 删除
                         </a>
                     </div>
@@ -145,37 +145,38 @@
     function submitHandler() {
         //$.operate.update("/blog/blog/edit", getData(),function(){window.parent.location.reload();});
 
-
-        var formData = new FormData();
-        var data = getData();
-        console.info(data);
-        for(var item in data) {
-            var val = data[item];
-            if(typeof  val  != 'undefined'){
-                formData.append(item, val);
+        if ($.validate.form()) {
+            var formData = new FormData();
+            var data = getData();
+            for(var item in data) {
+                var val = data[item];
+                if(typeof  val  != 'undefined'){
+                    formData.append(item, val);
+                }
             }
+            //附件
+            var _files=new Array();
+            $(".fileObjCls").each(function(){
+                var file = this.files[0];
+                formData.append("attachment[]", file,file.name);
+            });
+            $.ajax( {
+                url : "/blog/blog/edit",
+                data: formData,
+                type: 'put',
+                cache: false,contentType: false,processData: false,
+                /*beforeSend: function () {
+                    $.modal.loading("正在处理中，请稍后...");
+                },*/
+                success : function(result) {
+                    $.operate.successTabCallback(result);
+                    window.parent.location.reload();
+                },
+                error: function(data){
+                    $.modal.alertError("保存失败，HTTP错误。");
+                }
+            });
         }
-        //附件
-        var _files=new Array();
-        $(".fileObjCls").each(function(){
-            var file = this.files[0];
-            formData.append("attachment[]", file,file.name);
-        });
-        $.ajax( {
-            url : "/blog/blog/edit",
-            data: formData,
-            type: 'put',
-            cache: false,contentType: false,processData: false,
-            /*beforeSend: function () {
-                $.modal.loading("正在处理中，请稍后...");
-            },*/
-            success : function(result) {
-                $.operate.successTabCallback(result);
-            },
-            error: function(data){
-                $.modal.alertError("保存失败，HTTP错误。");
-            }
-        });
     }
 
     $(function () {
@@ -298,10 +299,10 @@
     //点击添加附件
     function addAttachment(){
         var fileId = (new Date()).getTime();
-        var delBtn = '<a class="btn btn-danger" onclick="delAttachment('+fileId+');">'+
+        var delBtn = '<a class="" onclick="delAttachment('+fileId+');">'+
                         '<i class="fa fa-remove"></i> 删除'+
                     '</a>';
-        $("#fileSpanId").append('<div id="fileSpan_'+fileId+'" style="border: 2px solid #f5f5f5;height: 45px;"><input type="file" id="attachment_'+fileId+'" name="attachment"  class="btn fileObjCls" style="display: inline;"/>'+delBtn+'</div>');
+        $("#fileSpanId").append('<div id="fileSpan_'+fileId+'" style="border: 2px solid #f5f5f5;height: 35px;line-height:2.5;"><input type="file" id="attachment_'+fileId+'" name="attachment"  class="btn fileObjCls" style="display: inline;"/>'+delBtn+'</div>');
         $("#attachment_"+fileId).click();
     }
     //删除附件

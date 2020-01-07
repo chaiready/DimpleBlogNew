@@ -15,7 +15,7 @@ import com.dimple.project.king.userlog.service.UserLogService;
  * @date 2019-12-11 14:08:40
  */
 @Controller
-@RequestMapping(value = "/ver/auditCols")
+@RequestMapping(value = "/userlog")
 public class UserLogController extends BaseController{
 
 	@Autowired
@@ -33,7 +33,7 @@ public class UserLogController extends BaseController{
 	 */
 	@RequestMapping("/list")
 	public String listView(Model model) {
-		return "modules/ver/auditcols/UserLog_list";
+		return "modules/ver/auditcols/userLog_list";
 	}
 
 	@RequestMapping("/add")

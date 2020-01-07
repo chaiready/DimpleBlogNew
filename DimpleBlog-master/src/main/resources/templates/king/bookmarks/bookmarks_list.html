@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="zh" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <th:block th:include="include-front-custom :: head('5180it.com','欢迎进入')"/>
+
+	<style type="text/css">
+		.paBanner{ position:fixed;}
+		.prevBanner,.nextBanner{ cursor:pointer; width:8%; height:100%; _height:100%; top:0;}
+		.prevBanner{ left:0; background:url(/img/arrow_l.png) no-repeat center 44%;}
+		.prevBanner:hover{background:#efefef url(/img/arrow_l.png) no-repeat center 44%;}
+		.nextBanner{ right:0;background:url(/img/arrow_r.png) no-repeat center 44%;}
+		.nextBanner:hover{background:#efefef url(/img/arrow_r.png) no-repeat center 44%;}
+	</style>
+	
+    <!-- 遮罩层 -->
+    <script th:src="@{/ajax/libs/blockUI/jquery.blockUI.js}"></script>
+
+    <script th:src="@{/ajax/libs/layer/layer.min.js}"></script>
+   <!-- <script th:src="@{/ajax/libs/layui/layui.js}"></script>-->
+    <script th:src="@{/dimple/js/common.js}"></script>
+    <script th:src="@{/dimple/js/ui.js}"></script>
+</head>
+
+<body class="nobg">
+<th:block th:replace="include-front-custom :: header"/>
+
+<!--内容区开始-->
+<div class="container">
+    <!--最新文章-->
+    <section class="mysection" style="width: 95%;">
+        <!-- <h4 class="index-title">
+            <a href="/"><i class="fa fa-home"></i>当前页: &nbsp;> </a>
+            <span class="orange-text" th:text="${funcName}"></span>
+            <span style="float:right;margin-right:10px;">共有文章:<font class="orange-text"
+                th:text="${blogs.total}"> 11 </font>篇</span>
+        </h4> -->
+        <!--<div>
+            <p class="smallText" th:text="${'分类描述：'+funcName}"></p>
+            <p class="smallText" th:text="${'创建时间：'+funcName}"></p>
+        </div>-->
+        
+        <!-- <h4 class="index-title">
+            <a th:if="${curUser==null}" class="orange-text"  href="/bbs/front/toLogin?toPage=kaoshi">登录可进行更多操作</a>
+            <span  class="orange-text"  th:if="${curUser!=null}">
+            	已登录
+            </span>
+        </h4> -->
+       <!--  <div style="text-align: center;">
+        	<input name="questionSearch" type="text" class="text" id="questionSearch" value="" maxlength="100" 
+            	placeholder="请输入要查询的问题" style="width:60%;">
+            <input type="button" id="searchQuestionBtn" class="btn btn-inverse" value="查询  "/>
+        </div> -->
+        
+        <!--分页开始-->
+        <!-- <div th:replace="navigation :: navigation-direct(${folderList})"></div> -->
+        <!--分页结束-->
+        <div class="arclist">
+            <h4 class="index-title">
+                <a th:href="${'/bbs/'+loginName+'.html'}">
+                    <i class="fa fa-home"></i>首页 &nbsp;&gt;
+                </a>
+                <span style="float:right;margin-right:10px;">共有文章:
+	            	<font class="orange-text" th:text="${blogs.total}">  </font>篇
+	            </span>
+            </h4>
+            <!--列表开始-->
+            <ul>
+                <li th:each="blog:${blogs.list}" th:class="${blog.support=='1'?'tuijian':''}">
+                    <div class="arcimg"  th:onclick="viewBlog([[${+blog.blogId}]]);">
+                        <img th:src="${blog.headerImg}" th:alt="${blog.title}" th:title="${blog.title}"/>
+                    </div>
+                    <div class="arc-right">
+                        <h4 class="blue-text">
+                            <a th:href="${'/bbs/detail/'+blog.blogId+'.html'}"
+                               th:title="${blog.title}"
+                               th:text="${blog.title}">
+                            </a>
+                        </h4>
+                        <p th:text="${blog.summary}"></p>
+                        <ul>
+                            <li>
+                                <a th:title="${'ls2008'+#dates.format(blog.createTime, 'yyyy-MM-dd')+'发表'}">
+                                    <i class="fa fa-clock-o"></i>
+                                    <span th:text="${#dates.format(blog.createTime, 'yyyy-MM-dd')}"></span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/f/about.html" title="作者： ls2008"><i class="fa fa-user"></i>ls2008</a>
+                            </li>
+                            <li>
+                                <a th:title="${'已有'+blog.commentCount+'条评论'}" th:href="${'/bbs/detail/'+blog.blogId+'.html#Comment'}">
+                                    <i class="fa fa-comments-o"></i>
+                                    <span th:text="${blog.commentCount}"></span>
+                                </a>
+                            </li>
+                            <li><a th:title="${'已有'+blog.click+'次浏览'}"><i class="fa fa-eye"></i><span
+                                    th:text="${blog.click}"></span></a></li>
+                            <!-- <li>
+                                <a th:href="${'/f/category/'+blog.categoryId+'.html'}" title="查看分类">
+                                    <i class="fa fa-list-ul"></i>
+                                    <span th:text="${blog.categoryTitle}"></span>
+                                </a>
+                            </li> -->
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <!--分页开始-->
+        <div th:replace="navigation :: navigation(${blogs},'bbs/'+${loginName},${funcId})"></div>
+        <!--分页结束-->
+    </section>
+    
+    <a href="javascript:void(0);" class="prevBanner paBanner none" id="banner_prev"></a>
+    <a href="javascript:void(0);" class="nextBanner paBanner" id="banner_next"></a>
+        
+    <!--左侧结束-->
+    <!--<th:block th:replace="include-front-custom :: side"/>-->
+</div>
+<!--<th:block th:replace="include-front-custom :: footer"/>-->
+
+<script>
+	$(function(){
+		$('#banner_next').bind('click',function(){
+			$('.paginationNext')[0].click();
+		});
+		$('#banner_prev').click(function(){
+			$('.paginationPrev')[0].click();
+		});
+		
+	});
+</script>
+</body>
+</html>
