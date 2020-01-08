@@ -43,5 +43,12 @@ $.modal.alertSuccess(result.msg)
 $.modal.alertWarning(result.msg)
 $.modal.alertError(result.msg);
 
+if (result.code == web_status.SUCCESS) {
+                        $.modal.alertSuccess(result.msg);
+                        window.parent.location.reload();
+                    }else{
+                        $.modal.alertWarning(result.msg);
+                    }
+
 
 

@@ -16,6 +16,7 @@ import com.dimple.project.common.service.FileService;
 import com.dimple.project.system.user.domain.User;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -93,7 +94,15 @@ public class BlogController extends BaseController {
     @PostMapping("/add")
     @ResponseBody
     public AjaxResult addSave(Blog blog,MultipartHttpServletRequest request) {
-        int i = blogService.insertBlog(blog,request.getFiles("attachment[]"));
+        int i = 0;
+        try{
+            i = blogService.insertBlog(blog,request.getFiles("attachment[]"));
+        }catch (DataIntegrityViolationException e){
+            e.printStackTrace();
+            return AjaxResult.error("保存内容过长(如果内容中有粘贴进入的图片，建议从工具栏中的'图片'先上传)");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         return toAjax(i);
     }
 
@@ -117,7 +126,16 @@ public class BlogController extends BaseController {
     @Log(title = "系统博客", businessType = BusinessType.UPDATE)
     @ResponseBody
     public AjaxResult editSave(Blog blog, MultipartHttpServletRequest request) {
-        return toAjax(blogService.updateBlog(blog,request.getFiles("attachment[]")));
+        int i = 0;
+        try{
+            i = blogService.updateBlog(blog,request.getFiles("attachment[]"));
+        }catch (DataIntegrityViolationException e){
+            e.printStackTrace();
+            return AjaxResult.error("保存内容过长(如果内容中有粘贴进入的图片，建议从工具栏中的“图片”先上传)");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return toAjax(i);
     }
 
     @PutMapping("/support/{support}")

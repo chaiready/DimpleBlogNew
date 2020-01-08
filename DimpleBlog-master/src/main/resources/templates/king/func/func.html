@@ -238,6 +238,9 @@
                     <a th:href="${'/king/func/'+func.id+'.html'}"
                        th:text="${func.funcName}"></a>
                 </li>
+                <li>
+                    <a th:href="${'/bbs/'+loginName+'.html'}" style="color: #000000;">返回</a>
+                </li>
                  <li>
                     <a onclick="openAddDiolog();" style="color: #000000;">+添加菜单</a>
                  </li>
@@ -255,6 +258,9 @@
                 <li th:each="func:${funcList}">
                     <a th:href="${'/king/func/'+func.id+'.html'}"
                        th:text="${func.funcName}"></a>
+                </li>
+                <li>
+                    <a th:href="${'/bbs/'+loginName+'.html'}" style="color: #000000;">返回</a>
                 </li>
                 <li>
                     <a onclick="openAddDiolog();" style="color: #000000;">+添加菜单</a>

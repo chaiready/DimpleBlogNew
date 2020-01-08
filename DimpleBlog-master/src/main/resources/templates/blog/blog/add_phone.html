@@ -259,8 +259,12 @@
                     $.modal.loading("正在处理中，请稍后...");
                 },*/
                 success : function(result) {
-                    $.operate.successTabCallback(result);
-                    window.parent.location.reload();
+                    if (result.code == web_status.SUCCESS) {
+                        $.operate.successTabCallback(result);
+                        window.parent.location.reload();
+                    }else{
+                        $.modal.alertWarning(result.msg);
+                    }
                 },
                 error: function(data){
                     $.modal.alertError("保存失败，HTTP错误。");

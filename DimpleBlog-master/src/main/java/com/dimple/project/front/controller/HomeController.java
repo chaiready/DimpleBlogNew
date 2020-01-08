@@ -1,16 +1,5 @@
 package com.dimple.project.front.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import com.dimple.common.constant.CommonConstant;
 import com.dimple.common.constant.Constants;
 import com.dimple.common.utils.AddressUtils;
@@ -39,6 +28,14 @@ import com.dimple.project.system.user.domain.User;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import eu.bitwalker.useragentutils.UserAgent;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 /**
  * @className: HomeController
  * @description: 前台首页Controller
@@ -104,6 +101,20 @@ public class HomeController extends BaseController {
      * 前台首页
      */
     @GetMapping("/")
+    @VLog(title = "首页")
+    public String home(Integer pageNum, Model model) {
+        setCommonMessage(model);
+        PageHelper.startPage(pageNum == null ? 1 : pageNum, Constants.BLOG_PAGE_SIZE, "create_time desc");
+        model.addAttribute("blogs", new PageInfo<>(homeService.selectFrontBlogList(new Blog())));
+        //放置轮播图
+        model.addAttribute("carouselMaps", carouselMapService.selectCarouselMapListFront());
+        return "front/home";
+    }
+
+    /**
+     * 前台首页
+     */
+    @GetMapping("/index.html")
     @VLog(title = "首页")
     public String index(Integer pageNum, Model model) {
         setCommonMessage(model);

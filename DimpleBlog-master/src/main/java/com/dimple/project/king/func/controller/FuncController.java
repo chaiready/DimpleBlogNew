@@ -1,26 +1,12 @@
 package com.dimple.project.king.func.controller;
 
-import java.util.List;
-
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.dimple.common.constant.Constants;
 import com.dimple.common.utils.security.ShiroUtils;
 import com.dimple.framework.aspectj.lang.annotation.Log;
 import com.dimple.framework.aspectj.lang.enums.BusinessType;
-import com.dimple.framework.web.controller.BaseController;
 import com.dimple.framework.web.domain.AjaxResult;
+import com.dimple.project.front.controller.BaseBlogController;
 import com.dimple.project.front.service.HomeService;
 import com.dimple.project.king.func.domain.Func;
 import com.dimple.project.king.func.domain.FuncBlogEntity;
@@ -31,6 +17,15 @@ import com.dimple.project.system.carouselMap.service.CarouselMapService;
 import com.dimple.project.system.user.domain.User;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @className: FuncController
@@ -41,7 +36,7 @@ import com.github.pagehelper.PageInfo;
  */
 @Controller
 @RequestMapping("/king/func")
-public class FuncController extends BaseController {
+public class FuncController extends BaseBlogController {
 
   private String prefix = "king/func";
 
@@ -58,21 +53,21 @@ public class FuncController extends BaseController {
   @GetMapping({"", "/{funcId}.html"})
   public String func(Model model, @PathVariable(required = false) Long funcId,String loginName, Integer pageNum) {
     User user = ShiroUtils.getSysUser();
+    if(user==null){
+      return blogLoginPage();
+    }
     if(StringUtils.isEmpty(loginName)){
     	loginName = user.getLoginName();
     }
-    List<Func> funcList = funcService.findBbsByCreator(user.getLoginName());
-    model.addAttribute("funcList", funcList);
+    List<Func> funcList = setBLogHead(loginName,model);
 
     String funcName = "";
     if (CollectionUtils.isNotEmpty(funcList)) {
-      if (funcId == null) {
-        funcId = funcList.get(0).getId();
-
-      }
+      funcId = (funcId==null?funcList.get(0).getId():funcId);
       for (Func func : funcList) {
         if (func.getId().longValue() == funcId.longValue()) {
           funcName = func.getFuncName();
+          break;
         }
       }
     }
@@ -80,23 +75,13 @@ public class FuncController extends BaseController {
     model.addAttribute("blogs", new PageInfo<>(homeService.selectBlogListByFuncId(funcId)));
     model.addAttribute("funcId", funcId);
     model.addAttribute("funcName", funcName);
-    // 设置当前访问主页名
-    model.addAttribute("loginName", loginName);
-    model.addAttribute("curUser", user);
-    
+
     // 放置轮播图
     List<CarouselMap> carouselMaps = carouselMapService.selectByCreateBy(user.getLoginName());
     if(CollectionUtils.isEmpty(carouselMaps)){
-      CarouselMap cm = new CarouselMap();
-      cm.setTitle("");
-      cm.setSubTitle("");
-      cm.setImgUrl("/front/images/touploadimg.jpg");
-      carouselMaps.add(cm);
-      cm = new CarouselMap();
-      cm.setTitle("");
-      cm.setSubTitle("");
-      cm.setImgUrl("/front/images/touploadimg.jpg");
-      carouselMaps.add(cm);
+      carouselMaps.add(new CarouselMap("/front/images/touploadimg.jpg","",""));
+      carouselMaps.add(new CarouselMap("/front/images/touploadimg.jpg","",""));
+      carouselMaps.add(new CarouselMap("/front/images/touploadimg.jpg","",""));
     }
     model.addAttribute("carouselMaps", carouselMaps);
     
