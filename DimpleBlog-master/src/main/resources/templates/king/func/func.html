@@ -273,6 +273,11 @@
 
 <!--内容区开始-->
 <div class="container">
+    <span>
+        <a th:onclick="toFirst([[${funcId}]]);">【置顶】</a>
+        <a th:onclick="toUpdate([[${funcId}]]);">【修改】</a>
+        <a th:onclick="toDel([[${funcId}]]);">【删除】</a>
+    </span>
     <!--最新文章-->
     <section class="mysection" style="width: 95%;">
     	<span style="float: right;">
@@ -318,11 +323,6 @@
                 th:text="${blogs.total}"></font>篇</span>
         </h4>
         <div style="font-size: 14px;">
-        	<span>
-	        	<a th:onclick="toFirst([[${funcId}]]);">【置顶】</a>
-	            <a th:onclick="toUpdate([[${funcId}]]);">【修改】</a>
-	            <a th:onclick="toDel([[${funcId}]]);">【删除】</a>
-            </span>
             <span style="float: right;">
             	<a th:onclick="toAddBlog([[${funcId}]]);">【添加博客】</a>
             </span>

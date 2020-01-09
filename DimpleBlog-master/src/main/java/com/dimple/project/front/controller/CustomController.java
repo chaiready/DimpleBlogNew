@@ -107,7 +107,7 @@ public class CustomController extends BaseBlogController {
           if (funcId==FUNC_FIRST&&CollectionUtils.isNotEmpty(funcList)) {
             funcId = funcList.get(0).getId();
             model.addAttribute("funcName", funcList.get(0).getFuncName());
-          }else{
+          }else if(funcId!=null&&funcId!=0){
             model.addAttribute("funcName", funcService.getById(funcId).getFuncName());
           }
           model.addAttribute("funcId", funcId);

@@ -50,7 +50,7 @@
         <!--电脑导航开始-->
         <nav class="mynav">
             <ul class="orange-text">
-                <li class=""><a href="/">首页</a></li>
+                <!--<li class=""><a href="/">首页</a></li>-->
                 <!--<li class='drop'>
                     <a href="JavaScript:;">分类 <i class='fa fa-chevron-down '></i></a>
                     <div class="drop-nav orange-text ">
@@ -64,10 +64,10 @@
                 </li>
                 <li><a href="/f/archives.html">归档</a></li>
                 <li><a href="/f/link.html">友链</a></li>-->
-                <li><a href="/f/leaveComment.html">博客</a></li>
-                <li><a href="/kaoshi">问卷试题</a></li>
-                <li><a href="/login">后台管理</a></li>
-                <li><a href="/f/images.html">图片</a></li>
+                <li th:each="func:${funcList}">
+                    <a th:href="${func.url}"
+                       th:text="${func.funcName}"></a>
+                </li>
             </ul>
             <!--移动的滑动-->
             <div class="move-bg"></div>
@@ -85,7 +85,7 @@
         <div class="mob-menu">
             <!--手机下拉菜单-->
             <ul class="mob-ulnav">
-                <li><a href="/">首页</a></li>
+                <!--<li><a href="/">首页</a></li>-->
                 <!--<li class='mob-drop'>
                     <a href="javascrip:;">分类<i></i></a>
                     <ul class="mob-dropmenu">
@@ -96,10 +96,10 @@
                     </ul>
                 </li>
                 <li><a href="/f/archives.html">归档</a></li>-->
-                <li><a href="/f/leaveComment.html">博客</a></li>
-                <li><a href="/kaoshi">问卷试题</a></li>
-                <li><a href="/login">后台管理</a></li>
-                <li><a href="/f/images.html">图片</a></li>
+                <li th:each="func:${funcList}">
+                    <a th:href="${func.url}"
+                       th:text="${func.funcName}"></a>
+                </li>
             </ul>
         </div>
     </div>

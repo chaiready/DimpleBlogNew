@@ -1,16 +1,17 @@
 package com.dimple.project.king.func.service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dimple.common.utils.StringUtils;
 import com.dimple.common.utils.security.ShiroUtils;
 import com.dimple.project.king.func.domain.Func;
 import com.dimple.project.king.func.mapper.FuncMapper;
 import com.dimple.project.system.user.domain.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @className: FuncServiceImpl
@@ -111,7 +112,9 @@ public class FuncServiceImpl extends ServiceImpl<FuncMapper, Func> implements IF
     List<Func> funcList = findByCreator(loginName);
     List<Func> defaultFucs = new ArrayList<Func>();
     for (Func func : funcList) {
-      func.setUrl("/bbs/" + loginName + "/"+func.getId()+".html");
+      if(!loginName.equals("admin")){
+        func.setUrl("/bbs/" + loginName + "/"+func.getId()+".html");
+      }
       defaultFucs.add(func);
     }
     return defaultFucs;

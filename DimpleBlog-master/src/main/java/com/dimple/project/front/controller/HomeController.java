@@ -9,7 +9,6 @@ import com.dimple.common.utils.StringUtils;
 import com.dimple.common.utils.baidu.BaiduUtils;
 import com.dimple.common.utils.security.ShiroUtils;
 import com.dimple.framework.aspectj.lang.annotation.VLog;
-import com.dimple.framework.web.controller.BaseController;
 import com.dimple.framework.web.domain.AjaxResult;
 import com.dimple.project.blog.blog.domain.Blog;
 import com.dimple.project.blog.blog.service.BlogService;
@@ -44,7 +43,7 @@ import java.util.Objects;
  * @version: 1.0
  */
 @Controller
-public class HomeController extends BaseController {
+public class HomeController extends BaseBlogController {
 
     @Autowired
     HomeService homeService;
@@ -74,12 +73,14 @@ public class HomeController extends BaseController {
       
 		List<Func> funcList = new ArrayList<Func>();
 		String loginName = "admin";
-		funcList.add(new Func("首页","/" + loginName + "/index.html"));
-		funcList.add(new Func("生活互助","/" + loginName + "/index.html"));
-		funcList.add(new Func("吐槽大会","/" + loginName + "/index.html"));
-		funcList.add(new Func("图片","/" + loginName + "/index.html"));
-		model.addAttribute("funcList", funcList);
-		model.addAttribute("curUser", user);
+//		funcList.add(new Func("首页","/" + loginName + "/index.html"));
+//		funcList.add(new Func("生活互助","/" + loginName + "/index.html"));
+//		funcList.add(new Func("吐槽大会","/" + loginName + "/index.html"));
+//		funcList.add(new Func("图片","/" + loginName + "/index.html"));
+//		model.addAttribute("funcList", funcList);
+//		model.addAttribute("curUser", user);
+
+        setBLogHead(loginName,model);
 
         //获取分类下拉项中的分类
         model.addAttribute("categories", categoryService.selectSupportCategoryList());
