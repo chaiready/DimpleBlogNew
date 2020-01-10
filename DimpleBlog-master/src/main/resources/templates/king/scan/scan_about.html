@@ -2,19 +2,22 @@
 <html lang="zh" xmlns:th="https://www.thymeleaf.org">
 <head>
     <th:block th:include="include-front :: head('关于我-Dimple的个人博客','个人简介')"/>
+
+    <style>
+        /*重写default.css演示*/
+        .maybe-love ul li:nth-of-type(3), .maybe-love ul li:nth-of-type(4) {
+            display:inline;
+        }
+        .maybe-love ul li{
+            width: 30%;
+        }
+    </style>
 </head>
 <body class="nobg">
-<style>
-    /*重写default.css演示*/
-    .maybe-love ul li:nth-of-type(3), .maybe-love ul li:nth-of-type(4) {
-        display:inline;
-    }
-    .maybe-love ul li{
-        width: 30%;
-    }
-</style>
+<th:block th:replace="include-front-custom :: header"/>
+
 <!--内容区开始-->
-<div class="container" style="padding-top: 5px;padding-left: 10px;padding-right: 10px;">
+<div class="container" style="padding-left: 10px;padding-right: 10px;">
 
     <div id="baidumapcontainer" style="height: 200px;"></div>
     <div th:replace="baidu-map :: newmap('baidumapcontainer',113.5796810500,22.3777888800)"></div>

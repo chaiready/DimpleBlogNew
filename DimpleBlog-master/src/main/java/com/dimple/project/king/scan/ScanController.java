@@ -44,6 +44,7 @@ public class ScanController extends BaseBlogController {
 
 	@RequestMapping("/goods.html")
 	public String goods(Model model) {
+		setBLogHead(Constants.ADMIN_LOGINNAME,model);
 		// 放置轮播图
 		List<CarouselMap> carouselMaps = new ArrayList<>();
 		carouselMaps.add(new CarouselMap("/img/king/goods1.png","",""));
@@ -55,6 +56,7 @@ public class ScanController extends BaseBlogController {
 
 	@RequestMapping("/about.html")
 	public String about(Model model) {
+		setBLogHead(Constants.ADMIN_LOGINNAME,model);
 		return "king/scan/scan_about";
 	}
 }
