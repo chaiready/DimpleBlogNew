@@ -1,0 +1,100 @@
+<!doctype html>
+
+<html lang="zh" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <th:block th:include="include-front :: head('5180it','5180it')"/>
+    <script th:src="@{/ajax/libs/layer/layer.min.js}"></script>
+    <script th:src="@{/ajax/libs/layui/layui.js}"></script>
+    <!--右下角工具栏-->
+    <th:block th:include="include-front-custom :: sidebar-css"/>
+
+    <style>
+        /*重写default.css演示*/
+        .maybe-love ul li:nth-of-type(3), .maybe-love ul li:nth-of-type(4) {
+            display:inline;
+        }
+        .maybe-love ul li{
+            width: 30%;
+        }
+        /*重写右下角工具栏样式*/
+        .jdc-side { display: none; position: fixed; right: 5px; bottom: 5px; z-index: 300; width: 60px }
+
+        /*重写底部样式*/
+        footer{
+            position: fixed;
+            bottom: 0px;
+        }
+    </style>
+</head>
+<body class="nobg">
+<th:block th:replace="include-front-custom :: header"/>
+
+<!--内容区开始-->l
+<div class="container">
+    <section style="width: 100%;">
+        <article>
+            <!--标题-->
+            <h3 class="act-title">扫码系统</h3>
+            <div align="center">
+                <img style="width: 360px;height: 210px;" src="/front/images/scan.jpg">
+            </div>
+            <div class=" article-content bg-color">
+                <div class="article-content bg-color">
+                    <!--文章正文-->
+                    <div class="maybe-love">
+                        <h4 class="index-title"><i class="fa fa-heart"></i>扫下方二维码可获取相关资料资讯</h4>
+                        <ul>
+                            <li>
+                                <img src="/front/images/scan/bbs.png" alt=""  title="" style="height: auto;"/>
+                                <a href="/bbs/hjhy.html"><span>创建博客</span></a>
+                            </li>
+                            <li>
+                                <img src="/front/images/scan/goods.png" alt=""  title="" style="height: auto;"/>
+                                <a href="/scan/goods.html"><span>产品介绍</span></a>
+                            </li>
+                            <li>
+                                <img src="/front/images/scan/about.png" alt=""  title="" style="height: auto;"/>
+                                <a href="/scan/about.html"><span>关于我们</span></a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!--END 文章正文-->
+                    <!--打赏和分享-->
+                    <div class="article-fx">
+                        <span class="img-circle" href="javascript:void(0)" onClick="dashangToggle()">打赏</span>&nbsp;&nbsp;&nbsp;
+                    </div>
+                    <!--END 分享-->
+
+                    <div style="height: 50px;">
+                        <hr>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </section>
+
+    <!--右下角工具栏-->
+    <th:block th:replace="include-front-custom :: sidebar"/>
+
+    <!--打赏弹框-->
+    <th:block th:replace="include-front-custom :: dashang"/>
+
+    <!--<th:block th:replace="include-front :: side"/>-->
+</div>
+<th:block th:replace="include-front :: footer"/>
+<script>
+    $(function () {
+        if ($(".wall").children("li").length >= 10) {
+            $(".pagintion").show();
+            $(".wall").css("margin-bottom", "10px");
+        } else {
+            $(".pagination").hide();
+            $(".wall").css("margin-bottom", "90px");
+        }
+    });
+</script>
+</body>
+</html>
+
+

@@ -20,91 +20,13 @@
         .jdc-side { display: none; position: fixed; right: 5px; bottom: 5px; z-index: 300; width: 60px }
 
         footer{
-            position: absolute;
+            position: fixed;
             bottom: 0px;
         }
     </style>
 </head>
 <body class="nobg">
-<!--<th:block th:replace="include-front :: header"/>-->
-<header class="myheader" th:fragment="header">
-    <!--导航开始-->
-    <div class="top">
-        <div class="top-left">
-            <!--logo部分-->
-            <div class="logo">
-                <a href="/">
-                    <img src="/front/images/logo.png"/>
-                </a>
-            </div>
-            <!--滚动消息-->
-            <div class="web-xiaoxi">
-                <i class="fa fa-volume-up"></i>
-                <ul class="mulitline">
-                    <li th:each="notice:${notices}" th:text="${notice.noticeTitle}"></li>
-                </ul>
-            </div>
-            <!--手机菜单按钮-->
-            <div class="mobile-nav"><i class="fa fa-list"></i><i class="fa fa-remove"></i></div>
-        </div>
-        <!--电脑导航开始-->
-        <nav class="mynav">
-            <ul class="orange-text">
-                <!--<li class=""><a href="/">首页</a></li>-->
-                <!--<li class='drop'>
-                    <a href="JavaScript:;">分类 <i class='fa fa-chevron-down '></i></a>
-                    <div class="drop-nav orange-text ">
-                        <ul>
-                            <li th:each="category:${categories}">
-                                <a th:href="${'/f/category/'+category.categoryId+'.html'}"
-                                   th:text="${category.categoryTitle}"></a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <li><a href="/f/archives.html">归档</a></li>
-                <li><a href="/f/link.html">友链</a></li>-->
-                <li th:each="func:${funcList}">
-                    <a th:href="${func.url}"
-                       th:text="${func.funcName}"></a>
-                </li>
-            </ul>
-            <!--移动的滑动-->
-            <div class="move-bg"></div>
-            <!--移动的滑动 end-->
-        </nav>
-        <!--登录-->
-        <div class="vip" style="width: 4%;float: right;text-align: right;">
-            <a href="/bbs/front/toLogin">
-                <img class="img-circle"
-                     src="/front/images/default_head_img.gif"
-                     alt="登录" title="登录" style="margin-top: 17px;">
-            </a>
-        </div>
-        <!--手机导航-->
-        <div class="mob-menu">
-            <!--手机下拉菜单-->
-            <ul class="mob-ulnav">
-                <!--<li><a href="/">首页</a></li>-->
-                <!--<li class='mob-drop'>
-                    <a href="javascrip:;">分类<i></i></a>
-                    <ul class="mob-dropmenu">
-                        <li th:each="category:${categories}">
-                            <a th:href="${'/f/category/'+category.categoryId+'.html'}"
-                               th:text="${category.categoryTitle}"></a>
-                        </li>
-                    </ul>
-                </li>
-                <li><a href="/f/archives.html">归档</a></li>-->
-                <li th:each="func:${funcList}">
-                    <a th:href="${func.url}"
-                       th:text="${func.funcName}"></a>
-                </li>
-            </ul>
-        </div>
-    </div>
-    <!--导航结束-->
-</header>
+<th:block th:replace="include-front-custom :: header"/>
 
 <!--内容区开始-->l
 <div class="container">

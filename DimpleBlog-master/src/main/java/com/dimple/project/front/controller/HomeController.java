@@ -18,7 +18,6 @@ import com.dimple.project.blog.comment.service.CommentService;
 import com.dimple.project.blog.tag.domain.Tag;
 import com.dimple.project.blog.tag.service.TagService;
 import com.dimple.project.front.service.HomeService;
-import com.dimple.project.king.func.domain.Func;
 import com.dimple.project.link.domain.Link;
 import com.dimple.project.link.service.LinkService;
 import com.dimple.project.system.carouselMap.service.CarouselMapService;
@@ -32,7 +31,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 /**
@@ -71,16 +69,7 @@ public class HomeController extends BaseBlogController {
         User user = ShiroUtils.getSysUser();
         model.addAttribute("user", user);
       
-		List<Func> funcList = new ArrayList<Func>();
-		String loginName = "admin";
-//		funcList.add(new Func("首页","/" + loginName + "/index.html"));
-//		funcList.add(new Func("生活互助","/" + loginName + "/index.html"));
-//		funcList.add(new Func("吐槽大会","/" + loginName + "/index.html"));
-//		funcList.add(new Func("图片","/" + loginName + "/index.html"));
-//		model.addAttribute("funcList", funcList);
-//		model.addAttribute("curUser", user);
-
-        setBLogHead(loginName,model);
+        setBLogHead(Constants.ADMIN_LOGINNAME,model);
 
         //获取分类下拉项中的分类
         model.addAttribute("categories", categoryService.selectSupportCategoryList());

@@ -1,0 +1,331 @@
+<!doctype html>
+
+<html lang="zh" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <title th:text="${loginName+'的个人博客'}"></title>
+    <meta name="baidu_union_verify" content="7aef518d672b5859ca390cabb140abf3">
+    <div th:include="include-front-custom :: head('','')"></div>
+    <style>
+        .swiper-container {
+            width: 100%;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .swiper-slide {
+            position: relative;
+        }
+
+        .swiper-slide .content {
+            width: 50%;
+            max-width: 460px;
+            position: absolute;
+            right: 60px;
+            bottom: 90px;
+            z-index: 20;
+        }
+
+        @media screen and (max-width: 768px) {
+            .swiper-slide .content {
+                display: none;
+            }
+        }
+
+        .swiper-slide .content .txt {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.85);
+        }
+
+        .swiper-slide .content .txt h3 {
+            font-family: "BerlingskeSans Serif", Georgia, Times, serif;
+            margin: 0;
+            font-size: 2.3em;
+            font-weight: normal;
+        }
+
+        .swiper-slide .content .txt p {
+            margin: 5px 0 0;
+            font-size: 1.2em;
+        }
+
+        .swiper-slide .content .link {
+            border-radius: 25px;
+            display: block;
+            background: #008369;
+            transition: .2s background;
+            color: #fff;
+            font-family: "BerlingskeSans Bd", Tahoma, helvetica, arial, sans-serif;
+            text-align: center;
+            font-weight: 400;
+            font-size: 1.1em;
+            line-height: 1.1em;
+            padding: 10px 30px 10px;
+            float: right;
+            margin-top: 15px;
+            text-decoration: none;
+        }
+
+        .swiper-slide .content .link:hover {
+            background: #006a55;
+        }
+
+        .img-fix {
+            /*margin-top: -25%;*/
+            overflow: hidden;
+        }
+
+        .img-inner {
+            transform: translateY(0%);
+        }
+
+        .swiper-container img {
+            width: 100%;
+            display: block;
+        }
+
+        .swiper-button-next, .swiper-button-prev {
+            background: none;
+            top: auto;
+            bottom: 30px;
+        }
+
+        .swiper-button-prev {
+            left: 0;
+        }
+
+        .swiper-button-next {
+            right: 40px;
+        }
+
+        .swiper-button-next:before, .swiper-button-prev:before {
+            font-family: "upsicons";
+            position: absolute;
+            display: block;
+            height: 54px;
+            width: 50px;
+            top: 0;
+            left: 0;
+            text-align: center;
+            line-height: 54px;
+            color: #fff;
+            font-size: 68px;
+        }
+
+        .swiper-button-prev:before {
+            content: '\e628';
+        }
+
+        .swiper-button-next:before {
+            content: '\e62a';
+        }
+
+        .bottom-nav {
+            width: 100%;
+            text-align: center;
+            position: absolute;
+            bottom: 30px;
+            z-index: 10;
+        }
+
+        .ups-icon-videoplay {
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 15px;
+            cursor: pointer;
+        }
+
+        .ups-icon-videoplay:before {
+            font-family: "upsicons";
+            content: "\e680";
+            font-size: 28px;
+            color: white;
+        }
+
+        .stop-status.ups-icon-videoplay:before {
+            content: "\e681";
+        }
+
+        .swiper-pagination {
+            position: relative;
+            display: inline-block;
+            height: 29px;
+            vertical-align: middle;
+        }
+
+        #ups-banner .swiper-pagination-bullet {
+            width: 18px;
+            height: 18px;
+            background: #fff;
+            opacity: 1;
+            box-sizing: border-box;
+            border: 3px solid #fff;
+            margin: 0 15px;
+            vertical-align: middle;
+        }
+
+        #ups-banner .swiper-pagination-bullet-active {
+            background: #ffb500;
+        }
+
+        @media (max-width: 767px) {
+            .swiper-button-prev:before {
+                content: '\e627';
+            }
+
+            .swiper-button-next:before {
+                content: '\e629';
+            }
+
+            .swiper-button-next, .swiper-button-prev {
+                bottom: 10px;
+            }
+
+            .swiper-button-next:before, .swiper-button-prev:before {
+                font-size: 32px;
+            }
+
+            .bottom-nav {
+                bottom: 10px;
+            }
+
+            #ups-banner .swiper-pagination-bullet {
+                width: 12px;
+                height: 12px;
+                border-width: 2px;
+                margin: 0 10px;
+            }
+
+            .ups-icon-videoplay {
+                margin-right: 10px;
+            }
+        }
+
+        /*重写底部样式*/
+        footer{
+            position: fixed;
+            bottom: 0px;
+        }
+    </style>
+    <link rel="stylesheet" th:href="@{/front/css/font.css}"/>
+</head>
+
+<body class="nobg">
+<!--<header th:replace="include-front-custom :: header"></header>-->
+<!--内容区开始-->
+<div class="container" style="padding-top: 5px;padding-left: 10px;padding-right: 10px;">
+    <!--最新文章-->
+    <section class="mysection" style="width: 100%;">
+        <!--轮播图开始-->
+        <div id="ups-banner">
+            <div class="swiper-container">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide" th:each="carouselMap:${carouselMaps}">
+                        <div class="content">
+                            <div class="txtXXXX"><h3 th:text="${carouselMap.title}" style="background:none;"></h3>
+                                <p th:text="${carouselMap.subTitle}"></p>
+                            </div>
+                            <!-- <a th:target="${(carouselMap.target=='1')?'_blank':''}"
+                               th:href="${'/f/carouselMap/'+carouselMap.carouselId+'?url='+carouselMap.url}"
+                               class="link">详情点击</a> -->
+                        </div>
+                        <div class="img-fix">
+                            <div class="img-inner">
+                                <img th:src="${carouselMap.imgUrl}" class="imgs" style="height: 300px;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bottom-nav">
+                    <div class="ups-icon-videoplay"></div>
+                    <div class="swiper-pagination"></div>
+                </div>
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+            </div>
+        </div>
+        <!-- 轮播图结束-->
+
+        <article>
+            <!--标题-->
+            <h3 class="act-title" style="margin-top:20px;">产品信息</h3>
+            <div class="article-content bg-color">
+                <div class="article-content bg-color">
+                    <!--文章正文-->
+                    <div class="article-body">
+                        <h4 class="index-title">
+                            产品介绍
+                        </h4>
+                        指纹、密码、刷卡、电子钥匙、蓝牙等多种开锁方式，手机APP远程监控与授权，异常信息接收，无缝对接智能家居系统。
+
+                        <h4 class="index-title">
+                           技术参数
+                        </h4>
+                        <div>
+                            <div>额定电压： DC 6V</div>
+                            <div>工作温度： -10 ~ +55℃</div>
+                            <div>工作湿度： ﹤95%RH</div>
+                            <div>平均最大工作电流： ≦ 150mA</div>
+                            <div>平均静态电流：  ≦ 25uA</div>
+                            <div>正常续航能力： > 5000次（开锁次数）</div>
+                            <div>低电续航能力： > 50次（开锁次数）</div>
+                            <div>安装方式：6068标准锁体安装</div>
+                        </div>
+
+                        <h4 class="index-title">
+                            功能特点
+                        </h4>
+                        <div>
+                            配合网关使用，支持手机远程控制，开关门消息推送
+                            支持指纹、密码、刷卡、钥匙、手机蓝牙等多种开锁方式
+                        </div>
+                    </div>
+                    <!--END 文章正文-->
+                    <hr>
+                </div>
+            </div>
+        </article>
+    </section>
+    <!--左侧结束-->
+</div>
+<th:block th:replace="include-front-custom :: footer"/>
+<!-- Initialize Swiper -->
+<script>
+    $(function () {
+        var upsSwiper = new Swiper('.swiper-container', {
+            speed: 1000,
+            longSwipes: false,
+            loop: true,
+            autoplay: {
+                disableOnInteraction: false,
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            on: {
+                autoplayStop: function () {
+                    this.$el.find(".ups-icon-videoplay").addClass('stop-status');
+                },
+                autoplayStart: function () {
+                    this.$el.find(".ups-icon-videoplay").removeClass('stop-status');
+                },
+
+            }
+        });
+
+        upsSwiper.$el.find(".ups-icon-videoplay").on('click', function () {
+            if (upsSwiper.autoplay.running) {
+                upsSwiper.autoplay.stop();
+            } else {
+                upsSwiper.autoplay.start();
+            }
+        });
+    });
+</script>
+</body>
+</html>

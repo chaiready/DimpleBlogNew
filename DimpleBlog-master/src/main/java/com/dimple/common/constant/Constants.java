@@ -87,4 +87,7 @@ public class Constants {
 
     public static String STATUS_NORMAL = "1";
     public static String STATUS_DEL = "0";
+
+
+    public static String ADMIN_LOGINNAME = "admin";
 }
