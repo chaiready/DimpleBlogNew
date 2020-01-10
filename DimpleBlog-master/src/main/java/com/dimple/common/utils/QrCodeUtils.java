@@ -9,10 +9,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.Hashtable;
 import java.util.Random;
 
@@ -210,7 +207,14 @@ public class QrCodeUtils {
     public static void encode(String content, String logoPath, OutputStream output, boolean needCompress)
             throws Exception {
         BufferedImage image = QrCodeUtils.createImage(content, logoPath, needCompress);
+        ByteArrayOutputStream   bos = new ByteArrayOutputStream();
         ImageIO.write(image, FORMAT, output);
+    }
+
+    public static void encode(String content, String logoPath, ByteArrayOutputStream bos, boolean needCompress)
+            throws Exception {
+        BufferedImage image = QrCodeUtils.createImage(content, logoPath, needCompress);
+        ImageIO.write(image, FORMAT, bos);
     }
 
     /**

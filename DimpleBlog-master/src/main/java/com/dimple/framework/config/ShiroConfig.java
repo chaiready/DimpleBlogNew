@@ -1,11 +1,12 @@
 package com.dimple.framework.config;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import javax.servlet.Filter;
+import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
+import com.dimple.framework.shiro.realm.UserRealm;
+import com.dimple.framework.shiro.session.ShiroSessionListener;
+import com.dimple.framework.shiro.web.filter.FrontLogoutFilter;
+import com.dimple.framework.shiro.web.filter.KickoutSessionControlFilter;
+import com.dimple.framework.shiro.web.filter.LogoutFilter;
+import com.dimple.framework.shiro.web.filter.captcha.CaptchaValidateFilter;
 import org.apache.commons.io.IOUtils;
 import org.apache.shiro.codec.Base64;
 import org.apache.shiro.config.ConfigurationException;
@@ -24,13 +25,13 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import com.dimple.framework.shiro.realm.UserRealm;
-import com.dimple.framework.shiro.session.ShiroSessionListener;
-import com.dimple.framework.shiro.web.filter.FrontLogoutFilter;
-import com.dimple.framework.shiro.web.filter.KickoutSessionControlFilter;
-import com.dimple.framework.shiro.web.filter.LogoutFilter;
-import com.dimple.framework.shiro.web.filter.captcha.CaptchaValidateFilter;
-import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
+
+import javax.servlet.Filter;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * @className: ShiroConfig
@@ -362,6 +363,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/bbs/front/**", "anon");//博客
         filterChainDefinitionMap.put("/kaoshi/**", "anon");//考试
         filterChainDefinitionMap.put("/common/upload", "anon");//上传文件
+        filterChainDefinitionMap.put("/scan/**", "anon");
 
         filterChainDefinitionMap.put("/captcha/captchaImage**", "anon");
         // 退出 logout地址，shiro去清除session
