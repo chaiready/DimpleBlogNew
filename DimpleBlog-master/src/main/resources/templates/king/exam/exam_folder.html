@@ -125,9 +125,9 @@
             <p class="smallText" th:text="${'分类描述：'+funcName}"></p>
             <p class="smallText" th:text="${'创建时间：'+funcName}"></p>
         </div>-->
-        
+
         <h4 class="index-title">
-            <a th:if="${curUser==null}" class="orange-text"  href="/bbs/front/toLogin?toPage=kaoshi">登录可进行更多操作</a>
+            <a th:if="${curUser==null}" class="orange-text"  href="/bbs/front/toLogin?toPage=kaoshi">登录可进行更多操作3333aaa</a>
             <span  class="orange-text"  th:if="${curUser!=null}">
             	已登录：
             	<a th:href="${'/kaoshi/listExam/'+folderId+'.html?toPage=kaoshi'}">【开始做题】</a>
@@ -136,15 +136,15 @@
             </span>
         </h4>
        <!--  <div style="text-align: center;">
-        	<input name="questionSearch" type="text" class="text" id="questionSearch" value="" maxlength="100" 
+        	<input name="questionSearch" type="text" class="text" id="questionSearch" value="" maxlength="100"
             	placeholder="请输入要查询的问题" style="width:60%;">
             <input type="button" id="searchQuestionBtn" class="btn btn-inverse" value="查询  "/>
         </div> -->
-        
+
         <!--分页开始-->
         <div th:replace="navigation :: navigation-direct(${questionList})"></div>
         <!--分页结束-->
-        <div class="arclist" style="margin-left: 20px;margin-right: 20px;padding-right: 20px;">
+        <div class="arclist" style="margin-left: 20px;margin-right: 20px;padding-right: 20px;width: 92%;">
             <!--列表开始-->
             <form>
                 <div th:each="question:${questionList.list}">
@@ -155,11 +155,11 @@
                         </h4>
                         	<div  th:each="qo:${question.optionList}" style="margin-bottom: 15px;">
                         		<label style="">
-		                        	<span th:style="@{(${qo.correct} eq 0 ? 'color: red;' : (${qo.correct} eq 1 ? 'color: #67c23a;':''))}" 
+		                        	<span th:style="@{(${qo.correct} eq 0 ? 'color: red;' : (${qo.correct} eq 1 ? 'color: #67c23a;':''))}"
 		                        		th:text="${qo.optionOrder+'、'+qo.optionVal}"></span>
 	                        	</label>
                         	</div>
-                            	
+
                         <p style="margin-top: 10px;">
                         	<span th:if="${curUser==null}">
                         		<span style="color: #67c23a;" th:text="${'正確答案： 登录后才能查看答案'}"></span>
@@ -170,14 +170,14 @@
             						<span th:if="${question.hasAnswer == 1}" style='color: #67c23a;'>&nbsp;&nbsp;&nbsp;&nbsp;您的答案：[[${question.youAnswer}]]</span>
 					        	   	<span th:if="${question.hasAnswer == 0}" style='color: red;'>&nbsp;&nbsp;&nbsp;您的答案：[[${question.youAnswer}]]</span>
             					</span>
-                       		
+
 		                       	 <span th:if="${curUser!=null}" class="orange-text">
-		                       	 	<a th:style="'display:' + @{(${question.hasFavorites} eq 0 ? 'none' : 'inline-block')} + ';float: right;'" 
+		                       	 	<a th:style="'display:' + @{(${question.hasFavorites} eq 0 ? 'none' : 'inline-block')} + ';float: right;'"
 		                       	 		th:onclick="delFavorites([[${question.id}]]);"  th:id = "delQues+(${question.id})"><i class="fa fa-star"></i>已收藏</a>
-		                       	 		
+
 		                        	<a th:style="'display:' + @{(${question.hasFavorites ne 0} ? 'none' : 'inline-block')} + ';float: right;'"
 		                        		 th:onclick="addFavorites([[${question.id}]]);"  th:id = "addQues+(${question.id})"><i class="fa fa-star-o"></i>未收藏</a>
-		                       	 </span>	
+		                       	 </span>
             				</span>
                         </p>
                     </div>

@@ -448,7 +448,7 @@
 
 <!---底部开始-->
 <sidebar th:fragment="sidebar">
-    <div class="jdc-side" style="display: block;">
+    <div id="sideBarDiv" class="jdc-side" style="display: block;">
 	  <!-- <div class="mod_hang_qrcode jdc_feedback_qrcode">
 	    <div class="mod_hang_qrcode_btn"><i class="jdcfont"></i><span>扫码反馈</span></div>
 	    <div class="mod_hang_qrcode_show">
@@ -459,6 +459,9 @@
 	      <p>扫一扫，反馈当前页面</p>
 	    </div>
 	  </div> -->
+       <div class="mod_hang_qrcode jdc_feedback_qrcode">
+            <div id="closeSidebar" class="mod_hang_qrcode_btnXXX"><span>X关闭</span></div>
+       </div>
 	  <div class="mod_hang_qrcode jdc_hang_qrcode">
 	  	<a class="mod_hang_qrcode_btn"><i class="jdcfont"></i><span>扫码支持</span></a>
 	    <div class="mod_hang_qrcode_show">
@@ -522,7 +525,7 @@
 	      </ul>
 	    </div> -->
 	  </div>
-	  <div class="mod_hang_qrcode mod_hang_top"><a href="#" class="mod_hang_qrcode_btn"><i class="jdcfont"></i><span>返回顶部</span></a></div>
+	  <div class="mod_hang_qrcode mod_hang_top" style="margin: 0px 0 0;"><a href="#" class="mod_hang_qrcode_btn"><i class="jdcfont"></i><span>返回顶部</span></a></div>
 	  <div class="el-dialog__wrapper" style="display: none;">
 	    <div class="el-dialog el-dialog--small" style="top: 15%;">
 	      <div class="el-dialog__header"><span class="el-dialog__title"></span>
@@ -532,6 +535,13 @@
 	  </div>
 	</div>
 	 <script>
+         $(function () {
+             //关闭按钮点击
+             $("#closeSidebar").click(function () {
+                $("#sideBarDiv").hide();
+             });
+         });
+
          $("#sidebarSuggestBtn").click(function () {
              console.info($("#sidebarSuggestText").val()+">>>>>>>");
              $.ajax({
@@ -653,6 +663,6 @@
 </div>
 
 <div th:fragment="sidebar-css">
-    <link rel="stylesheet" th:href="@{/css/king/sidebar/common.css?v=11}"/>
+    <link rel="stylesheet" th:href="@{/css/king/sidebar/common.css?v=12}"/>
 </div>
 </html>
