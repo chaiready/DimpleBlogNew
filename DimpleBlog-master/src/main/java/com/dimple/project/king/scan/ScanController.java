@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -75,7 +74,7 @@ public class ScanController extends BaseBlogController {
 
 
 	@RequestMapping(value = "/image", produces = MediaType.IMAGE_PNG_VALUE)
-	public ResponseEntity<byte[]> getImage() throws Exception{
+	public ResponseEntity<byte[]> getImage(String conetent) throws Exception{
 		ByteArrayOutputStream os = null;
 		os = new ByteArrayOutputStream();
 		QrCodeUtils.encode("http://5180it:8080", null, os, true);
@@ -103,7 +102,7 @@ public class ScanController extends BaseBlogController {
 
 	@RequestMapping(value = "/get",produces = MediaType.IMAGE_JPEG_VALUE)
 	@ResponseBody
-	public BufferedImage get(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public BufferedImage get(HttpServletRequest request, String conetent) throws Exception {
 		StringBuffer url = request.getRequestURL();
 		// 域名
 		String tempContextUrl = url.delete(url.length() - request.getRequestURI().length(), url.length()).append("/").toString();
@@ -111,6 +110,6 @@ public class ScanController extends BaseBlogController {
 		// 再加上请求链接
 		String requestUrl = tempContextUrl;
 		System.out.println(requestUrl);
-		return  QrCodeUtils.createImage(requestUrl, null, true);
+		return  QrCodeUtils.createImage(conetent, null, true);
 	}
 }
