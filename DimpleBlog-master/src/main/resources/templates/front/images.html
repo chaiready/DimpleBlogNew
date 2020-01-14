@@ -45,7 +45,7 @@
 <header th:replace="include-front-custom :: header"></header>
 <div class="container" id="location">
     <!--左侧开始-->
-    <section>
+    <section  style="width: 100%;">
         <div class="comment-area">
 			<div id="jssor_1" style="position: relative; margin: 0 auto; top: 0px; left: 0px; width: 800px; height: 456px; overflow: hidden; visibility: hidden; background-color: #24262e;">
 				<!-- Loading Screen -->
@@ -198,9 +198,9 @@
 			</div>
         </div>
     </section>
-    <th:block th:replace="include-front :: side"/>
+    <!-- <th:block th:replace="include-front :: side"/> -->
 </div>
-<th:block th:replace="include-front :: footer"/>
+<th:block th:replace="include-front-custom :: footer"/>
 
 </body>
 </html>

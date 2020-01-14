@@ -212,7 +212,8 @@ public class CustomController extends BaseBlogController {
     @GetMapping("/{loginName}/images.html")
     @VLog(title = "用户首页")
     public String images(@PathVariable String loginName, Integer pageNum, Model model) {
-        setCommonMessage(model, loginName,FUNC_NULL,pageNum);
+//        setCommonMessage(model, loginName,FUNC_NULL,pageNum);
+    	setBLogHead(loginName,model);
         return "front/images";
     }
     

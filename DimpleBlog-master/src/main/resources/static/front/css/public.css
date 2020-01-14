@@ -266,7 +266,7 @@ header .mynav{width:60%;float:left;height:100%;position:relative;}
 .side-link ul li a:hover{border-radius:0;-webkit-border-radius:0;box-shadow:3px 3px 5px #ccc;text-shadow:0 0px 3px #000;color:#fff;}
 .side-link h4 a{float:right;margin-right:10px;}
 /*页脚*/
-footer{width:100%;background:rgba(0,67,94,0.65);margin-top:35px;clear:both;}
+footer{width:100%;background:rgba(0,67,94,0.65);margin-top:35px;clear:both;position: fixed;bottom: 0px;}
 .footer-area{width:100%;max-width:1200px;margin:auto;padding:25px 0;color:#fff;overflow:hidden;}
 .footer-area h4{color:#fff;font-weight:normal;background:none;text-indent:15px;padding:0;}
 /*����ͳ��*/
