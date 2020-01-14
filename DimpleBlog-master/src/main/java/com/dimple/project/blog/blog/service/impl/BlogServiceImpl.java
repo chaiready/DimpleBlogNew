@@ -3,6 +3,7 @@ package com.dimple.project.blog.blog.service.impl;
 import com.dimple.common.constant.CacheConstant;
 import com.dimple.common.constant.CommonConstant;
 import com.dimple.common.constant.Constants;
+import com.dimple.common.exception.BusinessException;
 import com.dimple.common.utils.security.ShiroUtils;
 import com.dimple.common.utils.text.Convert;
 import com.dimple.common.vo.FileForm;
@@ -104,6 +105,10 @@ public class BlogServiceImpl implements BlogService {
     @CacheEvict(value = CacheConstant.BUSINESS_CACHE_BLOG_ITEM, key = "#blog.blogId")
     @Override
     public int updateBlog(Blog blog ,List<MultipartFile> files) {
+    	Blog blogEntity = blogMapper.selectById(blog.getBlogId());
+    	if(!blogEntity.getCreateBy().equals(ShiroUtils.getLoginName())){
+    		throw new BusinessException("该博客不属于当前用户");
+    	}
         blog.setUpdateBy(ShiroUtils.getLoginName());
         //添加新的tag
         tagService.insertTags(blog.getTags());
@@ -160,6 +165,12 @@ public class BlogServiceImpl implements BlogService {
     })
     @Override
     public int deleteBlogById(Integer[] ids) {
+    	for(Integer id:ids){
+    		Blog blogEntity = blogMapper.selectById(id);
+        	if(!blogEntity.getCreateBy().equals(ShiroUtils.getLoginName())){
+        		throw new BusinessException("该博客不属于当前用户");
+        	}
+    	}
         return blogMapper.deleteBlogByIds(BLogStatusEnum.DUSTBIN.getStatus(),ids);
     }
 

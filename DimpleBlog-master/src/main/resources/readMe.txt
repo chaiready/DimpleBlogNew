@@ -51,4 +51,15 @@ if (result.code == web_status.SUCCESS) {
                     }
 
 
-
+$.modal.confirm("确认要删除该文件吗？", function () {
+            $.operate.ajaxSend("/common/delFile", "post", "json", {"fileId":fileId}, function callBackFunc(result){
+                console.info(result);
+                $.modal.closeLoading();
+                if(result.code == web_status.SUCCESS){
+                    delAttachment(fileId)
+                    $.modal.msgSuccess(result.msg);
+                }else{
+                    $.modal.alertWarning(result.msg)
+                }
+            });
+        })

@@ -16,6 +16,10 @@
 
     <script th:src="@{/ajax/libs/layer/layer.min.js}"></script>
     <script th:src="@{/ajax/libs/layui/layui.js}"></script>
+        <!-- 遮罩层 -->
+    <script th:src="@{/ajax/libs/blockUI/jquery.blockUI.js}"></script>
+    
+    <script th:src="@{/dimple/js/ui.js}"></script>
     <style>
         checkbox-custom{position:relative;padding:0 15px 0 25px;margin-bottom:7px;display:inline-block}.checkbox-custom input[type="checkbox"]{opacity:0;position:absolute;cursor:pointer;z-index:2;margin:-6px 0 0 0;top:50%;left:3px}.checkbox-custom label:before{content:'';position:absolute;top:50%;left:0;margin-top:-9px;width:18px;height:17px;display:inline-block;border-radius:2px;border:1px solid #bbb;background:#fff}.checkbox-custom input[type="checkbox"]:checked+label:after{position:absolute;display:inline-block;font-family:'Glyphicons Halflings';content:"\e013";top:42%;left:3px;margin-top:-5px;font-size:11px;line-height:1;width:16px;height:16px;color:#333}.checkbox-custom label{cursor:pointer;line-height:1.2;font-weight:normal;margin-bottom:0;text-align:left}
     </style>
@@ -32,9 +36,17 @@
             <div class="mbnav">
                 <a onclick="location.href=document.referrer;">
 	            	<i class="fa fa-home"></i>&lt;&lt;返回
+	            </a>
             </div>
             <!--标题-->
             <h3 class="act-title" th:text="${blog.title}"></h3>
+            <div style="text-align: center;" onclick="addBookmark();">
+             	<h4 class="index-title">
+                    <i class="fa fa-tags"></i>
+                    <span>【添加到收藏】</span>
+				</h4>
+            </div>
+            
             <!--副标题信息-->
             <div class="post-line bg-color">
                 <ul>
@@ -76,6 +88,14 @@
                         <a th:text="${fileObj.originalName}" th:href="${fileObj.relativePath}"></a>
                     </div>
                     <!--end附件-->
+                    
+                    <div style="text-align: center;"  onclick="addBookmark();">
+                    	<h4 class="index-title">
+                    		<i class="fa fa-tags"></i>
+                    		<span>【添加到收藏】</span>
+				        </h4>
+                    </div>
+                    
                     <!--打赏和分享-->
                     <div class="article-fx">
                         <span class="img-circle" href="javascript:void(0)" onClick="dashangToggle()">打赏</span>&nbsp;&nbsp;&nbsp;
@@ -374,7 +394,18 @@
         img.onerror = null;
     }
 
-
+	//添加到收藏
+	function addBookmark(){
+       $.operate.ajaxSend("/bookmarks/add", "post", "json", {"blogId": $("#pageId").val()}, function callBackFunc(result){
+           console.info(result);
+           $.modal.closeLoading();
+           if(result.code == web_status.SUCCESS){
+               $.modal.msgSuccess(result.msg);
+           }else{
+               $.modal.alertWarning(result.msg)
+           }
+       });
+	}
 </script>
 </body>
 </html>
