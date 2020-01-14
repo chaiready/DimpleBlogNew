@@ -31,6 +31,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Objects;
 /**
@@ -99,6 +100,19 @@ public class HomeController extends BaseBlogController {
         //放置轮播图
         model.addAttribute("carouselMaps", carouselMapService.selectCarouselMapListFront());
         return "front/home";
+    }
+
+    @GetMapping("/frame")
+    @VLog(title = "首页")
+    public String frame(String url, HttpServletRequest request, Model model) {
+        setBLogHead(Constants.ADMIN_LOGINNAME,model);
+        if(org.springframework.util.StringUtils.isEmpty(url)){
+            StringBuffer urlBuff = request.getRequestURL();
+            url = urlBuff.delete(urlBuff.length() - request.getRequestURI().length(), urlBuff.length()).append("/").toString();
+            url = "https://www.52doutu.cn/maker";
+        }
+        model.addAttribute("url", url);
+        return "front/frame";
     }
 
     /**
