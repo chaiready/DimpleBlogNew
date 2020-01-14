@@ -7,7 +7,7 @@
         <if test="title != null and title != '' ">title,</if>
         <if test="description != null and description != '' ">description,</if>
         <if test="headerImg != null and headerImg != '' ">header_img,</if>
-        <if test="url != null and url != ''">url = #{url},</if>
+        <if test="url != null and url != ''">url,</if>
         <if test="weight != null and weight != '' ">weight,</if>
         <if test="available != null and available != ''">available,</if>
         <if test="processed != null and processed != ''">processed,</if>

@@ -225,8 +225,8 @@
         <div class="copy-right"><span>CopyRight &#169; 2008-2019 King &#160;</span></div>
         <div>
             <span>
-                <a href="/f/copyright.html" target="_blank">版权说明</a>
-                -<a href="/f/delete.html" target="_blank">侵删联系</a>
+                 <a href="#" target="_blank">QQ:909074489</a>
+                -<a href="#" target="_blank">邮箱:ls909074489@163.com</a>
             </span>
         </div>
     </div>
@@ -543,7 +543,6 @@
          });
 
          $("#sidebarSuggestBtn").click(function () {
-             console.info($("#sidebarSuggestText").val()+">>>>>>>");
              $.ajax({
                  type: "POST",
                  url: "/king/suggest/add",
@@ -552,6 +551,7 @@
                  success: function (data) {
               	   console.info(data);
               	   if (data.code == 200) {
+                         //$(".mod_hang_appeal_show").hide();
                          layer.msg(data.msg, {icon: 1});
                      } else {
                          layer.msg(data.msg, {icon: 2});

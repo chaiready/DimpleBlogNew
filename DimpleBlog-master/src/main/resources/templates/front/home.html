@@ -74,7 +74,9 @@
     <div id="player3"></div>
 
 </div>
-<th:block th:replace="include-front :: footer"/>
+<div style="height: 65px;margin-top: 20px;">
+    <th:block th:replace="include-front :: footer"/>
+</div>
 <script>
     $(function () {
         if ($(".wall").children("li").length >= 10) {
