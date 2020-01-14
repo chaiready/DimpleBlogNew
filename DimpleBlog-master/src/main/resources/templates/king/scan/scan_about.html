@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="zh" xmlns:th="https://www.thymeleaf.org">
 <head>
-    <th:block th:include="include-front :: head('关于我-Dimple的个人博客','个人简介')"/>
+    <th:block th:include="include-front-custom :: head('关于我-Dimple的个人博客','个人简介')"/>
 
     <style>
         /*重写default.css演示*/
@@ -17,14 +17,14 @@
 <th:block th:replace="include-front-custom :: header"/>
 
 <!--内容区开始-->
-<div class="container" style="padding-left: 10px;padding-right: 10px;">
+<div class="container" style="">
 
     <div id="baidumapcontainer" style="height: 200px;"></div>
     <div th:replace="baidu-map :: newmap('baidumapcontainer',113.5796810500,22.3777888800)"></div>
 
     <section class="mysection" style="width: 100%;">
         <div class="maybe-love">
-            <h4 class="index-title"><i class="fa fa-heart"></i>相关产品</h4>
+            <h4 class="index-title"><i class="fa fa-heart"></i>相关产品11</h4>
             <ul>
                 <li>
                     <img src="/img/king/goods1.png" alt=""  title="" style=""/>
