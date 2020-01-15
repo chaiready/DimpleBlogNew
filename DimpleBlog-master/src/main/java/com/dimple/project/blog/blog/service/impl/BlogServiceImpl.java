@@ -105,7 +105,7 @@ public class BlogServiceImpl implements BlogService {
     @CacheEvict(value = CacheConstant.BUSINESS_CACHE_BLOG_ITEM, key = "#blog.blogId")
     @Override
     public int updateBlog(Blog blog ,List<MultipartFile> files) {
-    	Blog blogEntity = blogMapper.selectById(blog.getBlogId());
+    	Blog blogEntity = blogMapper.selectBlogById(Long.valueOf(blog.getBlogId()));
     	if(!blogEntity.getCreateBy().equals(ShiroUtils.getLoginName())){
     		throw new BusinessException("该博客不属于当前用户");
     	}
@@ -166,7 +166,7 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public int deleteBlogById(Integer[] ids) {
     	for(Integer id:ids){
-    		Blog blogEntity = blogMapper.selectById(id);
+    		Blog blogEntity = blogMapper.selectBlogById(Long.valueOf(id));
         	if(!blogEntity.getCreateBy().equals(ShiroUtils.getLoginName())){
         		throw new BusinessException("该博客不属于当前用户");
         	}
