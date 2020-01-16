@@ -55,7 +55,10 @@
                     <div th:each="folderObj:${folderList.list}">
                         <div class="arc-left">
                             <h4 class="blue-text">
-                                <a th:text="${folderObj.folderName}" th:href="${'/kaoshi/questionFolder/'+folderObj.id+'.html'}"></a>
+                            	<!-- 选择题 -->
+                                <a th:if="${folderObj.type} eq 'choice'" th:text="${folderObj.folderName}" th:href="${'/kaoshi/questionFolder/'+folderObj.id+'.html'}"></a>
+                                <!-- pdf阅读 -->
+                                <a th:if="${folderObj.type} eq 'pdf'" th:text="${folderObj.folderName}" th:href="${'/kaoshi/pdfFolder/'+folderObj.id+'.html'}"></a>
                             </h4>
                         </div>
                     </div>
@@ -63,7 +66,7 @@
                 <!--列表结束-->
             </div>
             <!--分页开始-->
-            <div th:replace="navigation :: navigation-direct(${folderList})"></div>
+            <div th:replace="navigation :: navigation-param(${folderList},'funcId='+${funcId})"></div>
             <!--分页结束-->
         </article>
     </section>

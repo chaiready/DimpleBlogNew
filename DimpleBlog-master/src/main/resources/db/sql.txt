@@ -251,3 +251,9 @@ UPDATE `bg_func` SET `id`='4', `func_name`='扫码系统', `parent_id`='0', `ord
 INSERT INTO `bg_func` (`id`, `func_name`, `parent_id`, `order_num`, `url`, `func_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`, `creator`) VALUES ('5', '后台管理', '0', '1578535921031', '/login', '', '0', NULL, '#', 'admin', NULL, '', NULL, '', '1');
 
 
+#20200116
+alter table bg_question_folder add COLUMN func_id BIGINT(11) COMMENT '菜单id';
+alter table bg_question_folder add COLUMN type varchar(10) COMMENT '问题类型';
+update bg_question_folder set func_id=1 where id=1;
+update bg_question_folder set type='choice' where id=1;
+

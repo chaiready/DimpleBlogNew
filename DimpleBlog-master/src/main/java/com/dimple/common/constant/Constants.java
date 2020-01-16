@@ -90,4 +90,7 @@ public class Constants {
 
 
     public static String ADMIN_LOGINNAME = "admin";
+    
+    //pdf在线预览路径
+    public static String PDF_VIEWER = "/public/king/pdfjs_2_2_228/web/viewer.html";
 }

@@ -1,0 +1,57 @@
+<!doctype html>
+
+<html lang="zh" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <th:block th:include="include-front :: head('5180it','5180it')"/>
+    <script th:src="@{/ajax/libs/layer/layer.min.js}"></script>
+    <script th:src="@{/ajax/libs/layui/layui.js}"></script>
+
+    <link rel="stylesheet" href="/public/king/zplayer/css/zplayer.min.css" />
+    <script type="text/javascript" src="/public/king/zplayer/js/zplayer.min.js" ></script>
+
+    <!--右下角工具栏-->
+    <th:block th:include="include-front-custom :: sidebar-css"/>
+
+    <style>
+        /*重写右下角工具栏样式*/
+        .jdc-side { display: none; position: fixed; right: 5px; bottom: 5px; z-index: 300; width: 60px }
+
+        footer{
+            position: fixed;
+            bottom: 0px;
+        }
+
+         html { overflow-y:hidden; }
+    </style>
+</head>
+<body class="nobg">
+<th:block th:replace="include-front-custom :: header"/>
+
+<!--内容区开始-->l
+<div class="" style="margin-top: 75px;">
+    <section style="width: 100%;">
+    	<h4 class="index-title">
+        	<a class="orange-text" th:href="${'/kaoshi?funcId='+folderId+'&toPage=kaoshi'}">【返回】</a>
+        </h4>
+        <div class="">
+            <iframe id="myiframe" th:src="${url}" width="100%" height="600" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0"
+            	allowtransparency="true" scrolling="auto" allowfullscreen="true" style="overflow:auto;"></iframe>
+        </div>
+    </section>
+
+    <!--右下角工具栏-->
+    <th:block th:replace="include-front-custom :: sidebar"/>
+
+
+</div>
+<div style="height: 65px;margin-top: 120px;">
+    <th:block th:replace="include-front :: footer"/>
+</div>
+<script>
+    var ifm= document.getElementById("myiframe");
+    ifm.height=document.documentElement.clientHeight-200;
+</script>
+</body>
+</html>
+
+

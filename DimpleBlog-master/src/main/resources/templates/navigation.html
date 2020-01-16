@@ -120,3 +120,51 @@ id：
 		});
     </script>
 </div>
+
+<div th:fragment="navigation-param(pageInfo,paramstr)" class="navigation">
+    <div class="pagination" style="margin: 10px 0;">
+        <div class="list-page">
+            <ul class="post-data">
+                <li><span class="rows" th:text="${'共'+pageInfo.total+'条记录'}"></span></li>
+            </ul>
+        </div>
+        <ul>
+            <li>
+                <a class="first" th:href="${'?'+paramstr+'&pageNum=1'}">首页</a>
+            </li>
+            <li>
+                <a th:if="${pageInfo.hasPreviousPage}" class="prev paginationPrev"
+                   th:href="${'?'+paramstr+'&pageNum='+pageInfo.prePage}">上一页</a>
+                <a th:if="${!pageInfo.hasPreviousPage}" class=" not-allowed prev paginationPrev">上一页</a>
+            </li>
+            <li th:each="nav:${pageInfo.navigatepageNums}" th:class="${nav == pageInfo.pageNum}?'active':''">
+                <span th:if="nav == pageInfo.pageNum" th:text="${nav}"></span>
+                <a th:if="nav != pageInfo.pageNum" class="num" th:href="${'?'+paramstr+'&pageNum='+nav}"
+                   th:text="${nav}"></a>
+            </li>
+            <li>
+                <a th:if="${pageInfo.hasNextPage}" class="next paginationNext"
+                   th:href="${'?'+paramstr+'&pageNum='+pageInfo.nextPage}">下一页</a>
+                <a th:if="${!pageInfo.hasNextPage}" class="not-allowed next ">下一页</a>
+            </li>
+            <li>
+                <a class="end" th:href="${'?'+paramstr+'&pageNum='+pageInfo.pages}">尾页</a>
+            </li>
+            <li>
+            	<input name="directPage" type="text" class="text directPageCls" id="directPage" value="" maxlength="3" 
+            	placeholder="" style="float: left;width: 46px;margin: 10px 5px;">
+            	<a class="num" onclick="directToPage(this);" style="float: left;padding: 0 0px;margin: 0 0px;">跳转到</a>
+            </li>
+        </ul>
+    </div>
+    <script type="text/javascript">
+    	function directToPage(t){
+    		window.location.href="?[[${paramstr}]]&directPage="+$(t).parent().find("input[name=directPage]").val();
+    	}
+    	$('.directPageCls').bind('keypress',function(event){
+			if(event.keyCode == "13"){
+				directToPage(this);             
+			}
+		});
+    </script>
+</div>

@@ -24,92 +24,7 @@
 </head>
 
 <body class="nobg">
-<!--<th:block th:replace="include-front-custom :: header"/>-->
-<header class="myheader" th:fragment="header">
-    <!--导航开始-->
-    <div class="top">
-        <div class="top-left">
-            <!--logo部分-->
-            <div class="logo">
-                <a href="/">
-                    <img src="/front/images/logo.png"/>
-                </a>
-            </div>
-            <!--滚动消息-->
-            <div class="web-xiaoxi">
-                <i class="fa fa-volume-up"></i>
-                <ul class="mulitline">
-                    <li th:each="notice:${notices}" th:text="${notice.noticeTitle}"></li>
-                </ul>
-            </div>
-            <!--手机菜单按钮-->
-            <div class="mobile-nav"><i class="fa fa-list"></i><i class="fa fa-remove"></i></div>
-        </div>
-        <!--电脑导航开始-->
-        <nav class="mynav">
-            <ul class="orange-text">
-                <li th:each="func:${funcList}">
-                    <a th:href="${func.url}"
-                       th:text="${func.funcName}"></a>
-                </li>
-                <li class='drop'  th:if="${curUser!=null}">
-                    <a href="JavaScript:;">我的 <i class='fa fa-chevron-down '></i></a>
-                    <div class="drop-nav orange-text ">
-                        <ul>
-                           <!--  <li>
-	                             <a href="#" th:text="${curUser.loginName}">当前用户</a>
-	                        </li> -->
-	                        <li>
-	                             <a href="/frontLogout?toPage=kaoshi">退出登录</a>
-	                        </li>
-                        </ul>
-                    </div>
-                </li>
-                <li th:if="${curUser==null}">
-                	<a href="/bbs/front/toLogin?toPage=kaoshi">
-		                <img class="img-circle"
-		                     src="/front/images/default_head_img.gif"
-		                     alt="登录" title="登录" style="margin-top: 12px;">
-		          	 </a>
-                </li>
-            </ul>
-
-            <!--移动的滑动-->
-            <div class="move-bg"></div>
-            <!--移动的滑动 end-->
-        </nav>
-
-        <!--手机导航-->
-        <div class="mob-menu">
-            <!--手机下拉菜单-->
-            <ul class="mob-ulnav">
-                 <li th:each="func:${funcList}">
-                    <a th:href="${func.url}"
-                       th:text="${func.funcName}"></a>
-                </li>
-                <li class='mob-drop'  th:if="${curUser!=null}">
-                    <a href="javascrip:;">我的<i></i></a>
-                    <ul class="mob-dropmenu">
-                     	<!-- <li>
-                             <a href="#" th:text="${curUser.loginName}">当前用户</a>
-                        </li> -->
-                        <li>
-                             <a href="/frontLogout?toPage=kaoshi">退出登录</a>
-                        </li>
-                    </ul>
-                </li>
-                <li th:if="${curUser==null}">
-                	<a href="/bbs/front/toLogin?toPage=kaoshi">
-		                <img class="img-circle"
-		                     src="/front/images/default_head_img.gif"
-		                     alt="登录" title="登录" style="margin-top: 12px;">
-		          	 </a>
-                </li>
-            </ul>
-        </div>
-    </div>
-    <!--导航结束-->
-</header>
+<th:block th:replace="include-front-custom :: header"/>
 
 <!--内容区开始-->
 <div class="container">
@@ -127,7 +42,8 @@
         </div>-->
 
         <h4 class="index-title">
-            <a th:if="${curUser==null}" class="orange-text"  href="/bbs/front/toLogin?toPage=kaoshi">登录可进行更多操作3333aaa</a>
+        	<a class="orange-text" th:href="${'/kaoshi?funcId='+folderId+'&toPage=kaoshi'}">【返回】</a>
+            <a th:if="${curUser==null}" class="orange-text"  href="/bbs/front/toLogin?toPage=kaoshi">登录可进行更多操作</a>
             <span  class="orange-text"  th:if="${curUser!=null}">
             	已登录：
             	<a th:href="${'/kaoshi/listExam/'+folderId+'.html?toPage=kaoshi'}">【开始做题】</a>
