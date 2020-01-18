@@ -260,7 +260,7 @@ public class CustomController extends BaseBlogController {
         Subject subject = SecurityUtils.getSubject();
         try {
             subject.login(token);
-            if(StringUtils.isEmpty(toPage)){
+            if(StringUtils.isEmpty(toPage)||toPage.equals("null")){
               AjaxResult result = AjaxResult.success();
               result.put("redirectPage", "/bbs/"+loginName+".html");
               return result;

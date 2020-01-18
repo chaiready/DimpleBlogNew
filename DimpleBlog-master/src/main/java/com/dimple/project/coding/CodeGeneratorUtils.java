@@ -50,30 +50,45 @@ public class CodeGeneratorUtils {
 
   public static void main(String[] args) throws Exception {
     EntityInfo info = new EntityInfo();
-    info.setEntityName("BookmarksEntity");
+    info.setEntityName("ProductEntity");
     info.setExtendEntityName("SuperEntity");
-    info.setPackagePath("com.dimple.project.king.userlog");
-    info.setTitle("建议");
+    info.setPackagePath("com.dimple.project.king.product");
+    info.setTitle("产品");
     info.setAuthor("ls2008");
-    info.setReqMappingPath("/ver/auditCols");
+    info.setReqMappingPath("/product");
     info.setJspPath("modules/ver/auditcols");// jsp路径
 
     // 生成实体==================================================================================
     List<ColInfo> list = new ArrayList<ColInfo>();
     ColInfo col = new ColInfo();
-    col.setColName("userId");
-    col.setColType("Long");
+    col.setColName("title");
+    col.setColType("String");
     col.setColLenth(250);
-    col.setColAnno("用户id");
+    col.setColAnno("标题");
     col.setEleType(ColInfo.EleType.TEXT);
     list.add(col);
     col = new ColInfo();
-    col.setColName("blogId");
-    col.setColType("Long");
-    col.setColLenth(10);
-    col.setColAnno("博客日志");
+    col.setColName("description");
+    col.setColType("String");
+    col.setColLenth(250);
+    col.setColAnno("描述");
     col.setEleType(ColInfo.EleType.TEXT);
     list.add(col);
+    col = new ColInfo();
+    col.setColName("headerImg");
+    col.setColType("String");
+    col.setColLenth(250);
+    col.setColAnno("头像");
+    col.setEleType(ColInfo.EleType.TEXT);
+    list.add(col);
+    col = new ColInfo();
+    col.setColName("unit");
+    col.setColType("String");
+    col.setColLenth(10);
+    col.setColAnno("单位");
+    col.setEleType(ColInfo.EleType.TEXT);
+    list.add(col);
+    
     // 生成实体==================================================================================
 
     String entityName = getUppercaseChar(info.getEntityName());
