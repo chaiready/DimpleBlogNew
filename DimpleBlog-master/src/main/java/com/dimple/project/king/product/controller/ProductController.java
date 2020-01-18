@@ -69,6 +69,7 @@ public class ProductController extends BaseController {
 
 	@GetMapping("/edit/{id}")
 	public String editView(Model model,@PathVariable Long id) {
+		model.addAttribute("entity", service.getById(id));
 		return "king/product/product_edit";
 	}
 	

@@ -101,27 +101,19 @@
         rules: {
             title: {
                 required: true,
-                rangelength: [2, 15],
+                rangelength: [2, 100]
             },
             description: {
                 required: true,
-                rangelength: [2, 80]
+                rangelength: [2, 250]
             },
-            url: {
-                required: true/* ,
-                url: true */
+            unit: {
+                required: true,
+                rangelength: [2, 10]
             },
             headerImg: {
                 required: true,
-            },
-            email: {
-                required: true,
-                email: true
-            },
-            weight: {
-                required: true,
-                number: true
-            },
+            }
         },
         messages: {
             "title": {
@@ -129,25 +121,17 @@
                 rangelength: "请输入长度为 {0} 至 {1} 之间的标题",
             },
             "description": {
-                required: "请输入标题",
+                required: "请输入描述",
                 rangelength: "请输入长度为 {0} 至 {1} 之间的标题"
             },
-            "url": {
-                required: "请输入产品地址",
+            "unit": {
+                required: "请输入单位",
                 rangelength: "请输入长度为 {0} 至 {1} 之间的标题"
-            },
-            "email": {
-                required: "请输入负责人邮箱",
-                email: "请输入正确的邮箱格式"
             },
             "headerImg": {
-                required: "请输入网站头像",
-            },
-            "weight": {
-                required: "请输入权重",
-                rangelength: "请输入正确格式的权重"
-            },
-        },
+                required: "请输入图片",
+            }
+        }
     });
 
     function submitHandler() {

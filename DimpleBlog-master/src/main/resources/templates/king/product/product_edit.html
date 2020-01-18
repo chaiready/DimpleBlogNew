@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="https://www.thymeleaf.org">
 <head>
-    <th:block th:include="include :: header('编辑产品')"/>
+    <th:block th:include="include :: header('产品')"/>
 </head>
 <body>
 <div class="ibox float-e-margins">
     <div class="ibox-content">
-        <form class="form-horizontal m-t" id="linkUpdateForm">
+        <form class="form-horizontal m-t" id="entityEditForm">
             <input type="hidden" name="id" th:value="${entity.id}">
             <div class="form-group">
-                <label class="col-sm-3 control-label">名称：</label>
+                <label class="col-sm-3 control-label">标题：</label>
                 <div class="col-sm-8">
                     <input id="linkTitle" name="title" type="text"
                            class="form-control"
-                           th:value="${link.title}"
+                           th:value="${entity.title}"
                            required="" aria-required="true">
                 </div>
             </div>
@@ -22,25 +22,25 @@
                 <div class="col-sm-8">
                     <input id="linkDescription" type="text" class="form-control"
                            name="description" required=""
-                           th:value="${link.description}"
+                           th:value="${entity.description}"
                            aria-required="true">
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label">链接地址：</label>
+                <label class="col-sm-3 control-label">单位：</label>
                 <div class="col-sm-8">
-                    <input id="linkUrl" class="form-control" name="url" required="" value="http://"
-                           th:value="${link.url}">
+                    <input id="unit" class="form-control" name="unit" required="" value=""
+                           th:value="${entity.unit}">
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label">图标地址：</label>
                 <div class="col-sm-8">
                     <input type="hidden"  id="linkHeaderUrl" class="form-control" name="headerImg" required=""
-                           th:value="${link.headerImg}">
+                           th:value="${entity.headerImg}">
 
                     <div  id="divPreview" style="width: 200px;height: 200px;border:1px solid #ecdddd;">
-                        <img alt=""  id="imgHeadPhoto" th:src="${link.headerImg}" style="width: 200px;height: 200px;"  onclick="showFilePic();">
+                        <img alt=""  id="imgHeadPhoto" th:src="${entity.headerImg}" style="width: 200px;height: 200px;"  onclick="showFilePic();">
                         <!--  点击显示大图片 -->
                         <div id="outerdiv" style="position:fixed;top:0;left:0;background:rgba(0,0,0,0.7);z-index:2;width:100%;height:100%;display:none;">
                             <div id="innerdiv" style="position:absolute;">
@@ -54,31 +54,6 @@
                     <span id="fileSpanId">
                         <input type="file" id="multifile" name="attachment"  class="btn" style=""/>
                     </span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">邮箱：</label>
-                <div class="col-sm-8">
-                    <input id="linkEmail" class="form-control" name="email" required="" th:value="${link.email}">
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">显示：</label>
-                <div class="col-sm-8">
-                    <div class="onoffswitch">
-                        <input type="checkbox" class="onoffswitch-checkbox"
-                               th:checked="${link.display == 1 ? true : false}" id="display">
-                        <label class="onoffswitch-label" for="display">
-                            <span class="onoffswitch-inner"></span>
-                            <span class="onoffswitch-switch"></span>
-                        </label>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">权重：</label>
-                <div class="col-sm-8">
-                    <input id="linkWeight" class="form-control" name="weight" th:value="${link.weight}">
                 </div>
             </div>
         </form>
@@ -95,7 +70,7 @@
 <th:block th:include="include :: footer"/>
 <script th:src="@{/js/king/preview_image.js}"></script>
 <script type="text/javascript">
-    var prefix = ctx + "link/link";
+    var prefix = ctx + "product";
 
     var _files=new Array();
 
@@ -127,31 +102,23 @@
         $("#multifile").click();
     }
 
-    $("#linkAddForm").validate({
+    $("#entityEditForm").validate({
         rules: {
             title: {
                 required: true,
-                rangelength: [2, 15],
+                rangelength: [2, 100]
             },
             description: {
                 required: true,
-                rangelength: [2, 80]
+                rangelength: [2, 250]
             },
-            url: {
-                required: true/* ,
-                url: true */
+            unit: {
+                required: true,
+                rangelength: [2, 10]
             },
             headerImg: {
                 required: true,
-            },
-            email: {
-                required: true,
-                email: true
-            },
-            weight: {
-                required: true,
-                number: true
-            },
+            }
         },
         messages: {
             "title": {
@@ -159,25 +126,17 @@
                 rangelength: "请输入长度为 {0} 至 {1} 之间的标题",
             },
             "description": {
-                required: "请输入标题",
+                required: "请输入描述",
                 rangelength: "请输入长度为 {0} 至 {1} 之间的标题"
             },
-            "url": {
-                required: "请输入产品地址",
+            "unit": {
+                required: "请输入单位",
                 rangelength: "请输入长度为 {0} 至 {1} 之间的标题"
-            },
-            "email": {
-                required: "请输入负责人邮箱",
-                email: "请输入正确的邮箱格式"
             },
             "headerImg": {
-                required: "请输入网站头像",
-            },
-            "weight": {
-                required: "请输入权重",
-                rangelength: "请输入正确格式的权重"
-            },
-        },
+                required: "请输入图片",
+            }
+        }
     });
 
     function submitHandler() {
@@ -187,7 +146,7 @@
             data.push({"name": "display", "value": display})
             $.operate.updateTab(prefix + "/edit", data);*/
 
-            var formData = new FormData($('#linkUpdateForm')[0]);
+            var formData = new FormData($('#entityEditForm')[0]);
             formData.append("display", display);
             //附件
             $.each(_files, function(i, file) {
