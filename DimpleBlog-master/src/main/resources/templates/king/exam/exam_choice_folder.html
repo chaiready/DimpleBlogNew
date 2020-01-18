@@ -42,13 +42,13 @@
         </div>-->
 
         <h4 class="index-title">
-        	<a class="orange-text" th:href="${'/kaoshi?funcId='+folderId+'&toPage=kaoshi'}">【返回】</a>
+        	<a class="orange-text" th:href="${'/kaoshi?funcId='+funcId+'&toPage=kaoshi'}">【返回】</a>
             <a th:if="${curUser==null}" class="orange-text"  href="/bbs/front/toLogin?toPage=kaoshi">登录可进行更多操作</a>
             <span  class="orange-text"  th:if="${curUser!=null}">
             	已登录：
-            	<a th:href="${'/kaoshi/listExam/'+folderId+'.html?toPage=kaoshi'}">【开始做题】</a>
-           		<a th:href="${'/kaoshi/listWrong/'+folderId+'.html?toPage=kaoshi'}">【查看错题】</a>
-             	<a th:href="${'/kaoshi/listFavorites/'+folderId+'.html?toPage=kaoshi'}">【查看收藏】</a>
+            	<a th:href="${'/kaoshi/listExam/'+funcId+'/'+folderId+'.html?toPage=kaoshi'}">【开始做题】</a>
+           		<a th:href="${'/kaoshi/listWrong/'+funcId+'/'+folderId+'.html?toPage=kaoshi'}">【查看错题】</a>
+             	<a th:href="${'/kaoshi/listFavorites/'+funcId+'/'+folderId+'.html?toPage=kaoshi'}">【查看收藏】</a>
             </span>
         </h4>
        <!--  <div style="text-align: center;">

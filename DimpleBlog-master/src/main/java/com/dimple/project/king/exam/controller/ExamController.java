@@ -106,7 +106,7 @@ public class ExamController extends BaseController {
     notice.setNoticeTitle("欢迎进入htt://5180it.com:8080");
     noticeList.add(notice);
     model.addAttribute("notices", noticeList);
-    
+    model.addAttribute("toPage", Constants.EXAM_INDEX_PAGE);
     return funcId;
   }
 
@@ -147,9 +147,9 @@ public class ExamController extends BaseController {
     return prefix + "/exam_index";
   }
 
-  @GetMapping("/questionFolder/{folderId}.html")
-  public String questionFolder(Model model, @PathVariable(required = false) Long funcId, Integer pageNum,
-      String directPage,@PathVariable Long folderId) {
+  @GetMapping("/questionFolder/{funcId}/{folderId}.html")
+  public String questionFolder(Model model, @PathVariable Long funcId,@PathVariable Long folderId, 
+		  Integer pageNum,String directPage) {
     User user = ShiroUtils.getSysUser();
     PageHelper.startPage(changePageNum(pageNum, directPage), 10, "id asc");
     List<Question> questionList = questionService.selectQuestionByFolderId(folderId);
@@ -160,9 +160,9 @@ public class ExamController extends BaseController {
     return prefix + "/exam_choice_folder";
   }
   
-  @GetMapping("/pdfFolder/{folderId}.html")
-  public String pdfFolder(Model model, @PathVariable(required = false) Long funcId, Integer pageNum,
-      String directPage,@PathVariable Long folderId) {
+  @GetMapping("/pdfFolder/{funcId}/{folderId}.html")
+  public String pdfFolder(Model model, @PathVariable Long funcId,@PathVariable Long folderId, 
+		  Integer pageNum,String directPage) {
     User user = ShiroUtils.getSysUser();
     setFunc(model, funcId, user);
     model.addAttribute("folderId", folderId);
@@ -172,9 +172,9 @@ public class ExamController extends BaseController {
   }
   
 
-  @GetMapping("/listFavorites/{folderId}.html")
-  public String listFavorites(Model model, @PathVariable(required = false) Long funcId,@PathVariable Long folderId,
-      Integer pageNum, String directPage) {
+  @GetMapping("/listFavorites/{funcId}/{folderId}.html")
+  public String listFavorites(Model model, @PathVariable Long funcId,@PathVariable Long folderId, 
+		  Integer pageNum,String directPage) {
     User user = ShiroUtils.getSysUser();
     Long userId = user == null ? 0l : user.getUserId();
     PageHelper.startPage(changePageNum(pageNum, directPage), 10, "id asc");
@@ -186,9 +186,9 @@ public class ExamController extends BaseController {
     return prefix + "/exam_favorites";
   }
 
-  @GetMapping("/listWrong/{folderId}.html")
-  public String listWrong(Model model, @PathVariable(required = false) Long funcId,@PathVariable Long folderId, Integer pageNum,
-      String directPage) {
+  @GetMapping("/listWrong/{funcId}/{folderId}.html")
+  public String listWrong(Model model, @PathVariable Long funcId,@PathVariable Long folderId, 
+		  Integer pageNum,String directPage) {
     User user = ShiroUtils.getSysUser();
     Long userId = user == null ? 0l : user.getUserId();
     PageHelper.startPage(changePageNum(pageNum, directPage), 10, "id asc");
@@ -202,8 +202,8 @@ public class ExamController extends BaseController {
 
 
   @GetMapping("/listExam/{folderId}.html")
-  public String listExam(Model model, @PathVariable(required = false) Long funcId,@PathVariable Long folderId,
-      Integer pageNum) {
+  public String listExam(Model model, @PathVariable Long funcId,@PathVariable Long folderId, 
+		  Integer pageNum,String directPage) {
     User user = ShiroUtils.getSysUser();
     Long userId = user == null ? 0l : user.getUserId();
     PageHelper.startPage(pageNum == null ? 1 : pageNum, 10, "create_time desc");
@@ -216,8 +216,8 @@ public class ExamController extends BaseController {
 
   @ResponseBody
   @GetMapping("/createExam")
-  public AjaxResult createExam(Model model, @PathVariable(required = false) Long funcId,Long folderId,
-      Integer pageNum, String directPage) {
+  public AjaxResult createExam(Model model, @PathVariable Long funcId,@PathVariable Long folderId, 
+		  Integer pageNum,String directPage) {
     User user = ShiroUtils.getSysUser();
     if (user == null) {
       return AjaxResult.error("未登录");

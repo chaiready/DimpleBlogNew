@@ -93,4 +93,6 @@ public class Constants {
     
     //pdf在线预览路径
     public static String PDF_VIEWER = "/public/king/pdfjs_2_2_228/web/viewer.html";
+    
+    public static String EXAM_INDEX_PAGE = "/kaoshi";
 }
