@@ -423,4 +423,9 @@ public class CustomController extends BaseBlogController {
         model.addAttribute("keyWord", search_word);
         return "front/custom/search";
     }
+    
+    @GetMapping("/ws")
+    public String ws(Model model) {
+        return "front/custom/websocket";
+    }
 }
