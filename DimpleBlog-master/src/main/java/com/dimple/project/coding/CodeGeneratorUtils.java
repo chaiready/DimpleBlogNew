@@ -58,7 +58,6 @@ public class CodeGeneratorUtils {
     info.setReqMappingPath("/"+info.getEntityName().replace("Entity", ""));
     info.setJspPath("king/"+info.getEntityName().replace("Entity", ""));// jsp路径
     
-
     // 生成实体==================================================================================
     List<ColInfo> list = new ArrayList<ColInfo>();
     ColInfo col = new ColInfo();
@@ -76,6 +75,7 @@ public class CodeGeneratorUtils {
     col.setColType("String");
     col.setColLenth(250);
     col.setColAnno("备注");
+
     col.setEleType(ColInfo.EleType.TEXT);
     list.add(col);
     

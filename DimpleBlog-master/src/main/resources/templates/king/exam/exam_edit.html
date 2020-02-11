@@ -128,7 +128,7 @@
             <a th:if="${curUser==null}" class="orange-text"  href="/bbs/front/toLogin?toPage=kaoshi">登录可进行更多操作</a>
             <span  class="orange-text"  th:if="${curUser!=null}">
             	<a href="javascript:void(0);"><i class="fa fa-home"></i>当前页: &nbsp;答卷明细 </a>
-            	<a class="orange-text" th:href="${'/kaoshi/listExam/'+folderId+'.html?toPage=kaoshi'}">【返回】</a>
+            	<a class="orange-text" th:href="${'/kaoshi/listExam/'+funcId+'/'+folderId+'.html?toPage=kaoshi'}">【返回】</a>
             </span>
         </h4>
        <!--  <div style="text-align: center;">

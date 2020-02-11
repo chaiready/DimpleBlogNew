@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="zh" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <th:block th:include="include-front-custom :: head('5180it.com','欢迎进入')"/>
+
+	<style type="text/css">
+		.paBanner{ position:fixed;}
+		.prevBanner,.nextBanner{ cursor:pointer; width:8%; height:100%; _height:100%; top:0;}
+		.prevBanner{ left:0; background:url(/img/arrow_l.png) no-repeat center 44%;}
+		.prevBanner:hover{background:#efefef url(/img/arrow_l.png) no-repeat center 44%;}
+		.nextBanner{ right:0;background:url(/img/arrow_r.png) no-repeat center 44%;}
+		.nextBanner:hover{background:#efefef url(/img/arrow_r.png) no-repeat center 44%;}
+	</style>
+    <!--右下角工具栏-->
+	<th:block th:include="include-front-custom :: sidebar-css"/>
+	
+    <!-- 遮罩层 -->
+    <script th:src="@{/ajax/libs/blockUI/jquery.blockUI.js}"></script>
+
+    <script th:src="@{/ajax/libs/layer/layer.min.js}"></script>
+   <!-- <script th:src="@{/ajax/libs/layui/layui.js}"></script>-->
+    <script th:src="@{/dimple/js/common.js}"></script>
+    <script th:src="@{/dimple/js/ui.js}"></script>
+</head>
+
+<body class="nobg">
+<th:block th:replace="include-front-custom :: header"/>
+
+<!--内容区开始-->
+<div class="container">
+    <!--最新文章-->
+    <section class="mysection" style="width: 95%;">
+        <!-- <h4 class="index-title">
+            <a href="/"><i class="fa fa-home"></i>当前页: &nbsp;> </a>
+            <span class="orange-text" th:text="${funcName}"></span>
+            <span style="float:right;margin-right:10px;">共有文章:<font class="orange-text"
+                th:text="${blogs.total}"> 11 </font>篇</span>
+        </h4> -->
+        <!--<div>
+            <p class="smallText" th:text="${'分类描述：'+funcName}"></p>
+            <p class="smallText" th:text="${'创建时间：'+funcName}"></p>
+        </div>-->
+
+        <h4 class="index-title">
+        	<a class="orange-text" th:href="${'/kaoshi?funcId='+funcId+'&toPage=kaoshi'}">【返回】</a>
+            <a th:if="${curUser==null}" class="orange-text"  href="/bbs/front/toLogin?toPage=kaoshi">登录可进行更多操作</a>
+            <span  class="orange-text"  th:if="${curUser!=null}">
+            	已登录：
+            	<a th:href="${'/kaoshi/listExam/'+funcId+'/'+folderId+'.html?toPage=kaoshi'}">【开始做题】</a>
+           		<a th:href="${'/kaoshi/listWrong/'+funcId+'/'+folderId+'.html?toPage=kaoshi'}">【查看错题】</a>
+             	<a th:href="${'/kaoshi/listFavorites/'+funcId+'/'+folderId+'.html?toPage=kaoshi'}">【查看收藏】</a>
+            </span>
+        </h4>
+       <!--  <div style="text-align: center;">
+        	<input name="questionSearch" type="text" class="text" id="questionSearch" value="" maxlength="100"
+            	placeholder="请输入要查询的问题" style="width:60%;">
+            <input type="button" id="searchQuestionBtn" class="btn btn-inverse" value="查询  "/>
+        </div> -->
+
+        <!--分页开始-->
+        <div th:replace="navigation :: navigation-direct(${questionList})"></div>
+        <!--分页结束-->
+        <div class="arclist" style="margin-left: 20px;margin-right: 20px;padding-right: 20px;width: 92%;">
+            <!--列表开始-->
+            <form>
+                <div th:each="question:${questionList.list}">
+                    <div class="arc-left">
+                        <h4 class="blue-text">
+                        	 [[${question.questionOrder}]]
+                            <a th:text="${question.content}"></a>
+                        </h4>
+                        	<div  th:each="qo:${question.optionList}" style="margin-bottom: 15px;">
+                        		<label style="">
+		                        	<span th:style="@{(${qo.correct} eq 0 ? 'color: red;' : (${qo.correct} eq 1 ? 'color: #67c23a;':''))}"
+		                        		th:text="${qo.optionOrder+'、'+qo.optionVal}"></span>
+	                        	</label>
+                        	</div>
+
+                        <p style="margin-top: 10px;">
+                        	<span th:if="${curUser==null}">
+                        		<span style="color: #67c23a;" th:text="${'正確答案： 登录后才能查看答案'}"></span>
+                        	</span>
+            				<span class="questionAnswerSpanCls" th:if="${curUser!=null}">
+            					<span style="color: #67c23a;" th:text="${'正確答案： '+question.answer}"></span>
+            					<span th:id = "yourAnswer+(${question.id})">
+            						<span th:if="${question.hasAnswer == 1}" style='color: #67c23a;'>&nbsp;&nbsp;&nbsp;&nbsp;您的答案：[[${question.youAnswer}]]</span>
+					        	   	<span th:if="${question.hasAnswer == 0}" style='color: red;'>&nbsp;&nbsp;&nbsp;您的答案：[[${question.youAnswer}]]</span>
+            					</span>
+
+		                       	 <span th:if="${curUser!=null}" class="orange-text">
+		                       	 	<a th:style="'display:' + @{(${question.hasFavorites} eq 0 ? 'none' : 'inline-block')} + ';float: right;'"
+		                       	 		th:onclick="delFavorites([[${question.id}]]);"  th:id = "delQues+(${question.id})"><i class="fa fa-star"></i>已收藏</a>
+
+		                        	<a th:style="'display:' + @{(${question.hasFavorites ne 0} ? 'none' : 'inline-block')} + ';float: right;'"
+		                        		 th:onclick="addFavorites([[${question.id}]]);"  th:id = "addQues+(${question.id})"><i class="fa fa-star-o"></i>未收藏</a>
+		                       	 </span>
+            				</span>
+                        </p>
+                    </div>
+                </div>
+               </form>
+            <!--列表结束-->
+        </div>
+        <!--分页开始-->
+        <div th:replace="navigation :: navigation-direct(${questionList})"></div>
+        <!--分页结束-->
+    </section>
+    
+    <a href="javascript:void(0);" class="prevBanner paBanner none" id="banner_prev"></a>
+    <a href="javascript:void(0);" class="nextBanner paBanner" id="banner_next"></a>
+
+    <!--右下角工具栏-->
+    <th:block th:replace="include-front-custom :: sidebar"/>
+        
+    <!--左侧结束-->
+    <!--<th:block th:replace="include-front-custom :: side"/>-->
+</div>
+<!--<th:block th:replace="include-front-custom :: footer"/>-->
+
+<script>
+	$(function(){
+		$('#banner_next').bind('click',function(){
+			$('.paginationNext')[0].click();
+		});
+		$('#banner_prev').click(function(){
+			$('.paginationPrev')[0].click();
+		});
+		$("#searchQuestionBtn").click(function(){
+			console.info($("#questionSearch").val());
+		});
+		
+	});
+
+	//收藏
+   function addFavorites(questionId){
+	   $.ajax({
+           type: "POST",
+           url: "/kaoshi/addFavorites",
+           data: {"questionId": questionId},
+           dataType: "json",
+           success: function (data) {
+        	   console.info(data);
+        	   if(data.hasFavorites==1){//已收藏的
+        		   $("#addQues"+questionId).hide();
+        		   $("#delQues"+questionId).show();
+        	   }else{
+        		   $("#addQues"+questionId).show();
+        		   $("#delQues"+questionId).hide();
+        	   }
+        	   if (data.code == 200) {
+                   layer.msg(data.msg, {icon: 1});
+               } else {
+                   layer.msg(data.msg, {icon: 2});
+               }
+           },
+           error: function (jqXHR) {
+        	   layer.msg('发送错误：' + jqXHR.status);
+           },
+       });
+   }
+	
+   function delFavorites(questionId){
+	   $.ajax({
+           type: "POST",
+           url: "/kaoshi/delFavorites",
+           data: {"questionId": questionId},
+           dataType: "json",
+           success: function (data) {
+        	   console.info(data);
+        	   if(data.hasFavorites==1){//已收藏的
+        		   $("#addQues"+questionId).hide();
+        		   $("#delQues"+questionId).show();
+        	   }else{
+        		   $("#addQues"+questionId).show();
+        		   $("#delQues"+questionId).hide();
+        	   }
+        	   if (data.code == 200) {
+                   layer.msg(data.msg, {icon: 1});
+               } else {
+                   layer.msg(data.msg, {icon: 2});
+               }
+           },
+           error: function (jqXHR) {
+        	   layer.msg('发送错误：' + jqXHR.status);
+           },
+       });
+   }
+   
+</script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dimple.project.king.product.mapper.ProductMapper">
+	<resultMap id="BaseResultMap" type="com.dimple.project.king.product.domain.ProductEntity">
+		<id column="id" property="id" jdbcType="BIGINT"/>
+		<result column="title" property="title" jdbcType="VARCHAR"/>
+		<result column="description" property="description" jdbcType="VARCHAR"/>
+		<result column="header_img" property="headerImg" jdbcType="VARCHAR"/>
+		<result column="unit" property="unit" jdbcType="VARCHAR"/>
+		<result column="create_by" property="optionOrder" jdbcType="VARCHAR"/>
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+		<result column="update_by" property="updateBy" jdbcType="VARCHAR"/>
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+	</resultMap>
+</mapper>

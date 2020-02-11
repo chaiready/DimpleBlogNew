@@ -102,7 +102,7 @@ public class CustomController extends BaseBlogController {
      */
     private void setCommonMessage(Model model, String loginName,Long funcId,Integer pageNum) {
         List<Func> funcList = setBLogHead(loginName,model);
-
+        model.addAttribute("toPage", loginName);
         if(funcId!=FUNC_NULL){
           if (funcId==FUNC_FIRST&&CollectionUtils.isNotEmpty(funcList)) {
             funcId = funcList.get(0).getId();
@@ -260,13 +260,17 @@ public class CustomController extends BaseBlogController {
         Subject subject = SecurityUtils.getSubject();
         try {
             subject.login(token);
-            if(StringUtils.isEmpty(toPage)){
+            if(StringUtils.isEmpty(toPage)||toPage.equals("null")){
               AjaxResult result = AjaxResult.success();
               result.put("redirectPage", "/bbs/"+loginName+".html");
               return result;
             }else{
               AjaxResult result = AjaxResult.success();
-              result.put("redirectPage", "/bbs/"+toPage+".html");
+              if(toPage.equals(Constants.EXAM_INDEX_PAGE)){
+            	  result.put("redirectPage", toPage);
+              }else{
+            	  result.put("redirectPage", "/bbs/"+toPage+".html");
+              }
               return result;
             }
         } catch (AuthenticationException e) {

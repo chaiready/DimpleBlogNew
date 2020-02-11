@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.dimple.common.constant.Constants;
 import com.dimple.common.utils.DateUtils;
 import com.dimple.common.utils.security.ShiroUtils;
 import com.dimple.framework.aspectj.lang.annotation.Log;
@@ -67,16 +70,23 @@ public class ExamController extends BaseController {
   @Autowired
   private QuestionFolderService questionFolderService;
 
-  private void setFunc(Model model, Long funcId, User user) {
+  private Long setFunc(Model model, Long funcId, User user) {
     List<Func> funcList = new ArrayList<Func>();
     model.addAttribute("funcList", funcList);
     String funcName = "";
 
     Func funcVo = new Func();
-    funcVo.setUrl("/kaoshi/questionFolder/1.html");
+    funcVo.setUrl("/kaoshi?funcId=1");
     funcVo.setFuncName("医药学");
     funcVo.setId(1l);
     funcList.add(funcVo);
+    
+    funcVo = new Func();
+    funcVo.setUrl("/kaoshi?funcId=2");
+    funcVo.setFuncName("信息系统项目管理师");
+    funcVo.setId(2l);
+    funcList.add(funcVo);
+    
     if (CollectionUtils.isNotEmpty(funcList)) {
       funcId = funcId == null ? funcList.get(0).getId() : funcId;
       for (Func func : funcList) {
@@ -96,6 +106,8 @@ public class ExamController extends BaseController {
     notice.setNoticeTitle("欢迎进入htt://5180it.com:8080");
     noticeList.add(notice);
     model.addAttribute("notices", noticeList);
+    model.addAttribute("toPage", Constants.EXAM_INDEX_PAGE);
+    return funcId;
   }
 
 
@@ -123,19 +135,21 @@ public class ExamController extends BaseController {
 
 
   @GetMapping()
-  public String index(Model model, @PathVariable(required = false) Long funcId, Integer pageNum,
-      String directPage,Long folderId) {
+  public String index(Model model,Long funcId, Integer pageNum,String directPage) {
     User user = ShiroUtils.getSysUser();
+    funcId = setFunc(model, funcId, user);
+    
     PageHelper.startPage(changePageNum(pageNum, directPage), 10, "id asc");
-    List<QuestionFolderEntity> folderList = questionFolderService.selectList();
+    QueryWrapper<QuestionFolderEntity> queryWrapper = new QueryWrapper<>();
+    queryWrapper.eq("func_id", funcId);
+    List<QuestionFolderEntity> folderList = questionFolderService.list(queryWrapper);
     model.addAttribute("folderList", new PageInfo<>(folderList));
-    setFunc(model, funcId, user);
     return prefix + "/exam_index";
   }
 
-  @GetMapping("/questionFolder/{folderId}.html")
-  public String questionFolder(Model model, @PathVariable(required = false) Long funcId, Integer pageNum,
-      String directPage,@PathVariable Long folderId) {
+  @GetMapping("/questionFolder/{funcId}/{folderId}.html")
+  public String questionFolder(Model model, @PathVariable Long funcId,@PathVariable Long folderId, 
+		  Integer pageNum,String directPage) {
     User user = ShiroUtils.getSysUser();
     PageHelper.startPage(changePageNum(pageNum, directPage), 10, "id asc");
     List<Question> questionList = questionService.selectQuestionByFolderId(folderId);
@@ -143,12 +157,24 @@ public class ExamController extends BaseController {
     model.addAttribute("questionList", new PageInfo<>(questionList));
     setFunc(model, funcId, user);
     model.addAttribute("folderId", folderId);
-    return prefix + "/exam_folder";
+    return prefix + "/exam_choice_folder";
   }
+  
+  @GetMapping("/pdfFolder/{funcId}/{folderId}.html")
+  public String pdfFolder(Model model, @PathVariable Long funcId,@PathVariable Long folderId, 
+		  Integer pageNum,String directPage) {
+    User user = ShiroUtils.getSysUser();
+    setFunc(model, funcId, user);
+    model.addAttribute("folderId", folderId);
+    QuestionFolderEntity folder = questionFolderService.getById(folderId);
+    model.addAttribute("url", Constants.PDF_VIEWER+"?file=/profile/office/pdf/pm/"+folder.getFolderName()+".pdf");
+    return prefix + "/exam_pdf_folder";
+  }
+  
 
-  @GetMapping("/listFavorites/{folderId}.html")
-  public String listFavorites(Model model, @PathVariable(required = false) Long funcId,@PathVariable Long folderId,
-      Integer pageNum, String directPage) {
+  @GetMapping("/listFavorites/{funcId}/{folderId}.html")
+  public String listFavorites(Model model, @PathVariable Long funcId,@PathVariable Long folderId, 
+		  Integer pageNum,String directPage) {
     User user = ShiroUtils.getSysUser();
     Long userId = user == null ? 0l : user.getUserId();
     PageHelper.startPage(changePageNum(pageNum, directPage), 10, "id asc");
@@ -160,9 +186,9 @@ public class ExamController extends BaseController {
     return prefix + "/exam_favorites";
   }
 
-  @GetMapping("/listWrong/{folderId}.html")
-  public String listWrong(Model model, @PathVariable(required = false) Long funcId,@PathVariable Long folderId, Integer pageNum,
-      String directPage) {
+  @GetMapping("/listWrong/{funcId}/{folderId}.html")
+  public String listWrong(Model model, @PathVariable Long funcId,@PathVariable Long folderId, 
+		  Integer pageNum,String directPage) {
     User user = ShiroUtils.getSysUser();
     Long userId = user == null ? 0l : user.getUserId();
     PageHelper.startPage(changePageNum(pageNum, directPage), 10, "id asc");
@@ -176,8 +202,8 @@ public class ExamController extends BaseController {
 
 
   @GetMapping("/listExam/{folderId}.html")
-  public String listExam(Model model, @PathVariable(required = false) Long funcId,@PathVariable Long folderId,
-      Integer pageNum) {
+  public String listExam(Model model, @PathVariable Long funcId,@PathVariable Long folderId, 
+		  Integer pageNum,String directPage) {
     User user = ShiroUtils.getSysUser();
     Long userId = user == null ? 0l : user.getUserId();
     PageHelper.startPage(pageNum == null ? 1 : pageNum, 10, "create_time desc");
@@ -190,8 +216,8 @@ public class ExamController extends BaseController {
 
   @ResponseBody
   @GetMapping("/createExam")
-  public AjaxResult createExam(Model model, @PathVariable(required = false) Long funcId,Long folderId,
-      Integer pageNum, String directPage) {
+  public AjaxResult createExam(Model model, @PathVariable Long funcId,@PathVariable Long folderId, 
+		  Integer pageNum,String directPage) {
     User user = ShiroUtils.getSysUser();
     if (user == null) {
       return AjaxResult.error("未登录");
