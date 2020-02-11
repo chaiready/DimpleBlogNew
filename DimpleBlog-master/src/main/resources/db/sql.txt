@@ -250,4 +250,62 @@ CREATE TABLE `bg_bookmarks` (
 UPDATE `bg_func` SET `id`='4', `func_name`='扫码系统', `parent_id`='0', `order_num`='1578535921032', `url`='/scan/index.html', `func_type`='', `visible`='0', `perms`=NULL, `icon`='#', `create_by`='admin', `create_time`=NULL, `update_by`='', `update_time`=NULL, `remark`='', `creator`='1' WHERE (`id`='4');
 INSERT INTO `bg_func` (`id`, `func_name`, `parent_id`, `order_num`, `url`, `func_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`, `creator`) VALUES ('5', '后台管理', '0', '1578535921031', '/login', '', '0', NULL, '#', 'admin', NULL, '', NULL, '', '1');
 
+#20200202
+CREATE TABLE `bg_order` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `product_id` bigint(20) COMMENT '产品id',
+  `num` bigint(20) COMMENT '数量',
+  `billcode` varchar(256) DEFAULT NULL COMMENT '订单号',
+  `billstatus` varchar(10) DEFAULT NULL COMMENT '订单状态',
+  `description` varchar(256) DEFAULT NULL COMMENT '描述',
+  `memo` varchar(256) DEFAULT NULL COMMENT '备注',
+  `create_by` varchar(64) DEFAULT NULL COMMENT '创建者',
+  `create_time` datetime DEFAULT NULL,
+  `update_by` varchar(64) DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='订单'
+
+
+#20200205
+CREATE TABLE `bg_form_main` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `title` varchar(256) DEFAULT NULL COMMENT '标题',
+  `memo` varchar(256) DEFAULT NULL COMMENT '备注',
+  `create_by` varchar(64) DEFAULT NULL COMMENT '创建者',
+  `create_time` datetime DEFAULT NULL,
+  `update_by` varchar(64) DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='表单'
+
+CREATE TABLE `bg_form_sub` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `mainid` bigint(11)  COMMENT 'mainid',
+  `col_name` varchar(256) DEFAULT NULL COMMENT '列名',
+  `col_type` varchar(10) DEFAULT NULL COMMENT '列类型',
+  `col_val` varchar(256) DEFAULT NULL COMMENT '列值',
+  `create_by` varchar(64) DEFAULT NULL COMMENT '创建者',
+  `create_time` datetime DEFAULT NULL,
+  `update_by` varchar(64) DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='表单子表'
+
+
+
+CREATE TABLE `bg_form_data` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `mainid` bigint(11)  COMMENT 'mainid',
+  `subid` bigint(11)  COMMENT 'subid',
+  `col_data` varchar(256) DEFAULT NULL COMMENT '列值',
+  `create_by` varchar(64) DEFAULT NULL COMMENT '创建者',
+  `create_time` datetime DEFAULT NULL,
+  `update_by` varchar(64) DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='表单数据'
+
+
+alter table bg_form_data add COLUMN rowuuid VARCHAR(36);
 
