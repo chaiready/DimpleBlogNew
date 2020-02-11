@@ -1,0 +1,110 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('表单明细')" />
+    
+    <style type="text/css">
+    	.Wdate .WdateTime{
+			border:1px solid #c2cad8;
+			height:28px; 
+			background:#fff url(/img/datePicker.gif) no-repeat right;
+		}
+    </style>
+    <th:block th:include="include :: datetimepicker-css"/>
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    	<div style="text-align: center;">
+    		<h1 style="color: #0181da;">
+    			[[${entity.title}]]
+    		</h1>
+    	</div>
+        <form class="form-horizontal m" id="form-entity-edit" th:object="${entity}">
+            <input id="id" name="mainid" th:value="${entity.id}"  type="hidden">
+            <hr>
+            <div id="optionContentId">
+	            <div th:each="sub:${subList}" class="form-group colNameDiv" 
+	            	style="padding-top: 10px;padding-bottom: 10px;">	
+	         	  <input id="subId" name="subId" th:value="${sub.id}"  type="hidden">
+	              <label class="col-xs-4 control-label">[[${sub.colName}]]：</label>
+	               <div class="col-xs-8 colNameCls">
+	                   <input th:if="${sub.colType eq '01'}" id="" th:name="${'colData_'+sub.id}" value="" class="form-control" type="text">
+	                   
+	                   <select  th:if="${sub.colType eq '02'}" id="" th:name="${'colData_'+sub.id}" class="form-control chooseSelectCls">
+	                   		<option value=""></option>
+	                    	<option th:each="cval : ${sub.colVals}" th:text="${cval}" th:value="${cval}"></option>
+	                   </select>
+	                   
+	                   <input th:if="${sub.colType eq '03'}" id="" th:name="${'colData_'+sub.id}" class="form-control Wdate" type="text">
+	                   
+	                   <input  th:if="${sub.colType eq '04'}" id="" th:name="${'colData_'+sub.id}" class="form-control WdateTime" type="text">
+	                   
+	               </div>
+	          	</div>
+            </div>
+            <div style="text-align: center;">
+	        	<button type="button" class="btn btn-sm btn-primary" onclick="submitHandler()">
+	        		<i class="fa fa-check"></i> 保 存
+	            </button>
+	            <button type="reset" class="btn btn-sm btn-warning">
+	        		<i class="fa fa-refresh"></i> 重置
+	            </button>
+	        </div>
+		</form>
+    </div>
+    <th:block th:include="include :: footer" />
+    
+    <th:block th:include="include :: datetimepicker-js"/>
+    
+    <script type="text/javascript">
+        var prefix = ctx + "form";
+        
+		var delSubIdArr = new Array();//要删除的选项
+        $(function () {
+       	 //相同name的校验
+       	 if ($.validator) {
+                $.validator.prototype.elements = function () {
+                    var validator = this,
+                      rulesCache = {};
+                    return $(this.currentForm)
+                    .find("input, select, textarea")
+                    .not(":submit, :reset, :image, [disabled]")
+                    .not(this.settings.ignore)
+                    .filter(function () {
+                        if (!this.name && validator.settings.debug && window.console) {
+                            console.error("%o has no name assigned", this);
+                        }
+                        rulesCache[this.name] = true;
+                        return true;
+                    });
+                }
+            }
+       	 
+       	 $(".Wdate").datetimepicker({
+             format: "yyyy-mm-dd",
+             minView: "month",
+             autoclose: true
+         });
+       	 
+       	$('.WdateTime').datetimepicker({format: "yyyy-mm-dd hh:ii:ss"});
+       	 
+       });
+        
+		$("#form-entity-edit").validate({
+			focusCleanup: true
+		});
+		
+		function submitHandler() {
+			$("input[name='colName']").each(function() {
+	        	$(this).rules("add", {required:true,maxlength:20,messages:{required:"必输",maxlength:"最大长达为20字符"}});
+	        });
+	    	
+			console.info($('#form-entity-edit').serialize());
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/save", $('#form-entity-edit').serialize());
+	        }
+	    }
+		
+	</script>
+</body>
+</html>

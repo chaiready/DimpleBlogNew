@@ -364,6 +364,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/kaoshi/**", "anon");//考试
         filterChainDefinitionMap.put("/common/upload", "anon");//上传文件
         filterChainDefinitionMap.put("/scan/**", "anon");
+        filterChainDefinitionMap.put("/order/**", "anon");
         filterChainDefinitionMap.put("/king/suggest/add", "anon");
         filterChainDefinitionMap.put("/frame", "anon");
 

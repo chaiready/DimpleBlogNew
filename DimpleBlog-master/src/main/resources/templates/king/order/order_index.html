@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="zh" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <th:block th:include="include-front-custom :: head('5180it.com','欢迎进入')"/>
+
+	<style type="text/css">
+		.paBanner{ position:fixed;}
+		.prevBanner,.nextBanner{ cursor:pointer; width:8%; height:100%; _height:100%; top:0;}
+		.prevBanner{ left:0; background:url(/img/arrow_l.png) no-repeat center 44%;}
+		.prevBanner:hover{background:#efefef url(/img/arrow_l.png) no-repeat center 44%;}
+		.nextBanner{ right:0;background:url(/img/arrow_r.png) no-repeat center 44%;}
+		.nextBanner:hover{background:#efefef url(/img/arrow_r.png) no-repeat center 44%;}
+		
+		/*重写底部样式*/
+        footer{
+            position: fixed;
+            bottom: 0px;
+        }
+	</style>
+	
+    <!-- 遮罩层 -->
+    <script th:src="@{/ajax/libs/blockUI/jquery.blockUI.js}"></script>
+
+    <script th:src="@{/ajax/libs/layer/layer.min.js}"></script>
+   <!-- <script th:src="@{/ajax/libs/layui/layui.js}"></script>-->
+    <script th:src="@{/dimple/js/common.js}"></script>
+    <script th:src="@{/dimple/js/ui.js}"></script>
+</head>
+
+<body class="nobg">
+<th:block th:replace="include-front-custom :: header"/>
+
+<!--内容区开始-->
+<div class="container">
+    <!--最新文章-->
+    <section class="mysection" style="width: 95%;">
+        <!-- <h4 class="index-title">
+            <a href="/"><i class="fa fa-home"></i>当前页: &nbsp;> </a>
+            <span class="orange-text" th:text="${funcName}"></span>
+            <span style="float:right;margin-right:10px;">共有文章:<font class="orange-text"
+                th:text="${blogs.total}"> 11 </font>篇</span>
+        </h4> -->
+        <!--<div>
+            <p class="smallText" th:text="${'分类描述：'+funcName}"></p>
+            <p class="smallText" th:text="${'创建时间：'+funcName}"></p>
+        </div>-->
+        
+        <!-- <h4 class="index-title">
+            <a th:if="${curUser==null}" class="orange-text"  href="/bbs/front/toLogin?toPage=kaoshi">登录可进行更多操作</a>
+            <span  class="orange-text"  th:if="${curUser!=null}">
+            	已登录
+            </span>
+        </h4> -->
+       <!--  <div style="text-align: center;">
+        	<input name="questionSearch" type="text" class="text" id="questionSearch" value="" maxlength="100" 
+            	placeholder="请输入要查询的问题" style="width:60%;">
+            <input type="button" id="searchQuestionBtn" class="btn btn-inverse" value="查询  "/>
+        </div> -->
+        
+        <!--分页开始-->
+        <!-- <div th:replace="navigation :: navigation-direct(${folderList})"></div> -->
+        <!--分页结束-->
+        <div class="arclist" style="margin-top:0px;">
+            <!-- <h4 class="index-title">
+                <a th:href="${'/bbs/'+loginName+'.html'}">
+                    <i class="fa fa-home"></i>首页 &nbsp;&gt;
+                </a>
+                <a class="orange-text" th:href="${'/bookmarks/list.html'}">当前页:我的收藏</a>
+                <span style="float:right;margin-right:10px;">共有文章:
+	            	<font class="orange-text" th:text="${blogs.total}">  </font>篇
+	            </span>
+            </h4> -->
+            <!--列表开始-->
+            <ul>
+                <li th:each="blog:${blogs.list}">
+                    <div class="arcimg">
+                        <img th:src="${blog.headerImg}" th:alt="${blog.title}" th:title="${blog.title}"/>
+                    </div>
+                    <div class="arc-right" style="">
+                        <h4 class="blue-text">
+                            <a th:title="${blog.title}"
+                               th:text="${blog.title}">
+                            </a>
+                        </h4>
+                        <p th:text="${blog.summary}"></p>
+                        <form action="" class="orderFormCls">
+                        	<input name="productId" type="hidden" th:value="${blog.blogId}">
+	                        <p style="margin-top: 5px;float:right;">
+	                        	<input type="button" class="btn btn-inverse" value="- "
+		                    		style="height: 25px;color: #ff6700;"  onclick="subNum(this);">
+		                    		
+	                       		<input type="text" name="num" class="orderNumCls" value="1" style="height: 25px;width: 50px;" readonly="readonly"/>
+	                       		
+	                       		<input type="button" class="btn btn-inverse" value="+ "
+		                    		style="height: 25px;color: #ff6700;" onclick="addNum(this);">
+		                    		
+	                        	<input type="button" class="btn btn-inverse" onclick="submitOrder(this);" value="添加   "
+		                    	style="height: 25px;color: #ff6700;">
+	                        </p>
+                        </form>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <!--分页开始-->
+        <div th:replace="navigation :: navigation-index(${blogs})"></div>
+        <!--分页结束-->
+        
+        <div style="height: 150px;">
+            <hr>
+        </div>
+    </section>
+    
+    <a href="javascript:void(0);" class="prevBanner paBanner none" id="banner_prev"></a>
+    <a href="javascript:void(0);" class="nextBanner paBanner" id="banner_next"></a>
+        
+</div>
+
+<footer th:fragment="footer" style="">
+    <!--底部导航-->
+    <div class="foot-nav">
+        <div id="orderBottomDiv">
+            <span style="font-size: 18px;color: #ff6700;">
+            <i id="orderInfoIcon" class="fa fa-chevron-down"></i>
+                 	订&nbsp;&nbsp;&nbsp;&nbsp;单
+            </span>
+        </div>
+        <div id="order-info" style="height: 120px;">
+           <input id="pageNum" name="pageNum" type="hidden" value="1">
+           <input id="hasPreviousPage" name="hasPreviousPage" type="hidden" value="true">
+           <input id="hasNextPage" name="hasNextPage" type="hidden" value="true">
+           
+
+	       <div id="preOrderPage"
+	       	style="background:url(/img/arrow_l.png) no-repeat center 44%;float: left;width: 50px;height: 100px;position:absolute;left:0;top:50px;"></div>
+	       <div id="orderRecordsEle"></div>
+	       <div  id="nextOrderPage"
+	       	style="background:url(/img/arrow_r.png) no-repeat center 44%;float: right;width: 50px;height: 100px;position:absolute;right:0;top:50px;"></div>
+	    </div>
+    </div>
+    <div id="toTop">返回顶部</div>
+    <script>
+        /**
+         * 隐藏加载条
+         */
+        $({property: 0}).animate({property: 100}, {
+            duration: 3000,
+            step: function () {
+                var percentage = Math.round(this.property);
+                $('#progress').css('width', percentage + "%");
+                if (percentage == 100) {
+                    $("#progress").addClass("done");//完成，隐藏进度条
+                }
+            }
+        });
+    </script>
+</footer>
+
+<script>
+	var showOrderHisFlag = false;
+	$(function(){
+		$('#banner_next').bind('click',function(){
+			$('.paginationNext')[0].click();
+		});
+		$('#banner_prev').click(function(){
+			$('.paginationPrev')[0].click();
+		});
+		
+		//底部订单记录折叠
+		$("#orderBottomDiv").click(function () {
+            if (!showOrderHisFlag) {
+            	showOrderHisFlag = true;
+                $("#order-info").slideUp(100);
+                $("#orderInfoIcon").attr("class","fa fa-chevron-up");
+            }else {
+            	showOrderHisFlag = false;
+                $("#order-info").slideDown(100);
+                $("#orderInfoIcon").attr("class","fa fa-chevron-down");
+            } 
+        });
+		//订单记录
+		listOrderRecords(1);
+		
+		$("#preOrderPage").click(function(){preOrderFunc();});
+		
+		$("#nextOrderPage").click(function(){nextOrderFunc();});
+	});
+
+	
+	
+	function cancelBookmarks(objId){
+        $.modal.confirm("确定要取消收藏吗？", function () {
+            $.ajax( {
+                url : "/bookmarks/del",
+                type: 'post',
+                data: {"objId": objId},
+                dataType: "json",
+                /*beforeSend: function () {
+                    $.modal.loading("正在处理中，请稍后...");
+                },*/
+                success : function(result) {
+                    if (result.code == web_status.SUCCESS) {
+                        $.modal.alertSuccess(result.msg);
+                        window.parent.location.reload();
+                    }else{
+                        $.modal.alertWarning(result.msg);
+                    }
+                },
+                error: function(data){
+                    $.modal.alertError("保存失败，HTTP错误。");
+                }
+            });
+        });
+    }
+	
+	function subNum(t){
+		var num = parseInt($(t).parent().find('.orderNumCls').val());
+		if(num>1){
+			$(t).parent().find('.orderNumCls').val(num-1);
+		}
+	}
+	
+	function addNum(t){
+		var num = parseInt($(t).parent().find('.orderNumCls').val());
+		if(num<99){
+			$(t).parent().find('.orderNumCls').val(num+1);
+		}
+	}
+	
+	function submitOrder(t){
+		$.operate.ajaxSend("/order/add", "post", "json", $(t).closest(".orderFormCls").serialize(), function callBackFunc(result){
+            $.modal.closeLoading();
+            if(result.code == web_status.SUCCESS){
+            	listOrderRecords(1);
+                $.modal.msgSuccess(result.msg);
+            }else{
+                $.modal.alertWarning(result.msg)
+            }
+        });
+	}
+	
+	function listOrderRecords(pn){
+		$.operate.ajaxSend("/order/query", "post", "json", {"pageNum":pn}, function callBackFunc(result){
+            console.info(result);
+            $.modal.closeLoading();
+            if(result.code == web_status.SUCCESS){
+            	var records = result.data.list;
+            	var str = '';
+            	for(var i=0;i<records.length;i++){
+            		str +='<div style="border: 1px solid #333;margin-top: 3px;">'+
+        			'<span style="width:150px;display:inline-block;">'+records[i].createTime+'</span>'+
+        			'<span>'+records[i].description+'</span>'+
+        			'</div>';
+            	}
+            	$("#orderRecordsEle").html(str);
+                $.modal.msgSuccess(result.msg);
+                $("#pageNum").val(result.data.pageNum);
+                $("#hasPreviousPage").val(result.data.hasPreviousPage);
+                $("#hasNextPage").val(result.data.hasNextPage);
+            }else{
+                $.modal.alertWarning(result.msg)
+                $("#pageNum").val(1);
+                $("#hasPreviousPage").val(true);
+                $("#hasNextPage").val(true);
+            }
+        });
+	}
+	
+	
+	function preOrderFunc(){
+		var num = parseInt($("#pageNum").val());
+		console.info("pre>>"+$("#hasPreviousPage").val());
+		if($("#hasPreviousPage").val()=='true'){
+			listOrderRecords(num-1)
+		}else{
+			$.modal.msgWarning("没有上一页了");
+		}
+	}
+	
+	function nextOrderFunc(){
+		var num = parseInt($("#pageNum").val());
+		console.info("next>>"+$("#hasNextPage").val());
+		if($("#hasNextPage").val()=='true'){
+			listOrderRecords(num+1)
+		}else{
+			$.modal.msgWarning("没有下一页了");
+		}
+	}
+</script>
+</body>
+</html>

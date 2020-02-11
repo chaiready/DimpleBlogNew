@@ -1,8 +1,13 @@
 package com.dimple.framework.web.controller;
 
 import java.beans.PropertyEditorSupport;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Date;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.web.bind.WebDataBinder;
@@ -151,4 +156,61 @@ public class BaseController {
         pageNum = pageNum == null ? 1 : pageNum;
         return pageNum;
     }
+    
+    /**
+	 * 获取浏览器类型
+	 * 
+	 * @author wzw 2014年11月13日
+	 * @param request
+	 * @return IE9: Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0) FireFox: Mozilla/5.0 (Windows
+	 *         NT 6.1; WOW64; rv:33.0) Gecko/20100101 Firefox/33.0 360:Mozilla/5.0 (Windows NT 6.1; WOW64)
+	 *         AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36 IE10: Mozilla/5.0 (compatible;
+	 *         MSIE 10.0; Windows NT 6.1; WOW64; Trident/6.0) google: Mozilla/5.0 (Windows NT 6.1; WOW64)
+	 *         AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.104 Safari/537.36
+	 */
+	public static String getExplorerType(HttpServletRequest request) {
+		try {
+			String agent = request.getHeader("User-Agent");
+			if (StringUtils.isBlank(agent))
+				return null;
+			if (agent.contains("MSIE")) {
+				return agent.split(";")[1];
+			} else if (agent.contains("Firefox")) {
+				return "Firefox";
+			} else if (agent.contains("Chrome")) {
+				return "Chrome";
+			}
+			return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static String encode(String fileName, String encode) {
+		String name = null;
+		try {
+			name = URLEncoder.encode(fileName, encode);
+			name = name.replace("+", "%20");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		return name;
+	}
+	
+	public void setExcelResponse(String filename,HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
+		response.reset();// 清空输出流
+		response.setContentType("application/octet-stream; charset=utf-8");
+		String explorerType = getExplorerType(request);
+
+		
+		if (explorerType == null || explorerType.contains("IE")) {// IE
+			response.setHeader("Content-Disposition",
+					"attachment; filename=\"" + encode(filename, "utf-8") + ".xlsx" + "\"");
+		} else {// fireFox/Chrome
+			response.setHeader("Content-Disposition",
+					"attachment; filename=" + new String(filename.getBytes("utf-8"), "ISO8859-1") + ".xlsx");
+		}
+		response.setContentType("application/msexcel");// 定义输出类型
+	}
 }

@@ -1,0 +1,330 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('修改表单')" />
+    
+    <style type="text/css">
+    	.Wdate .WdateTime{
+			border:1px solid #c2cad8;
+			height:28px; 
+			background:#fff url(/img/datePicker.gif) no-repeat right;
+		}
+    </style>
+    <th:block th:include="include :: datetimepicker-css"/>
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-entity-edit" th:object="${entity}">
+            <input id="id" name="id" th:field="*{id}"  type="hidden">
+	        <div class="form-group">
+	            <label class="col-sm-3 control-label">标题：</label>
+	            <div class="col-sm-8">
+	                <input id="title" name="title" th:value="${entity.title}" class="form-control" type="text" required>
+	            </div>
+	        </div>
+	        <div class="form-group">
+	            <label class="col-sm-3 control-label">备注：</label>
+	            <div class="col-sm-8">
+	                <textarea  id="memo" name="memo"  rows="" cols="" class="form-control" required>[[${entity.memo}]]</textarea>
+	            </div>
+	        </div>
+	        
+            <hr>
+            <div id="optionContentId">
+	            <div th:each="sub:${subList}" class="form-group colNameDiv" 
+	            	style="border: solid;1px;padding-top: 10px;padding-bottom: 10px;border-color: #f3b48970;">	
+	         	  <input id="subId" name="subId" th:value="${sub.id}"  type="hidden">
+	              <label class="col-sm-3 control-label"></label>
+	              <div class="col-sm-1 optionSelTypeCls">
+		               	 <select id ="colType" name="colType" class="form-control"  required onchange="changeType(this);">
+		                    <option value="01" th:selected="${sub.colType=='01'}">输入框</option>
+		                    <option value="02" th:selected="${sub.colType=='02'}">选择框</option>
+		                    <option value="03" th:selected="${sub.colType=='03'}">日期</option>
+		                    <option value="04" th:selected="${sub.colType=='04'}">日期时间</option>
+		                </select>
+	              </div>
+	              <div class="col-sm-2">
+		               	<input id="colName0" name="colName" th:value="${sub.colName}" class="form-control" type="text" required>
+	              </div>
+	               <div class="col-sm-4 colNameCls">
+	                   <input th:if="${sub.colType eq '01'}" id="" name="" value="" class="form-control" type="text" disabled="disabled">
+	                   
+	                   <select  th:if="${sub.colType eq '02'}" id="" name="" class="form-control chooseSelectCls">
+	                   		<option value=""></option>
+	                    	<option th:each="cval : ${sub.colVals}" th:text="${cval}" th:value="${cval}"></option>
+	                   	</select>
+	                   <div  th:if="${sub.colType eq '02'}" style="margin-top: 10px;width: 80%;">
+	                   		<div class="form-group">
+					            <div class="col-sm-8">
+					                <a class="btn btn-success" onclick="addChoose(this);" style="height: 24px;font-size: 12px;line-height: 5px;">
+						              <i class="fa fa-plus"></i> 新增选项
+						          </a>
+					            </div>
+					        </div>
+					        <div class="chooseContent">
+		                   		<div th:each="cval:${sub.colVals}" class="form-group chooseItem">
+						            <div class="col-xs-10">
+						                <input id="colVal" name="colVal" th:value="${cval}" placeholder="选项" class="form-control colVal" type="text" 
+						                	required style="height: 24px;" onchange="changeChoose(this);">
+						            </div>
+						             <div class="col-xs-2">
+							            <a class="btn btn-danger btn-del" onclick="delChoose(this,0);" style="height: 24px;font-size: 12px;line-height: 5px;">
+							                <i class="fa fa-remove"></i> 删除
+							            </a>
+						            </div>
+						        </div>
+					        </div>
+	                   </div>
+	                   
+	                   <input th:if="${sub.colType eq '03'}" id="" name="" class="form-control Wdate" type="text">
+	                   
+	                   <input  th:if="${sub.colType eq '04'}" id="" name="" class="form-control WdateTime" type="text">
+	                   
+	               </div>
+	              <div class="col-sm-1">
+	              	<a class="btn btn-danger btn-del" th:onclick="delOption(this,[[${sub.id}]]);">
+		                <i class="fa fa-trash"></i> 删除
+		            </a>
+	              </div>
+	          	</div>
+            </div>
+            <div id="delOptionDiv"></div>
+            <div class="form-group">
+            	<label class="col-sm-3 control-label"></label>
+                <div class="col-sm-8">
+                    <a class="btn btn-success" onclick="addOption();">
+		                <i class="fa fa-plus"></i> 新增项
+		            </a>
+                </div>
+            </div>
+	        <!-- <div style="text-align: center;">
+	        	<button type="button" class="btn btn-sm btn-primary" onclick="submitHandler()">
+	        		<i class="fa fa-check"></i> 保 存
+	            </button>
+	            <button type="reset" class="btn btn-sm btn-warning">
+	        		<i class="fa fa-refresh"></i> 重置
+	            </button>
+	        </div> -->
+		</form>
+    </div>
+    <th:block th:include="include :: footer" />
+    
+    <th:block th:include="include :: datetimepicker-js"/>
+    
+    <script type="text/javascript">
+        var prefix = ctx + "form";
+	    
+		var delSubIdArr = new Array();//要删除的选项
+        $(function () {
+       	 //相同name的校验
+       	 if ($.validator) {
+                $.validator.prototype.elements = function () {
+                    var validator = this,
+                      rulesCache = {};
+                    return $(this.currentForm)
+                    .find("input, select, textarea")
+                    .not(":submit, :reset, :image, [disabled]")
+                    .not(this.settings.ignore)
+                    .filter(function () {
+                        if (!this.name && validator.settings.debug && window.console) {
+                            console.error("%o has no name assigned", this);
+                        }
+                        rulesCache[this.name] = true;
+                        return true;
+                    });
+                }
+            }
+       	 
+	       	$(".Wdate").datetimepicker({
+	            format: "yyyy-mm-dd",
+	            minView: "month",
+	            autoclose: true
+	        });
+	      	 
+	       	$('.WdateTime').datetimepicker({format: "yyyy-mm-dd hh:ii:ss"});
+       });
+        
+		$("#form-entity-edit").validate({
+			focusCleanup: true
+		});
+		
+		function submitHandler() {
+			$("input[name='colName']").each(function() {
+	        	$(this).rules("add", {required:true,maxlength:20,messages:{required:"必输",maxlength:"最大长达为20字符"}});
+	        });
+	    	
+	    	var datas = new Array();
+	    	$(".colNameDiv").each(function(){
+	    		var o = {};
+	    		console.info($(this).find("select[name=colType]").val());
+	    		console.info($(this).find("input[name=colName]").val());
+	    		
+	    		o['subId'] = $(this).find("input[name=subId]").val();
+	    		o['colType'] = $(this).find("select[name=colType]").val();
+	    		o['colName'] = $(this).find("input[name=colName]").val();
+	    		
+	    		//console.info($(this).find("input[name=colVal]").val());
+	    		
+	    		var colVals = new Array();
+	    		$(this).find("input[name=colVal]").each(function(){
+	    			console.info($(this).attr("name")+">>"+$(this).val());
+	    			
+	    			colVals.push($(this).val());
+	    		});
+	    		o['colVals'] = colVals;
+	    		console.info(o);
+	    		datas.push(o);
+	    	});
+	    	console.info(delSubIdArr);
+	    	console.info(JSON.stringify(datas));
+	    	console.info(JSON.stringify(delSubIdArr));
+	    	
+	    	//var delObj = {};
+	    	//delObj['delSubId'] = delSubIdArr;
+	    	//console.info($.param(delObj));
+	    	var delSubIdStr = '';
+	    	for(var i=0;i<delSubIdArr.length;i++){
+	    		delSubIdStr+='&delSubId='+delSubIdArr[i];
+	    	}
+	    	console.info(delSubIdStr);
+	    	
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/edit", "id="+$("#id").val()+"&title="+$("#title").val()+"&memo="+$("#memo").val()+delSubIdStr+"&jsonStr="+JSON.stringify(datas));
+	        }
+	    }
+		
+		//添加选项
+		function addOption(){
+			var str='<div class="form-group colNameDiv" style="border: solid;1px;padding-top: 10px;padding-bottom: 10px;border-color: #f3b48970;">'+	
+						'<input id="subId" name="subId" value="0" type="hidden">'+
+			            '<label class="col-sm-3 control-label"></label>'+	
+			            '<div class="col-sm-1 optionSelTypeCls">'+
+				            '<select id ="colType" name="colType" class="form-control"  required onchange="changeType(this);">'+
+			                    '<option value="01">输入框</option>'+
+			                    '<option value="02">选择框</option>'+
+			                    '<option value="03">日期</option>'+
+			                    '<option value="04">日期时间</option>'+
+			                '</select>'+
+			          	'</div>'+
+			          	'<div class="col-sm-2">'+
+			               	'<input id="colName0" name="colName" value="" placeholder="如:您的姓名" class="form-control" type="text" required>'+
+		                '</div>'+
+			            '<div class="col-sm-4 colNameCls">'+	
+			                '<input id="" name="" value="" class="form-control" type="text" required disabled="disabled">'+	
+			            '</div>'+	
+			            '<div class="col-sm-1">'+
+		                	'<a class="btn btn-danger btn-del" onclick="delOption(this,0);">'+
+				                '<i class="fa fa-trash"></i> 删除'+
+				           ' </a>'+
+		                '</div>'+
+			        '</div>';
+	        $("#optionContentId").append(str);
+		}
+		
+		//删除选项
+		function delOption(t,optionId){
+			console.info(optionId);
+			if(optionId!=0){//删除的选项
+				$("#delOptionDiv").append('<input id="delOptinId" name="delOptinId" value="'+optionId+'" type="hidden">');
+			}			
+			$(t).closest(".colNameDiv").remove();
+			
+			if(optionId>0){
+				delSubIdArr.push(optionId);
+			}
+		}
+		
+		function changeType(t){
+			var str = "";
+			if($(t).val()=='02'){//选择
+				str = ' <select id="" name="" class="form-control chooseSelectCls"><option value=""></option></select>'+
+						'<div style="margin-top: 10px;width: 80%;">'+
+			       		'<div class="form-group">'+
+				            '<div class="col-sm-8">'+
+				                '<a class="btn btn-success" onclick="addChoose(this);" style="height: 24px;font-size: 12px;line-height: 5px;">'+
+					              '<i class="fa fa-plus"></i> 新增选项'+
+					          '</a>'+
+				            '</div>'+
+				        '</div>'+
+				        '<div class="chooseContent">'+
+			           		'<div class="form-group chooseItem">'+
+					            '<div class="col-xs-10">'+
+					                '<input id="colVal" name="colVal" value="" placeholder="选项" class="form-control colVal" type="text" required style="height: 24px;" onchange="changeChoose(this);">'+
+					            '</div>'+
+					            '<div class="col-xs-2">'+
+						            '<a class="btn btn-danger btn-del" onclick="delChoose(this,0);" style="height: 24px;font-size: 12px;line-height: 5px;">'+
+						                '<i class="fa fa-remove"></i> 删除'+
+						            '</a>'+
+					            '</div>'+
+					        '</div>'+
+					        '<div class="form-group chooseItem">'+
+					            '<div class="col-xs-10">'+
+					                '<input id="colVal" name="colVal" value="" placeholder="选项" class="form-control colVal" type="text" required style="height: 24px;" onchange="changeChoose(this);">'+
+					            '</div>'+
+					            '<div class="col-xs-2">'+
+						            '<a class="btn btn-danger btn-del" onclick="delChoose(this,0);" style="height: 24px;font-size: 12px;line-height: 5px;">'+
+						                '<i class="fa fa-remove"></i> 删除'+
+						            '</a>'+
+					            '</div>'+
+					        '</div>'+
+				        '</div>'+
+			       '</div>';
+			}else if($(t).val()=='03'){//日期
+				str = '<input id="" name="" class="form-control Wdate" type="text">';
+			}else if($(t).val()=='04'){//日期时间
+                str = '<input id="" name="" class="form-control WdateTime" type="text">';
+			}else{
+				str = '<input id="" name="" value="" class="form-control" type="text" disabled="disabled">';
+			}
+			$(t).closest(".colNameDiv").find(".colNameCls").html(str);
+			
+	       	 $(".Wdate").datetimepicker({
+	             format: "yyyy-mm-dd",
+	             minView: "month",
+	             autoclose: true
+	         });
+	       	 
+	       	$('.WdateTime').datetimepicker({format: "yyyy-mm-dd hh:ii:ss"});
+		}
+		
+		function delChoose(t,index){
+			var selEle = $(t).parents().closest(".colNameCls").find(".chooseSelectCls");
+			$(selEle).empty();
+			$(selEle).append('<option value=""></option>');
+			var t_chooseContent = $(t).parents().closest(".chooseContent");
+			
+			$(t).closest(".chooseItem").remove();
+			
+			$(t_chooseContent).find(".colVal").each(function(){
+				console.info($(this).val());
+				$(selEle).append('<option value="'+$(this).val()+'">'+$(this).val()+'</option>');
+			});
+		}
+		
+		function addChoose(t){
+			var str = '<div class="form-group chooseItem">'+
+						'<div class="col-xs-10">'+
+					        '<input id="colVal" name="colVal" value="" placeholder="选项" class="form-control colVal" type="text" required="" style="height: 24px;" onchange="changeChoose(this);">'+
+					    '</div>'+
+					    '<div class="col-xs-2">'+
+					        '<a class="btn btn-danger btn-del" onclick="delChoose(this,0);" style="height: 24px;font-size: 12px;line-height: 5px;">'+
+					            '<i class="fa fa-remove"></i> 删除'+
+					        '</a>'+
+					    '</div>'+
+					'</div>';
+			$(t).parent().parent().parent().find(".chooseContent").append(str);
+		}
+		
+		//选择项改变
+		function changeChoose(t){
+			var selEle = $(t).parents().closest(".colNameCls").find(".chooseSelectCls");
+			$(selEle).empty();
+			$(selEle).append('<option value=""></option>');
+			$(t).parents().closest(".chooseContent").find(".colVal").each(function(){
+				console.info($(this).val());
+				$(selEle).append('<option value="'+$(this).val()+'">'+$(this).val()+'</option>');
+			});
+		}
+	</script>
+</body>
+</html>

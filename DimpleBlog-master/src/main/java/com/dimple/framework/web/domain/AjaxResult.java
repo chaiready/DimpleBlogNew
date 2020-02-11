@@ -72,6 +72,14 @@ public class AjaxResult extends HashMap<String, Object> {
     public static AjaxResult success() {
         return AjaxResult.success("操作成功");
     }
+    
+    /**
+     * 
+     * @return
+     */
+    public static AjaxResult successSearch() {
+        return AjaxResult.success("查询成功");
+    }
 
     /**
      * 返回成功消息

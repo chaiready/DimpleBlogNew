@@ -396,15 +396,20 @@
 
 	//添加到收藏
 	function addBookmark(){
-       $.operate.ajaxSend("/bookmarks/add", "post", "json", {"blogId": $("#pageId").val()}, function callBackFunc(result){
-           console.info(result);
-           $.modal.closeLoading();
-           if(result.code == web_status.SUCCESS){
-               $.modal.msgSuccess(result.msg);
-           }else{
-               $.modal.alertWarning(result.msg)
-           }
-       });
+	   var hasLogin = [[${curUser!=null}]];
+	   if(hasLogin){
+		   $.operate.ajaxSend("/bookmarks/add", "post", "json", {"blogId": $("#pageId").val()}, function callBackFunc(result){
+	           console.info(result);
+	           $.modal.closeLoading();
+	           if(result.code == web_status.SUCCESS){
+	               $.modal.msgSuccess(result.msg);
+	           }else{
+	               $.modal.alertWarning(result.msg)
+	           }
+	       });
+	   }else{
+		   $.modal.msgWarning("请先登录");		   
+	   }
 	}
 </script>
 </body>

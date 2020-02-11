@@ -141,12 +141,12 @@ public interface BlogMapper  extends BaseMapper<Blog> {
     /**
      * 获取上一篇博文
      */
-    Blog selectPreviousBlogByFuncIdAndId(Long funcId,Integer blogId);
+    Blog selectPreviousBlogByFuncIdAndId(@Param("funcId") Long funcId,@Param("blogId")Integer blogId);
 
     /**
      * 获取下一篇博文
      */
-    Blog selectNextBlogByFuncIdAndId(Long funcId,Integer blogId);
+    Blog selectNextBlogByFuncIdAndId(@Param("funcId") Long funcId,@Param("blogId")Integer blogId);
 
     /**
      * 随机获取i篇blog
