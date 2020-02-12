@@ -57,14 +57,14 @@
                 </div>
             </div>
         </form>
-        <div class="mail-body text-center tooltip-demo">
+        <!-- <div class="mail-body text-center tooltip-demo">
             <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler()"><i
                     class="fa fa-check"></i>保 存
             </button>&nbsp;
             <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i
                     class="fa fa-reply-all"></i>关 闭
             </button>
-        </div>
+        </div> -->
     </div>
 </div>
 <th:block th:include="include :: footer"/>
@@ -161,7 +161,7 @@
                     $.modal.loading("正在处理中，请稍后...");
                 },
                 success : function(result) {
-                    $.operate.successTabCallback(result);
+                	$.operate.successCallback(result);
                 },
                 error: function(data){
                     $.modal.alertError("保存失败，HTTP错误。");

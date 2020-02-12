@@ -19,6 +19,7 @@ import com.dimple.project.blog.blog.service.BlogService;
 import com.dimple.project.front.controller.BaseBlogController;
 import com.dimple.project.king.order.domain.OrderEntity;
 import com.dimple.project.king.order.service.OrderService;
+import com.dimple.project.king.product.service.ProductService;
 import com.dimple.project.system.carouselMap.entity.CarouselMap;
 import com.dimple.project.system.user.domain.User;
 import com.github.pagehelper.PageHelper;
@@ -34,7 +35,7 @@ import com.github.pagehelper.PageInfo;
 public class OrderController extends BaseBlogController {
 	
 	@Autowired
-	private BlogService blogService;
+	private ProductService productService;
 	@Autowired
 	private OrderService service;
 	
@@ -57,7 +58,7 @@ public class OrderController extends BaseBlogController {
 			return blogLoginPage();
 		}
 		PageHelper.startPage(changePageNum(pageNum, "") , Constants.BLOG_PAGE_SIZE);
-		model.addAttribute("blogs", new PageInfo<>(blogService.selectBookmarksList(user.getUserId())));
+		model.addAttribute("products", new PageInfo<>(productService.list()));
 		
 		return "king/order/order_index";
 	}

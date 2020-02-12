@@ -250,6 +250,30 @@ CREATE TABLE `bg_bookmarks` (
 UPDATE `bg_func` SET `id`='4', `func_name`='扫码系统', `parent_id`='0', `order_num`='1578535921032', `url`='/scan/index.html', `func_type`='', `visible`='0', `perms`=NULL, `icon`='#', `create_by`='admin', `create_time`=NULL, `update_by`='', `update_time`=NULL, `remark`='', `creator`='1' WHERE (`id`='4');
 INSERT INTO `bg_func` (`id`, `func_name`, `parent_id`, `order_num`, `url`, `func_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`, `creator`) VALUES ('5', '后台管理', '0', '1578535921031', '/login', '', '0', NULL, '#', 'admin', NULL, '', NULL, '', '1');
 
+
+
+#20200116
+alter table bg_question_folder add COLUMN func_id BIGINT(11) COMMENT '菜单id';
+alter table bg_question_folder add COLUMN type varchar(10) COMMENT '问题类型';
+update bg_question_folder set func_id=1 where id=1;
+update bg_question_folder set type='choice' where id=1;
+
+
+
+#20200118
+CREATE TABLE `bg_product` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `title` VARCHAR(256) DEFAULT NULL COMMENT '标题',
+  `description` varchar(256) DEFAULT NULL COMMENT '描述',
+  `header_img` varchar(256) DEFAULT NULL COMMENT '头像',
+  `unit` varchar(10) DEFAULT NULL COMMENT '单位',
+  `create_by` varchar(64) DEFAULT NULL COMMENT '创建者',
+  `create_time` datetime DEFAULT NULL,
+  `update_by` varchar(64) DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='产品信息'
+
 #20200202
 CREATE TABLE `bg_order` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
@@ -309,25 +333,7 @@ CREATE TABLE `bg_form_data` (
 
 alter table bg_form_data add COLUMN rowuuid VARCHAR(36);
 
-#20200116
-alter table bg_question_folder add COLUMN func_id BIGINT(11) COMMENT '菜单id';
-alter table bg_question_folder add COLUMN type varchar(10) COMMENT '问题类型';
-update bg_question_folder set func_id=1 where id=1;
-update bg_question_folder set type='choice' where id=1;
 
-
-
-#20200118
-CREATE TABLE `bg_product` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `title` VARCHAR(256) DEFAULT NULL COMMENT '标题',
-  `description` varchar(256) DEFAULT NULL COMMENT '描述',
-  `header_img` varchar(256) DEFAULT NULL COMMENT '头像',
-  `unit` varchar(10) DEFAULT NULL COMMENT '单位',
-  `create_by` varchar(64) DEFAULT NULL COMMENT '创建者',
-  `create_time` datetime DEFAULT NULL,
-  `update_by` varchar(64) DEFAULT NULL,
-  `update_time` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='产品信息'
-
+#20200211
+INSERT INTO `sys_menu` (`menu_id`, `menu_name`, `parent_id`, `order_num`, `url`, `menu_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`) VALUES ('2036', '订单管理', '0', '12', '#', 'M', '0', NULL, '#', 'admin', '2020-02-11 22:08:47', '', NULL, '');
+INSERT INTO `sys_menu` (`menu_id`, `menu_name`, `parent_id`, `order_num`, `url`, `menu_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`) VALUES ('2037', '产品管理', '2036', '1', '/product', 'C', '0', NULL, '#', 'admin', '2020-02-11 22:09:23', '', NULL, '');

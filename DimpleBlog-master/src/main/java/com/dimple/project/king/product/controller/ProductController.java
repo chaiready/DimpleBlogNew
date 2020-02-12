@@ -48,7 +48,7 @@ public class ProductController extends BaseController {
 	}
 
 	@ResponseBody
-	@PostMapping("/list")
+	@RequestMapping("/list")
 	public TableDataInfo list(ProductEntity entity) {
 		startPage();
 		List<ProductEntity> list = service.list();

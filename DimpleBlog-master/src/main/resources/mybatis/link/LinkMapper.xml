@@ -115,7 +115,7 @@
         select count(*) from bg_link
     </select>
     <select id="selectLinkListFront" resultType="com.dimple.project.link.domain.Link">
-        select link_id,title,url,header_img,description from bg_link where display=1 and available=1 order by weight limit 5
+        select link_id,title,url,header_img,description from bg_link where display=1 and available=1 order by weight limit 10
     </select>
     <select id="selectLinkListFrontWithSummary" resultType="com.dimple.project.link.domain.Link">
         select link_id,title,url,header_img,description from bg_link where display=1 and available=1 order by weight

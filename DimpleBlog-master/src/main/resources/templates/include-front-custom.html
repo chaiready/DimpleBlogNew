@@ -337,7 +337,7 @@
             <i class="fa fa-remove fx-close"></i>
         </div>
         <div class="mail-dy">
-            <img src="/front/images/weixin.png">
+            <img src="/front/images/weichat.png">
             <i class="fa fa-remove fx-close"></i>
         </div>
     </div>
@@ -469,7 +469,7 @@
 	      </div>
 	      <p>支付宝</p>
 	      <div class="mod_hang_qrcode_show_bg_king">
-	      	<img src="/front/images/weixin.png" style="width: 124px; height: 124px;">
+	      	<img src="/front/images/weichat.png" style="width: 124px; height: 124px;">
 	      </div>
 	      <p>微信</p>
 	    </div>
@@ -607,7 +607,7 @@
         <div class="shang_payimg">
             <img src="/front/images/alipay.png" alt="扫码查看"
                  title="扫一扫"/>
-            <!--<img src="/front/images/weichart.png" alt="微信"/>-->
+            <!--<img src="/front/images/weichat.png" alt="微信"/>-->
         </div>
         <div class="pay_explain">长按二维码打赏，你说多少就多少</div>
         <!--<div class="shang_payselect">
@@ -619,7 +619,7 @@
            <div class="pay_item" data-id="weipay">
                <span class="radiobox"></span>
                <span class="pay_logo">
-               <img src="/front/images/weichart.png" alt="微信"/></span>
+               <img src="/front/images/weichat.png" alt="微信"/></span>
            </div>
        </div>-->
     </div>
@@ -628,13 +628,13 @@
             $(".pay_item").click(function () {
                 $(this).addClass('checked').siblings('.pay_item').removeClass('checked');
                 var dataid = $(this).attr('data-id');
-                $(".shang_payimg img").attr("src", dataid == "alipay" ? "/front/images/alipay.png" : "/front/images/weichart.png");
+                $(".shang_payimg img").attr("src", dataid == "alipay" ? "/front/images/alipay.png" : "/front/images/weichat.png");
                 $("#shang_pay_txt").text(dataid == "alipay" ? "支付宝" : "微信");
             });
 
             $('input[type=radio][name=payType]').change(function() {
                 if (this.value == 'wxpay') {
-                    $(".shang_payimg img").attr("src", "/front/images/weichart.png");
+                    $(".shang_payimg img").attr("src", "/front/images/weichat.png");
                     $("#shang_pay_txt").text("微信");
                 }else{
                     $(".shang_payimg img").attr("src", "/front/images/alipay.png");

@@ -38,7 +38,7 @@
             <a href="/"><i class="fa fa-home"></i>当前页: &nbsp;> </a>
             <span class="orange-text" th:text="${funcName}"></span>
             <span style="float:right;margin-right:10px;">共有文章:<font class="orange-text"
-                th:text="${blogs.total}"> 11 </font>篇</span>
+                th:text="${products.total}"> 11 </font>篇</span>
         </h4> -->
         <!--<div>
             <p class="smallText" th:text="${'分类描述：'+funcName}"></p>
@@ -67,24 +67,24 @@
                 </a>
                 <a class="orange-text" th:href="${'/bookmarks/list.html'}">当前页:我的收藏</a>
                 <span style="float:right;margin-right:10px;">共有文章:
-	            	<font class="orange-text" th:text="${blogs.total}">  </font>篇
+	            	<font class="orange-text" th:text="${products.total}">  </font>篇
 	            </span>
             </h4> -->
             <!--列表开始-->
             <ul>
-                <li th:each="blog:${blogs.list}">
+                <li th:each="product:${products.list}">
                     <div class="arcimg">
-                        <img th:src="${blog.headerImg}" th:alt="${blog.title}" th:title="${blog.title}"/>
+                        <img th:src="${product.headerImg}" th:alt="${product.title}" th:title="${product.title}"/>
                     </div>
                     <div class="arc-right" style="">
                         <h4 class="blue-text">
-                            <a th:title="${blog.title}"
-                               th:text="${blog.title}">
+                            <a th:title="${product.title}"
+                               th:text="${product.title}">
                             </a>
                         </h4>
-                        <p th:text="${blog.summary}"></p>
+                        <p th:text="${product.description}"></p>
                         <form action="" class="orderFormCls">
-                        	<input name="productId" type="hidden" th:value="${blog.blogId}">
+                        	<input name="productId" type="hidden" th:value="${product.id}">
 	                        <p style="margin-top: 5px;float:right;">
 	                        	<input type="button" class="btn btn-inverse" value="- "
 		                    		style="height: 25px;color: #ff6700;"  onclick="subNum(this);">
@@ -103,7 +103,7 @@
             </ul>
         </div>
         <!--分页开始-->
-        <div th:replace="navigation :: navigation-index(${blogs})"></div>
+        <div th:replace="navigation :: navigation-index(${products})"></div>
         <!--分页结束-->
         
         <div style="height: 150px;">

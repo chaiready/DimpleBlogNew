@@ -255,7 +255,6 @@ $(document).ready(function () {
     });
     
     function indexNotice(){
-    	console.info("setTimeout>>>>>>>>>");
     	var _wrap = $('.mulitline');//定义滚动区域
     	var _field = _wrap.find('li:first');//此变量不可放置于函数起始处，li:first取值是变化的
         var _h = _field.height();//取得每次滚动高度
